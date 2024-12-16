@@ -1,0 +1,9 @@
+mutation CreatePrompt($input: PromptInput!) {
+	createPrompt(input: $input) {
+    ...Prompt
+		# title
+		# prompt
+		# tag
+		# creatorId
+	}
+}

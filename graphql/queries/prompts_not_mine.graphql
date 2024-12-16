@@ -1,0 +1,12 @@
+query GetAllPromptsExceptMine {
+	getAllPromptsExceptMine {
+		# id
+		# title
+		# prompt
+		# tag
+		# creator {
+		# 	...User
+		# }
+		...Prompt
+	}
+}

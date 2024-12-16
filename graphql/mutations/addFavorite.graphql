@@ -1,0 +1,12 @@
+mutation addToFavorites($promptId: Int!) {
+	addToFavorites(promptId: $promptId) {
+		id
+		user {
+			...User
+		}
+		prompt {
+			...Prompt
+		}
+	}
+}
+

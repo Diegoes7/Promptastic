@@ -1,0 +1,13 @@
+query GetUserPrompts {
+	getUserPrompts {
+		...Prompt
+		# id
+		# title
+		# prompt
+		# tag
+		# creatorId
+		# creator {
+		# 	...User
+		# }
+	}
+}

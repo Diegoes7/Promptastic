@@ -1,0 +1,10 @@
+query GetPromptById($getPromptByIdId: Int!) {
+	getPromptById(id: $getPromptByIdId) {
+		# id
+		# prompt
+		# tag
+		# title
+		# creatorId
+		...Prompt
+	}
+}

@@ -1,0 +1,8 @@
+query Prompts($limit: Int!, $cursor: String) {
+	prompts(limit: $limit, cursor: $cursor) {
+		prompts {
+			...Prompt
+		}
+		hasMore
+	}
+}

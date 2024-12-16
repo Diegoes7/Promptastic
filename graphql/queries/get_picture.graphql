@@ -1,0 +1,5 @@
+query GetUserPicture($userId: Int!) {
+	getUserPicture(userId: $userId) {
+		...Picture
+	}
+}

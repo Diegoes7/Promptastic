@@ -1,0 +1,11 @@
+query MyFavoritePrompts {
+	myFavoritePrompts {
+		id
+		prompt {
+			...Prompt
+		}
+		user {
+			...User
+		}
+	}
+}

@@ -1,0 +1,3 @@
+mutation UpdateLikes($updateLikesId: Int!) {
+  updateLikes(id: $updateLikesId)
+}

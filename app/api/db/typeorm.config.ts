@@ -1,0 +1,37 @@
+import 'reflect-metadata' // Import this to enable TypeORM decorators
+import { DataSource } from 'typeorm'
+import { User } from './entities/User'
+import { Prompt } from './entities/Prompt'
+import { Favorite } from './entities/Favorite'
+import { Picture } from './entities/Picture'
+
+
+export const AppDataSource = new DataSource({
+  type: 'postgres',
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT?.replace(/^https:\/\//, '') || ''),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: [User, Prompt, Favorite, Picture],
+  // entities: ['./entities/*.ts'],
+  synchronize: true /* process.env.NODE_ENV === "development" */,
+  logging: process.env.NODE_ENV === "development",
+  // migrations: ['./migrations/*.sql'],
+  subscribers: [],
+  // ssl: true,
+})
+
+
+export const initializeDatabase = async () => {
+  if (!AppDataSource.isInitialized) {
+    await AppDataSource.initialize()
+      .then(() => {
+        console.log('Data Source has been initialized!')
+      })
+      .catch((err) => {
+        console.error('Error during Data Source initialization', err)
+      })
+    return AppDataSource
+  }
+}

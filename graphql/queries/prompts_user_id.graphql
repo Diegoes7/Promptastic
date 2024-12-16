@@ -1,0 +1,5 @@
+query GetPromptsUserById($getPromptsUserById: Int!) {
+  getPromptsUserById(id: $getPromptsUserById) {
+     ...Prompt   
+  }
+}

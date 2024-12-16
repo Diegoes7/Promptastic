@@ -1,0 +1,3 @@
+mutation DeletePrompt($deletePromptId: Int!) {
+  deletePrompt(id: $deletePromptId)
+}

@@ -1,0 +1,13 @@
+fragment Prompt on Prompt {
+  id
+	title
+	tag
+	prompt
+	likes
+	creatorId
+	createdAt
+	updatedAt
+	creator {
+		...User
+	}
+}

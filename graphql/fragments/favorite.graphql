@@ -1,0 +1,8 @@
+# fragment Favorite on Favorite {
+	# creator {
+	# 	...User
+	# }
+	# favorites {
+	# 	Favorite
+	# }
+# }

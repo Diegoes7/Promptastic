@@ -1,0 +1,11 @@
+fragment User on User {
+	id
+	username
+	email
+	picture
+	image {
+		...Picture
+	}
+	createdAt
+	updatedAt
+}

@@ -1,0 +1,7 @@
+fragment Picture on Picture {
+	id
+	filename
+	mimetype
+	path
+	userId
+}
