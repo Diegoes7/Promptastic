@@ -188,16 +188,16 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
-
   secret: process.env.NEXTAUTH_SECRET,
 }
 
 
-const handler = NextAuth(authOptions)
+export const handler = NextAuth(authOptions)
 // const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 //   await initializeDatabase()
 //   return NextAuth(req, res, authOptions)
 // }
 
 export { handler as GET, handler as POST };
+
 
