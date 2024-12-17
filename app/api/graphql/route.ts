@@ -12,11 +12,11 @@ import { NextRequest } from 'next/server'
 import { uploadProcess } from 'graphql-upload-nextjs'
 
 // Disable Next.js body parsing for this route to handle file uploads
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// }
 
 const server = new ApolloServer({
   schema,
