@@ -192,11 +192,22 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 }
 
-// const handler = NextAuth(authOptions)
+// The handler for the NextAuth route
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // Initialize the database connection
   await initializeDatabase()
+
+  // Handle the NextAuth request
   return NextAuth(req, res, authOptions)
 }
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST }
+
+// // const handler = NextAuth(authOptions)
+// const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+//   await initializeDatabase()
+//   return NextAuth(req, res, authOptions)
+// }
+
+// export { handler as GET, handler as POST };
 
