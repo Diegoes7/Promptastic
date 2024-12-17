@@ -137,6 +137,7 @@ const Profile = ({
 							<div className='flex h-100%'>
 								<InputField
 									label='User Name'
+									subTitle=''
 									inputValue={inputUser || ''}
 									handleChange={handleChange}
 									htmlFor='username'

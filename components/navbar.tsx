@@ -71,7 +71,6 @@ const Navbar = () => {
 				<MainLists />
 			</Popup>
 
-			{/* Desktop Navigation */}
 			<div className='md:flex hidden'>
 				{session?.user ? (
 					<div className='flex gap-3 md:gap-5 items-center'>
