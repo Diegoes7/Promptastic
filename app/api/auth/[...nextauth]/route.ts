@@ -6,8 +6,8 @@ import { User } from '../../../api/db/entities/User'
 import argon2 from 'argon2'
 import { AdapterUser } from 'next-auth/adapters'
 import { TypeORMAdapter } from "@auth/typeorm-adapter"
-import { NextApiRequest, NextApiResponse } from 'next/types'
 import { Picture } from '@app/api/db/entities/Picture'
+import { NextRequest } from 'next/server'
 
 interface NextAuthUser {
   id: string
@@ -192,17 +192,28 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 }
 
-// The handler for the NextAuth route
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // Initialize the database connection
+// The GET handler for the authentication route
+export async function GET(req: NextRequest) {
+  // 1. Initialize the database connection before NextAuth is called
   await initializeDatabase()
 
-  // Handle the NextAuth request
-  return NextAuth(req, res, authOptions)
+  // You don't need to pass `req` to `NextAuth`, it handles it internally.
+  // The request is implicitly handled by `NextAuth`.
+  return NextAuth(authOptions) // This internally uses the `req` object
 }
 
-export { handler as GET, handler as POST }
+// The POST handler for the authentication route
+export async function POST(req: NextRequest) {
+  // 1. Initialize the database connection before NextAuth is called
+  await initializeDatabase()
 
+  // Similar to GET, `NextAuth` manages `req` internally.
+  return NextAuth(authOptions) // `req` is used implicitly inside `NextAuth`
+}
+
+
+
+//? initial implementation
 // // const handler = NextAuth(authOptions)
 // const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 //   await initializeDatabase()
