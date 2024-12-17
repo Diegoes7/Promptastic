@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import { authOptions } from '../authOptions'
 
 
-export const handler = NextAuth(authOptions)
+const handler = NextAuth(authOptions)
 // const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 //   await initializeDatabase()
 //   return NextAuth(req, res, authOptions)
