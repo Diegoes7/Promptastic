@@ -2,7 +2,7 @@ import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { ApolloServer } from '@apollo/server'
 import { schema } from './schema' // Assuming you have a GraphQL schema defined
 import { getServerSession } from 'next-auth'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { authOptions } from '../auth/authOptions'
 import { AppDataSource, initializeDatabase } from '../db/typeorm.config'
 import { ContextProps } from './context'
 import { supabase } from '../db/supabase_client'

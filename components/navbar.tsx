@@ -9,7 +9,7 @@ import AvatarMenu from './avatar_menu'
 import Popup from './pop_up'
 import MainLists from './main_lsits'
 import Avatar from './basic/avatar'
-import { MyOwnSession } from '@app/api/auth/[...nextauth]/route'
+import { MyOwnSession } from '@app/api/auth/authOptions'
 import { useWindowWidth } from '@app/utils/window_width'
 import ThemeSwitch from './switch_theme'
 
