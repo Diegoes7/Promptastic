@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { AppDataSource } from '../db/typeorm.config'
 import { supabase } from '../db/supabase_client'
-import { authOptions } from '../auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth/next'
+import { NextRequest, NextResponse } from 'next/server'
 
 export type ContextProps = {
-  req: NextApiRequest
-  res: NextApiResponse
+  req: NextRequest
+  // res: NextResponse
   dataSource: typeof AppDataSource
   supabaseClient: typeof supabase
   session: any
