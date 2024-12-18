@@ -9,13 +9,12 @@ import {
 import React, { useCallback } from 'react'
 import { FcLikePlaceholder } from 'react-icons/fc'
 import { FaRegHeart } from 'react-icons/fa'
-import Spinner from './spinner'
 import Button from './button/Button'
 import { useNotification } from '@app/utils/useNotification'
 import Notification from '../basic/notification'
 import { Post } from '@app/create_prompt/page'
 import { useSession } from 'next-auth/react'
-import { MyOwnSession } from '@app/api/auth/[...nextauth]/route'
+import { MyOwnSession } from '@app/api/auth/authOptions'
 
 type LikeProps = {
 	post: PromptFragment

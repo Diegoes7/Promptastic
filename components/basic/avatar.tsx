@@ -5,8 +5,6 @@ import Image from 'next/image'
 import React, { ImgHTMLAttributes } from 'react'
 import Spinner from './spinner'
 import ConsistentColorName from 'components/initials'
-import { useSession } from 'next-auth/react'
-// import { MyOwnSession } from '@app/api/auth/[...nextauth]/route'
 
 type AvatarProps = {
 	height: number

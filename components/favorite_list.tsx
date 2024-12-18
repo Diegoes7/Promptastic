@@ -13,7 +13,7 @@ import { User } from './register_form'
 import { useNotification } from '@app/utils/useNotification'
 import Notification from './basic/notification'
 import { useSession } from 'next-auth/react'
-import { MyOwnSession } from '@app/api/auth/[...nextauth]/route'
+// import { MyOwnSession } from '@app/api/auth/authOptions'
 import { useParams } from 'next/navigation'
 
 export type FavoriteProps = {
