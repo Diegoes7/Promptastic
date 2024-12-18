@@ -35,6 +35,7 @@ const LogInForm = ({ user, setUser, submitting, handleSubmit }: LogInProps) => {
 					handleChange={handleChange}
 					htmlFor='email'
 					label='Email'
+					subTitle='Type your email'
 					name='email'
 					placeholder='Type your email'
 					required
@@ -44,6 +45,7 @@ const LogInForm = ({ user, setUser, submitting, handleSubmit }: LogInProps) => {
 					htmlFor='password'
 					handleChange={handleChange}
 					label='Password'
+					subTitle='Type your password'
 					type='password'
 					name='password'
 					placeholder='Type your password'
