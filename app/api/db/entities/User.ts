@@ -27,7 +27,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   password!: string
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   picture?: string
 
@@ -46,7 +46,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Favorite, (favorite) => favorite.user)
   favorites!: Promise<Favorite[]>
 
-  @Field({ nullable: true })
+  @Field(() => Picture, { nullable: true })
   @OneToMany(() => Picture, (picture) => picture)
   image!: Picture
 }
