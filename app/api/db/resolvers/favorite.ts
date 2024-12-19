@@ -1,9 +1,9 @@
 import { Resolver, Query, Arg, Ctx, Mutation, UseMiddleware, Int } from 'type-graphql'
-import { User } from '../entities/User'
-import { Prompt } from '../entities/Prompt'
+import { User } from '../../db/entities/User'
+import { Prompt } from '../../db/entities/Prompt'
 import type { ContextProps } from '@app/api/graphql/context'
 import { isAuth } from '@app/middleware'
-import { Favorite } from '../entities/Favorite'
+import { Favorite } from '../../db/entities/Favorite'
 
 @Resolver()
 export class FavoriteResolver {

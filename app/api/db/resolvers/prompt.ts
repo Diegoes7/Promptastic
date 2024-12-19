@@ -1,9 +1,8 @@
 import { isAuth } from "../../../middleware"
 import { Arg, Ctx, Field, InputType, Int, Mutation, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql"
 import type { ContextProps } from "../../graphql/context"
-import { BaseEntity, Not } from "typeorm"
-import { Prompt } from "../entities/Prompt"
-// import { initializeDatabase } from "../typeorm.config"
+import { BaseEntity } from "typeorm"
+import { Prompt } from "../../db/entities/Prompt"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
 import { AppDataSource, initializeDatabase } from "../typeorm.config"
 

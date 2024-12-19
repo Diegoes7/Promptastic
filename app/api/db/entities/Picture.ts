@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType } from 'type-graphql'
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm'
-import { User } from './User' // Adjust this path based on your project structure
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
 @ObjectType()
 @Entity()

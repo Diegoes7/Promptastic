@@ -1,6 +1,6 @@
 import { Arg, Ctx, Int, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { GraphQLUpload, type File } from 'graphql-upload-nextjs'
-import { Picture } from '../entities/Picture'
+import { Picture } from '../../db/entities/Picture'
 import { v4 as uuidv4 } from 'uuid'
 import fs, { createWriteStream } from 'fs'
 import path from 'path'

@@ -1,5 +1,5 @@
 import { Arg, Ctx, Field, InputType, Int, Mutation, Query, Resolver, UseMiddleware } from "type-graphql"
-import { User } from "../entities/User"
+import { User } from "../../db/entities/User"
 import type { ContextProps } from "../../graphql/context"
 import argon2 from 'argon2'
 
