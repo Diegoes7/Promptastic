@@ -20,11 +20,6 @@ export class Picture extends BaseEntity {
   @Column()
   path!: string
 
-  // @Field(() => User)
-  // @ManyToOne(() => User, (user) => user.picture, { onDelete: 'CASCADE' })
-  // @JoinColumn({ name: 'userId' })
-  // user!: Promise<User>
-
   @Field()
   @Column()
   userId!: number

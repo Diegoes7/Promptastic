@@ -26,6 +26,7 @@ class PromptInput {
 class PaginatedPrompts {
   @Field(() => [Prompt])
   prompts!: Prompt[]
+  
   @Field()
   hasMore!: boolean
 }
@@ -104,8 +105,7 @@ export class PromptResolver extends BaseEntity {
     return ps
   }
 
-  //! Mutations
-
+  //? Mutations
   @Mutation(() => Prompt)
   @UseMiddleware(isAuth)
   async createPrompt(@Arg('input') input: PromptInput,

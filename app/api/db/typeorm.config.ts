@@ -1,9 +1,9 @@
 import 'reflect-metadata' // Import this to enable TypeORM decorators
 import { DataSource } from 'typeorm'
-import { User } from './entities/User'
-import { Prompt } from './entities/Prompt'
-import { Favorite } from './entities/Favorite'
-import { Picture } from './entities/Picture'
+import { User } from '../db/entities/User'
+import { Prompt } from '../db/entities/Prompt'
+import { Favorite } from '../db/entities/Favorite'
+import { Picture } from '../db/entities/Picture'
 
 
 export const AppDataSource = new DataSource({
