@@ -1,10 +1,5 @@
 mutation UpdatePrompt($input: PromptInput!, $updatePromptId: Int!) {
 	updatePrompt(input: $input, id: $updatePromptId) {
-		# id
-		# prompt
-		# title
-		# tag
-		# creatorId
 		...Prompt
 	}
 }

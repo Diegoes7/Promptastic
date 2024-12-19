@@ -143,7 +143,6 @@ export type PromptInput = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllPromptsExceptMine: Array<Prompt>;
   getOtherUser?: Maybe<User>;
   getPromptById?: Maybe<Prompt>;
   getPromptsUserById?: Maybe<Array<Prompt>>;
@@ -340,11 +339,6 @@ export type PromptsQueryVariables = Exact<{
 
 
 export type PromptsQuery = { __typename?: 'Query', prompts?: { __typename?: 'PaginatedPrompts', hasMore: boolean, prompts: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype: string, path: string, userId: number } | null } | null }> } | null };
-
-export type GetAllPromptsExceptMineQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllPromptsExceptMineQuery = { __typename?: 'Query', getAllPromptsExceptMine: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype: string, path: string, userId: number } | null } | null }> };
 
 export type GetPromptsUserByIdQueryVariables = Exact<{
   getPromptsUserById: Scalars['Int']['input'];
@@ -1052,45 +1046,6 @@ export type PromptsQueryHookResult = ReturnType<typeof usePromptsQuery>;
 export type PromptsLazyQueryHookResult = ReturnType<typeof usePromptsLazyQuery>;
 export type PromptsSuspenseQueryHookResult = ReturnType<typeof usePromptsSuspenseQuery>;
 export type PromptsQueryResult = Apollo.QueryResult<PromptsQuery, PromptsQueryVariables>;
-export const GetAllPromptsExceptMineDocument = gql`
-    query GetAllPromptsExceptMine {
-  getAllPromptsExceptMine {
-    ...Prompt
-  }
-}
-    ${PromptFragmentDoc}`;
-
-/**
- * __useGetAllPromptsExceptMineQuery__
- *
- * To run a query within a React component, call `useGetAllPromptsExceptMineQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllPromptsExceptMineQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAllPromptsExceptMineQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAllPromptsExceptMineQuery(baseOptions?: Apollo.QueryHookOptions<GetAllPromptsExceptMineQuery, GetAllPromptsExceptMineQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllPromptsExceptMineQuery, GetAllPromptsExceptMineQueryVariables>(GetAllPromptsExceptMineDocument, options);
-      }
-export function useGetAllPromptsExceptMineLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllPromptsExceptMineQuery, GetAllPromptsExceptMineQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllPromptsExceptMineQuery, GetAllPromptsExceptMineQueryVariables>(GetAllPromptsExceptMineDocument, options);
-        }
-export function useGetAllPromptsExceptMineSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllPromptsExceptMineQuery, GetAllPromptsExceptMineQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetAllPromptsExceptMineQuery, GetAllPromptsExceptMineQueryVariables>(GetAllPromptsExceptMineDocument, options);
-        }
-export type GetAllPromptsExceptMineQueryHookResult = ReturnType<typeof useGetAllPromptsExceptMineQuery>;
-export type GetAllPromptsExceptMineLazyQueryHookResult = ReturnType<typeof useGetAllPromptsExceptMineLazyQuery>;
-export type GetAllPromptsExceptMineSuspenseQueryHookResult = ReturnType<typeof useGetAllPromptsExceptMineSuspenseQuery>;
-export type GetAllPromptsExceptMineQueryResult = Apollo.QueryResult<GetAllPromptsExceptMineQuery, GetAllPromptsExceptMineQueryVariables>;
 export const GetPromptsUserByIdDocument = gql`
     query GetPromptsUserById($getPromptsUserById: Int!) {
   getPromptsUserById(id: $getPromptsUserById) {

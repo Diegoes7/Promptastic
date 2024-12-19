@@ -105,16 +105,6 @@ export class PromptResolver extends BaseEntity {
     return ps
   }
 
-  @Query(() => [Prompt])
-  async getAllPromptsExceptMine(@Ctx() { session, dataSource }: ContextProps): Promise<Prompt[]> {
-    return await dataSource.getRepository(Prompt).find({
-      where: {
-        creator: { id: Not(session.userID) }, // Exclude prompts created by the current user
-      },
-      relations: ['creator'], // Include the related User (creator) in the result
-    })
-  }
-
   //! Mutations
 
   @Mutation(() => Prompt)
