@@ -1,5 +1,6 @@
-import { Field, ID, ObjectType } from 'type-graphql'
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Field, ID, ObjectType, Int } from 'type-graphql'
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { User } from './User'
 
 @ObjectType()
 @Entity()
@@ -8,19 +9,23 @@ export class Picture extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Field()
+  @Field(() => String)
   @Column()
   filename!: string
 
-  @Field()
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   mimetype!: string
 
-  @Field()
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   path!: string
 
-  @Field()
+  @Field(() => Int)
   @Column()
   userId!: number
+
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.picture)
+  user!: Promise<User>  // Add the relationship with User
 }

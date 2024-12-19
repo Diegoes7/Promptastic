@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import fs, { createWriteStream } from 'fs'
 import path from 'path'
 import type { ContextProps } from '@app/api/graphql/context'
-import { User } from '../entities/User'
+import { User } from '../../db//entities/User'
 import { pipeline } from 'stream'
 import { DatabaseCheckMiddleware } from '@app/api/graphql/middleware/databaseCheck'
 

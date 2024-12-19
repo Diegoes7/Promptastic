@@ -1,8 +1,8 @@
 import 'reflect-metadata'
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import { User } from './User'
-import { Field, ID, Int, ObjectType } from 'type-graphql'
 import { Favorite } from './Favorite'
+import { Field, ID, Int, ObjectType } from 'type-graphql'
 
 @ObjectType()
 @Entity()
@@ -11,20 +11,20 @@ export class Prompt extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Field()
+  @Field(() => String)
   @Column({ unique: true })
   prompt!: string
 
-  @Field()
+  @Field(() => String)
   @Column({ unique: true })
   title!: string
 
-  @Field()
+  @Field(() => String)
   @Column({ unique: true })
   tag!: string
 
   @Field(() => Int)
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'int', default: 0 })
   likes!: number
 
   @Field()
@@ -39,11 +39,11 @@ export class Prompt extends BaseEntity {
   @ManyToOne(() => User, (user) => user.prompts, { nullable: true })
   creator: User | null = null;
 
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   @Column({ nullable: true })
   creatorId!: number
 
   @Field(() => [Favorite])
   @OneToMany(() => Favorite, (favorite) => favorite.prompt)
-  favorites!: Promise<Favorite[]>
+  favorites!: Favorite[]
 }

@@ -6,6 +6,7 @@ import { PromptResolver } from '../db/resolvers/prompt'
 import { FavoriteResolver } from '../db/resolvers/favorite'
 import { PictureResolver } from '../db/resolvers/picture'
 import { DatabaseCheckMiddleware } from './middleware/databaseCheck'
+import { printSchema } from 'graphql'
 
 
 export const schema = await buildSchema({
@@ -13,3 +14,6 @@ export const schema = await buildSchema({
   globalMiddlewares: [DatabaseCheckMiddleware], // Apply globally
   validate: false,
 })
+
+
+console.log(printSchema(schema));

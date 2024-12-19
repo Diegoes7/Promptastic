@@ -15,7 +15,7 @@ export class User extends BaseEntity {
   @Column({ unique: true, nullable: true })
   sub!: string // Store the sub field as a string
 
-  @Field(() => String)
+  @Field(() => String,)
   @Column({ nullable: true })
   username!: string
 
@@ -23,7 +23,7 @@ export class User extends BaseEntity {
   @Column()
   email!: string
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   password!: string
 
@@ -44,7 +44,7 @@ export class User extends BaseEntity {
 
   @Field(() => [Favorite])
   @OneToMany(() => Favorite, (favorite) => favorite.user)
-  favorites!: Promise<Favorite[]>
+  favorites!: Favorite[]
 
   @Field(() => Picture, { nullable: true })
   @OneToMany(() => Picture, (picture) => picture)
