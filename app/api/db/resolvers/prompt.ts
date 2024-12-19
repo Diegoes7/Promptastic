@@ -46,7 +46,7 @@ export class PromptResolver extends BaseEntity {
 
     const promptRepository = dataSource.getRepository(Prompt)
 
-    const realLimit = Math.min(10, limit) //! take the smaller of two values
+    const realLimit = Math.min(10, limit) //* take the smaller of two values
     const realLimitPlusOne = realLimit + 1
 
     const replacements: any[] = [realLimitPlusOne]
@@ -59,12 +59,6 @@ export class PromptResolver extends BaseEntity {
       .innerJoinAndSelect("p.creator", "u") // Assuming a relation exists between Post and User
       .orderBy("p.createdAt", "DESC")
       .take(realLimitPlusOne)
-
-    // Add cursor condition if provided
-    // if (cursor) {
-    //   const cursorDate = new Date(parseInt(cursor))
-    //   queryBuilder.where("p.createdAt < :cursor", { cursor: cursorDate })
-    // }
 
     if (cursor) {
       queryBuilder.andWhere("p.createdAt < :cursor", { cursor: new Date(parseInt(cursor)) })
@@ -79,14 +73,7 @@ export class PromptResolver extends BaseEntity {
       prompts.pop()
     }
 
-    // console.log(posts);
     return { prompts: prompts.slice(0, realLimit), hasMore }
-    // return { prompts, hasMore }
-
-
-    // return await promptRepository.find({
-    //   relations: ['creator'], // This tells TypeORM to include the related User (creator) in the result
-    // })
   }
 
   @Query(() => Prompt, { nullable: true })

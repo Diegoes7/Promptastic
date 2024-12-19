@@ -15,7 +15,6 @@ export class PictureResolver {
   @Query(() => Picture, { nullable: true })
   @UseMiddleware(DatabaseCheckMiddleware)
   async getUserPicture(@Arg('userId', () => Int) userId: number,
-    // @Ctx() { session }: ContextProps
   ): Promise<Picture | undefined | null> {
     const picture = await Picture.findOne({ where: { userId } })
     const found = picture ? picture : undefined

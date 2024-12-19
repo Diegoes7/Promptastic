@@ -4,9 +4,6 @@ import type { ContextProps } from "../../graphql/context"
 import argon2 from 'argon2'
 
 import { BaseEntity } from "typeorm"
-import { GraphQLUpload, type File } from 'graphql-upload-nextjs'
-import fs from 'fs'
-import path from 'path'
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
 
 @InputType()
@@ -54,25 +51,6 @@ export class UserResolver extends BaseEntity {
     @Ctx() { dataSource }: ContextProps): Promise<User> {
     const { email, password, username, picture } = options
 
-    // let pictureUrl = ''
-    // if (picture) {
-    //   const { createReadStream, filename, mimetype } = picture
-    //   // Define the path where files are stored
-    //   const uploadPath = path.join(process.cwd(), 'public/uploads', filename)
-
-
-    //   // Save the file to the upload path
-    //   await new Promise<void>((resolve, reject) => {
-    //     createReadStream()
-    //       .pipe(fs.createWriteStream(uploadPath))
-    //       .on('finish', () => resolve())
-    //       .on('error', reject)
-    //   })
-
-    //   // Construct the URL
-    //   pictureUrl = `https://${process.env.NEXTAUTH_URL_INTERNAL}/uploads/${filename}`
-    // }
-
     const userRepository = dataSource.getRepository(User)
     const hashedPassword = await argon2.hash(password)
 
@@ -93,28 +71,8 @@ export class UserResolver extends BaseEntity {
     @Arg('id', () => Int) id: number,
     @Arg('username', () => String) username: string,
     @Ctx() { dataSource }: ContextProps,
-    // @Arg('picture', () => GraphQLUpload, { nullable: true }) picture: FileUpload,
   ): Promise<User | null> {
     const userRepository = dataSource.getRepository(User)
-
-    // let pictureUrl: string | undefined
-
-    // if (picture) {
-    //   const { createReadStream, filename } = await picture
-    //   // Define the path where files are stored
-    //   const uploadPath = path.join(process.cwd(), 'public/uploads', filename)
-
-    //   // Save the file to the upload path
-    //   await new Promise<void>((resolve, reject) => {
-    //     createReadStream()
-    //       .pipe(fs.createWriteStream(uploadPath))
-    //       .on('finish', () => resolve())
-    //       .on('error', reject)
-    //   })
-
-    //   // Construct the URL
-    //   pictureUrl = `https://${process.env.NEXTAUTH_URL_INTERNAL}/uploads/${filename}`
-    // }
 
     await userRepository.update(id, { username })
 
@@ -133,7 +91,7 @@ export class UserResolver extends BaseEntity {
   @Mutation(() => User)
   async login(@Arg('email') email: string,
     @Arg('password') password: string,
-    @Ctx() { session, dataSource }: ContextProps
+    @Ctx() { dataSource }: ContextProps
   ): Promise<User | string> {
     const user = await dataSource.getRepository(User).findOne({ where: { email } })
     console.log('Log in: ', user)

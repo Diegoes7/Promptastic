@@ -35,7 +35,7 @@ export class Prompt extends BaseEntity {
   @UpdateDateColumn()
   updatedAt!: Date
 
-  @Field(() => User, { nullable: true }) //! Mark the field as nullable
+  @Field(() => User, { nullable: true }) //? Mark the field as nullable
   @ManyToOne(() => User, (user) => user.prompts, { nullable: true })
   creator: User | null = null;
 

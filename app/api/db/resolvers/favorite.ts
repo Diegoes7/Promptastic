@@ -18,8 +18,6 @@ export class FavoriteResolver {
       throw new Error('User not found')
     }
 
-    // Extract the prompts from the favorites
-    // const favoritePrompts = (await user.favorites).map(async (favorite: Favorite) => await favorite.prompt)
     const favoritePrompts = await Promise.all(
       (await user.favorites).map(async (favorite: Favorite) => await favorite)
     )
@@ -44,8 +42,6 @@ export class FavoriteResolver {
       throw new Error('User not found')
     }
 
-    // Extract the prompts from the favorites
-    // const favoritePrompts = user.favorites.map((favorite) => favorite.prompt)
     const favoritePrompts = await Promise.all(
       (await user.favorites).map(async (favorite: Favorite) => await favorite)
     )
@@ -87,11 +83,8 @@ export class FavoriteResolver {
   @UseMiddleware(isAuth)
   async removeFromFavorites(
     @Arg('favoriteID', () => Int) favoriteID: number,
-    // @Ctx() { session }: ContextProps
   ): Promise<number> { // Change return type to number for the ID
-    // const userId = session.userID
     const existingFavorite = await Favorite.findOne({
-      // where: { user: { id: userId }, prompt: { id: promptId } },
       where: { id: favoriteID }
     })
 
