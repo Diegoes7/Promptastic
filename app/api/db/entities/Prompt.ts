@@ -4,7 +4,7 @@ import { User } from './User'
 import { Favorite } from './Favorite'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
 
-@ObjectType()
+@ObjectType('Prompt')
 @Entity()
 export class Prompt extends BaseEntity {
   @Field(() => ID)

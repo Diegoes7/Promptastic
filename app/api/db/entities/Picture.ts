@@ -2,7 +2,7 @@ import { Field, ID, ObjectType, Int } from 'type-graphql'
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
 import { User } from './User'
 
-@ObjectType()
+@ObjectType('Picture')
 @Entity()
 export class Picture extends BaseEntity {
   @Field(() => ID)
