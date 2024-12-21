@@ -1,5 +1,5 @@
 import { isAuth } from "../../../middleware"
-import { Arg, Ctx, Field, InputType, Int, Mutation, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql"
+import { Arg, Ctx, Field, InputType, Int, Mutation, ObjectType, Query, Resolver, UseMiddleware, } from "type-graphql"
 import type { ContextProps } from "../../graphql/context"
 import { BaseEntity } from "typeorm"
 import { Prompt } from "../../db/entities/Prompt"
@@ -7,7 +7,7 @@ import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseChe
 import { AppDataSource, initializeDatabase } from "../typeorm.config"
 
 
-@InputType()
+@InputType('PromptInput')
 class PromptInput {
   @Field()
   title!: string
@@ -22,11 +22,11 @@ class PromptInput {
   likes!: number
 }
 
-@ObjectType()
+@ObjectType('PaginatedPrompts')
 class PaginatedPrompts {
   @Field(() => [Prompt])
   prompts!: Prompt[]
-  
+
   @Field()
   hasMore!: boolean
 }

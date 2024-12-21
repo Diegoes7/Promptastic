@@ -6,7 +6,7 @@ import argon2 from 'argon2'
 import { BaseEntity } from "typeorm"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
 
-@InputType()
+@InputType('UserInput')
 export class UserInput {
   @Field()
   email!: string
