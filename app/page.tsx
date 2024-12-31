@@ -1,21 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useUserQuery } from '../generated/graphql'
+import React from 'react'
 import Feed from '../components/feed'
-import { useSession } from 'next-auth/react'
 
 const Home = () => {
-	// const { data: currentUser } = useUserQuery()
-	// const [siteContent, setSiteContent] = useState('')
-	// const { data: session, status } = useSession()
-
-
-
-	// React.useEffect(() => {
-      
-	// }, [session])
-
 	return (
 		<>
 			<section className='w-full flex-center flex-col my-4'>

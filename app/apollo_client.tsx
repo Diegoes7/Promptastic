@@ -13,21 +13,21 @@ import { PaginatedPrompts } from 'generated/graphql'
 
 // Create an upload link for file uploads
 const uploadLink = createUploadLink({
-	uri: 'http://localhost:3000/api/graphql', // Replace with your GraphQL server URL
-	// uri: process.env.NEXTAUTH_URL_API_INTERNAL as string,
+	uri: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
 	credentials: 'include', // Include credentials for file uploads as well
 	headers: {
 		'Apollo-Require-Preflight': 'true', // Required for file uploads
-		// 'Content-Type': 'multipart/form-data',
 		'Content-Type': 'multipart/form-data',
 	},
 })
 
 // Create a regular HTTP link for standard queries
 const httpLink = new HttpLink({
-	uri: 'http://localhost:3000/api/graphql', // Replace with your GraphQL endpoint
-	// uri: process.env.NEXTAUTH_URL_API_INTERNAL as string,
+	uri: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
 	credentials: 'include',
+	// headers: {
+	// 	'Content-Type': 'application/json',
+	// },
 })
 
 // Combine links using ApolloLink

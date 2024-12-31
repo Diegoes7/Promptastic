@@ -6,8 +6,6 @@ import { PromptResolver } from '../db/resolvers/prompt'
 import { FavoriteResolver } from '../db/resolvers/favorite'
 import { PictureResolver } from '../db/resolvers/picture'
 import { DatabaseCheckMiddleware } from './middleware/databaseCheck'
-import { printSchema } from 'graphql'
-
 
 export const schema = await buildSchema({
   resolvers: [UserResolver, PromptResolver, FavoriteResolver, PictureResolver],
@@ -15,5 +13,3 @@ export const schema = await buildSchema({
   validate: false,
 })
 
-
-console.log(printSchema(schema));

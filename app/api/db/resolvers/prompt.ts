@@ -77,6 +77,7 @@ export class PromptResolver extends BaseEntity {
   }
 
   @Query(() => Prompt, { nullable: true })
+  @UseMiddleware(DatabaseCheckMiddleware)
   async getPromptById(@Arg('id', () => Int) id: number, @Ctx() { dataSource }: ContextProps): Promise<Prompt | null> {
     // return await Prompt.findOne({ where: { id } });
     const promptRepository = dataSource.getRepository(Prompt)
@@ -86,6 +87,7 @@ export class PromptResolver extends BaseEntity {
   }
 
   @Query(() => [Prompt], { nullable: true })
+  @UseMiddleware(DatabaseCheckMiddleware)
   async getUserPrompts(@Ctx() { session, dataSource }: ContextProps) {
     return await dataSource.getRepository(Prompt).find({
       where: { creator: { id: session.userID } }, // Filter prompts by the creator's ID
@@ -108,6 +110,7 @@ export class PromptResolver extends BaseEntity {
   //? Mutations
   @Mutation(() => Prompt)
   @UseMiddleware(isAuth)
+  @UseMiddleware(DatabaseCheckMiddleware)
   async createPrompt(@Arg('input') input: PromptInput,
     @Ctx() { session, dataSource }: ContextProps,
   ): Promise<Prompt> {
@@ -142,6 +145,7 @@ export class PromptResolver extends BaseEntity {
   };
 
   @Mutation(() => Prompt)
+  @UseMiddleware(DatabaseCheckMiddleware)
   @UseMiddleware(isAuth)
   async updatePrompt(@Arg('id', () => Int) id: number, @Arg('input') input: PromptInput,
     @Ctx() { session, dataSource }: ContextProps):
@@ -171,6 +175,7 @@ export class PromptResolver extends BaseEntity {
   }
 
   @Mutation(() => Int)
+  @UseMiddleware(DatabaseCheckMiddleware)
   async deletePrompt(@Arg('id', () => Int) id: number,
     @Ctx() { dataSource }: ContextProps): Promise<number> {
     const promptRepository = dataSource.getRepository(Prompt)
@@ -185,6 +190,7 @@ export class PromptResolver extends BaseEntity {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(DatabaseCheckMiddleware)
   async updateLikes(
     @Arg('id', () => Int) id: number,
     @Ctx() { dataSource }: ContextProps

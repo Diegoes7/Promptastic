@@ -96,7 +96,7 @@ const Like = ({ post }: LikeProps) => {
 
 	const prompt = favorites?.myFavoritePrompts.filter(
 		(f) => f.prompt.id === post.id
-	) [0]
+	)[0]
 
 	const [unLikedPrompt] = useRemoveFromFavoritesMutation()
 

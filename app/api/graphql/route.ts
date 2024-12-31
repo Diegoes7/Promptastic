@@ -3,7 +3,7 @@ import { ApolloServer } from '@apollo/server'
 import { schema } from './schema' // Assuming you have a GraphQL schema defined
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/authOptions'
-import { AppDataSource, initializeDatabase } from '../db/typeorm.config'
+import { initializeDatabase } from '../db/typeorm.config'
 import { ContextProps } from './context'
 import { supabase } from '../db/supabase_client'
 import { NextRequest, NextResponse } from 'next/server'
@@ -16,11 +16,11 @@ const server = new ApolloServer({
   csrfPrevention: false,
 })
 
-let dataSource: DataSource
+// let dataSource: DataSource
 
-if (!AppDataSource.isInitialized) {
-  dataSource = await initializeDatabase() as DataSource
-}
+// if (!AppDataSource.isInitialized) {
+const dataSource = await initializeDatabase() as DataSource
+// }
 
 const handleContext = async (req: NextRequest): Promise<ContextProps> => {
   const session = await getServerSession(authOptions)

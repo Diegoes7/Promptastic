@@ -5,6 +5,8 @@ import { InputField } from './basic/form_fields'
 import Link from 'next/link'
 import { LogInUser } from '../app/sign_up/page'
 import Button from './basic/button/Button'
+import { TbWritingSign } from 'react-icons/tb'
+import { MdOutlineCancelScheduleSend } from 'react-icons/md'
 
 type LogInProps = {
 	user: LogInUser
@@ -55,6 +57,7 @@ const LogInForm = ({ user, setUser, submitting, handleSubmit }: LogInProps) => {
 					<Link href='/' className='text-gray-500 text-sm'>
 						<Button
 							buttonStyle={{ color: 'gray', rounded: 'full', size: 'md' }}
+							rightIcon={<MdOutlineCancelScheduleSend />}
 						>
 							Cancel
 						</Button>
@@ -63,6 +66,7 @@ const LogInForm = ({ user, setUser, submitting, handleSubmit }: LogInProps) => {
 						type='submit'
 						isLoading={submitting}
 						buttonStyle={{ color: 'teal', rounded: 'full', size: 'md' }}
+						rightIcon={<TbWritingSign />}
 					>
 						Sign In
 					</Button>

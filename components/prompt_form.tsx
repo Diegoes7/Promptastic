@@ -3,6 +3,9 @@ import Link from 'next/link'
 import { Post } from '../app/create_prompt/page'
 import { InputField, TextAreaField } from './basic/form_fields'
 import Button from './basic/button/Button'
+import { MdOutlineCancelScheduleSend } from 'react-icons/md'
+import { AiFillEdit } from 'react-icons/ai'
+import { MdAddToPhotos } from 'react-icons/md'
 
 type FormProps = {
 	type: string
@@ -80,17 +83,30 @@ const PromptForm = ({
 					<Link href='/' className='text-gray-500 text-sm'>
 						<Button
 							buttonStyle={{ color: 'gray', rounded: 'full', size: 'md' }}
+							rightIcon={<MdOutlineCancelScheduleSend />}
 						>
 							Cancel
 						</Button>
 					</Link>
-					<Button
-						type='submit'
-						isLoading={submitting}
-						buttonStyle={{ color: 'glassBlue', rounded: 'full', size: 'md' }}
-					>
-						Create Prompt
-					</Button>
+					{post.prompt.length > 0 ? (
+						<Button
+							type='submit'
+							isLoading={submitting}
+							buttonStyle={{ color: 'glassBlue', rounded: 'full', size: 'md' }}
+							leftIcon={<AiFillEdit />}
+						>
+							Update Prompt
+						</Button>
+					) : (
+						<Button
+							type='submit'
+							isLoading={submitting}
+							buttonStyle={{ color: 'glassBlue', rounded: 'full', size: 'md' }}
+							leftIcon={<MdAddToPhotos />}
+						>
+							Create Prompt
+						</Button>
+					)}
 				</div>
 			</form>
 		</section>

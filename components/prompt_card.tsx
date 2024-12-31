@@ -151,7 +151,12 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 								{post.creator?.username || ''}
 							</h3>
 							<p className='w-[85%] max-w-[75%] p-1 font-inter text-sm text-gray-500 break-words whitespace-normal'>
-								{post.creator?.email || ''}
+								{/* {post.creator?.email || ''} */}
+								<TruncatedText
+									maxLength={17}
+									minHeight=''
+									text={post.creator?.email}
+								/>
 							</p>
 						</div>
 					</div>
@@ -160,7 +165,11 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 					</p>
 					<div className='my-4 font-satoshi text-sm text-gray-700 max-w-[90%] text-inherit'>
 						{/* <p className='whitespace-normal break-words'>{post.prompt}</p> */}
-						<TruncatedText text={post.prompt} />
+						<TruncatedText
+							maxLength={57}
+							minHeight='min-h-[3em]'
+							text={post.prompt}
+						/>
 					</div>
 					<p
 						className='font-inter text-sm blue_gradient cursor-pointer'

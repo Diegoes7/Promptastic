@@ -25,13 +25,18 @@
 
 // export default TruncatedText
 
+type TruncatedTextProps = {
+	text: string
+	maxLength: number
+	minHeight?: string
+}
+
 import React, { useState, useRef } from 'react'
 import ReactDOM from 'react-dom'
 
-const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
+const TruncatedText = ({ text, minHeight, maxLength = 57 }: TruncatedTextProps) => {
 	const [hover, setHover] = useState(false)
 	const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
-	const maxLength = 77
 	const ref = useRef<HTMLDivElement>(null)
 
 	const handleMouseEnter = (event: React.MouseEvent) => {
@@ -50,10 +55,10 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
 	}
 
 	const handleMouseLeave = () => setHover(false)
-
+	
 	return (
 		<div
-			className='relative group'
+			className={`relative group ${minHeight}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			ref={ref}

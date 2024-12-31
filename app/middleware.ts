@@ -5,6 +5,13 @@
 import { MiddlewareFn } from 'type-graphql'
 import { ContextProps } from './api/graphql/context'
 
+export const isAuth: MiddlewareFn<ContextProps> = ({ context }, next) => {
+  if (!context.session.userID) {
+    throw new Error('Not authenticated')
+  }
+  return next()
+}
+
 
 // export async function middleware(req: NextRequest) {
 //   try {
@@ -27,9 +34,3 @@ import { ContextProps } from './api/graphql/context'
 // }
 
 
-export const isAuth: MiddlewareFn<ContextProps> = ({ context }, next) => {
-  if (!context.session.userID) {
-    throw new Error('Not authenticated')
-  }
-  return next()
-}

@@ -5,6 +5,10 @@ import { InputField } from './basic/form_fields'
 import Link from 'next/link'
 import Button from './basic/button/Button'
 import useNavigationWithLoading from '@app/utils/useNavigationWithLoading'
+import {
+	MdOutlineAssignmentInd,
+	MdOutlineCancelScheduleSend,
+} from 'react-icons/md'
 
 export type User = {
 	username: string
@@ -80,6 +84,7 @@ const RegisterForm = ({ user, setUser, handleSubmit }: UseFormProps) => {
 					<Link href='/' className='text-gray-500 text-sm'>
 						<Button
 							buttonStyle={{ color: 'gray', rounded: 'full', size: 'md' }}
+							rightIcon={<MdOutlineCancelScheduleSend />}
 						>
 							Cancel
 						</Button>
@@ -87,6 +92,7 @@ const RegisterForm = ({ user, setUser, handleSubmit }: UseFormProps) => {
 					<Button
 						onClick={disabled ? undefined : handleNavigation}
 						buttonStyle={{ color: 'teal', rounded: 'full', size: 'md' }}
+						rightIcon={<MdOutlineAssignmentInd />}
 					>
 						Register
 					</Button>

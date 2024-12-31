@@ -1,12 +1,11 @@
-import NextAuth, { AuthOptions, Session } from 'next-auth'
+import { AuthOptions, Session } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { AppDataSource, initializeDatabase } from '../db/typeorm.config'
-import { User} from '../../api/db/entities/User'
+import { User } from '../db/entities/User'
 import argon2 from 'argon2'
 import { AdapterUser } from 'next-auth/adapters'
 import { TypeORMAdapter } from "@auth/typeorm-adapter"
-import { NextApiRequest, NextApiResponse } from 'next/types'
 import { Picture } from '@app/api/db/entities/Picture'
 
 interface NextAuthUser {
@@ -49,9 +48,7 @@ export const authOptions: AuthOptions = {
           throw new Error('No credentials provided')
         }
 
-        if (!AppDataSource) {
-          await initializeDatabase()
-        }
+        await initializeDatabase()
 
         const userRepository = AppDataSource.getRepository(User)
 
@@ -84,9 +81,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token, user }: { session: MyOwnSession, token: any, user: AdapterUser }) {
 
-      if (!AppDataSource) {
-        await initializeDatabase()
-      }
+      await initializeDatabase()
 
       const userRepository = AppDataSource.getRepository(User)
       const sessionUser = await userRepository.findOne({
@@ -113,9 +108,7 @@ export const authOptions: AuthOptions = {
     async signIn({ profile, credentials }: { profile?: ProfileProps, credentials?: CredentialsPops }): Promise<string | boolean> {
       console.log('Profile:', profile)
 
-      if (!AppDataSource) {
-        await initializeDatabase()
-      }
+      await initializeDatabase()
 
       const userRepository = AppDataSource.getRepository(User)
       const pictureRepository = AppDataSource.getRepository(Picture)

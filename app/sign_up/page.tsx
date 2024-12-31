@@ -9,6 +9,7 @@ import { signIn, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
+import { MdOutlineAssignmentInd } from 'react-icons/md'
 
 export type LogInUser = {
 	email: string
@@ -86,6 +87,7 @@ const SignIn = () => {
 								size: 'md',
 								align: 'center',
 							}}
+							rightIcon={<MdOutlineAssignmentInd />}
 						>
 							Register
 						</Button>

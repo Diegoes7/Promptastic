@@ -16,6 +16,9 @@ import ThemeSwitch from './switch_theme'
 import { FaSignInAlt } from 'react-icons/fa'
 import { FiExternalLink } from 'react-icons/fi'
 import { FaMedal } from 'react-icons/fa'
+import { FaPowerOff } from 'react-icons/fa6'
+import { MdOutlineNoteAdd } from 'react-icons/md'
+
 import useNavigationWithLoading from '../app/utils/useNavigationWithLoading'
 
 const Navbar = () => {
@@ -26,13 +29,13 @@ const Navbar = () => {
 	const userID = session?.user && parseInt((session as MyOwnSession).userID!)
 	const name = session?.user?.name || ''
 	const buttonSize = width > 600 ? 'md' : 'xs'
-	const { loading, disabled, handleNavigation } =
-		useNavigationWithLoading('/create_prompt')
-
-	const handleSignOut = useCallback(async () => {
-		handleNavigation()
-		await signOut()
-	}, [])
+	// const { loading, disabled, handleNavigation } =
+	// 	useNavigationWithLoading('/create_prompt')
+	// const {
+	// 	loading: signOutLoading,
+	// 	disabled: signOutDisabled,
+	// 	handleNavigation: handleNavigationSignOut,
+	// } = useNavigationWithLoading('/')
 
 	const handlePopUp = useCallback(() => {
 		setIsOpen(!isOpen)
@@ -74,29 +77,9 @@ const Navbar = () => {
 			<div className='md:flex hidden'>
 				{session?.user ? (
 					<div className='flex gap-3 md:gap-5 items-center'>
-						<Button
-							buttonStyle={{
-								color: 'black',
-								rounded: 'full',
-								size: buttonSize,
-							}}
-							disabled={disabled}
-							isLoading={loading}
-							onClick={disabled ? undefined : handleNavigation}
-						>
-							Create Prompt
-						</Button>
+						<CreatePromptButton buttonSize={buttonSize} />
 						<div>
-							<Button
-								buttonStyle={{
-									color: 'black',
-									rounded: 'full',
-									size: buttonSize,
-								}}
-								onClick={handleSignOut}
-							>
-								Sign out
-							</Button>
+							<SignOutButton buttonSize={buttonSize} />
 						</div>
 						<Link href='/profile' className='dropdown_link'>
 							{session && (
@@ -124,11 +107,33 @@ const Navbar = () => {
 
 export default Navbar
 
-type SignUpButton = {
+type ButtonProps = {
 	buttonSize: string
 }
 
-export const SignUpButton = ({ buttonSize }: SignUpButton) => {
+export const CreatePromptButton = ({ buttonSize }: ButtonProps) => {
+	const { loading, disabled, handleNavigation } =
+		useNavigationWithLoading('/create_prompt')
+	const color = disabled ? 'gray' : 'orange'
+
+	return (
+		<Button
+			buttonStyle={{
+				color: 'black',
+				rounded: 'full',
+				size: buttonSize as any,
+			}}
+			disabled={disabled}
+			isLoading={loading}
+			onClick={disabled ? undefined : handleNavigation}
+			rightIcon={<MdOutlineNoteAdd />}
+		>
+			Create Prompt
+		</Button>
+	)
+}
+
+export const SignUpButton = ({ buttonSize }: ButtonProps) => {
 	const { loading, disabled, handleNavigation } =
 		useNavigationWithLoading('/sign_up')
 	const color = disabled ? 'gray' : 'orange'
@@ -146,6 +151,33 @@ export const SignUpButton = ({ buttonSize }: SignUpButton) => {
 			rightIcon={<FaSignInAlt />}
 		>
 			Sign Up
+		</Button>
+	)
+}
+
+export const SignOutButton = ({ buttonSize }: ButtonProps) => {
+	const [loading, setLoading] = React.useState(false)
+	// const { loading, disabled, handleNavigation } = useNavigationWithLoading('/')
+	// const color = disabled ? 'gray' : 'orange'
+
+	const handleSignOut = useCallback(async () => {
+		setLoading(true)
+		await signOut()
+	}, [])
+
+	return (
+		<Button
+			buttonStyle={{
+				color: 'black',
+				rounded: 'full',
+				size: buttonSize as any,
+			}}
+			// disabled={disabled}
+			isLoading={loading}
+			onClick={handleSignOut}
+			rightIcon={<FaPowerOff />}
+		>
+			Sign out
 		</Button>
 	)
 }
