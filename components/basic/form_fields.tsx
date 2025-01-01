@@ -22,7 +22,7 @@ export const InputField = ({
 }: InputFieldProps) => {
 	return (
 		<label htmlFor={htmlFor}>
-			<span className='font-satoshi font-semibold text-base text-[#020e10]'>
+			<span className='font-satoshi font-semibold text-base text-black dark:text-white'>
 				{label} <span className='font-normal'>{subTitle}</span>
 			</span>
 			<input

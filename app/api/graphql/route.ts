@@ -9,6 +9,7 @@ import { supabase } from '../db/supabase_client'
 import { NextRequest, NextResponse } from 'next/server'
 import { uploadProcess } from 'graphql-upload-nextjs'
 import { DataSource } from 'typeorm'
+import Cors from 'cors'
 
 // Apollo Server setup
 const server = new ApolloServer({
@@ -27,15 +28,50 @@ const handleContext = async (req: NextRequest): Promise<ContextProps> => {
   return { req, session, dataSource, supabaseClient: supabase }
 }
 
+// Create CORS middleware configuration
+const cors = Cors({
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: '*', // You can customize this to allow only specific domains
+})
+
 // Use Apollo's Next.js handler with context
 const handleServer = startServerAndCreateNextHandler(server, {
   context: handleContext,
 })
 
+// CORS wrapper to handle Next.js requests
+const runCorsMiddleware = (req: NextRequest, res: NextResponse) => {
+  return new Promise<void>((resolve, reject) => {
+    const resAdapter = {
+      statusCode: res.status || 200,
+      setHeader: (key: string, value: string) => {
+        res.headers.set(key, value);
+      },
+      end: () => {
+        resolve();
+      },
+    };
+
+    cors(req as any, resAdapter as any, (result: any) => {
+      if (result instanceof Error) {
+        reject(result);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+
 // Updated request handler to ensure correct return type
 const requestHandler = async (req: NextRequest): Promise<NextResponse> => {
   console.log('Incoming Request:', req.body)
   try {
+    // Run CORS middleware
+    const res = new NextResponse()
+    await runCorsMiddleware(req, res)
+
     // Handle file uploads specifically if the request is multipart/form-data.
     if (req.headers.get('content-type')?.includes('multipart/form-data')) {
       const response = await uploadProcess(
