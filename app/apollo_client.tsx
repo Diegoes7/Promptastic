@@ -13,7 +13,7 @@ import { PaginatedPrompts } from 'generated/graphql'
 
 const uri = process.env.VERCEL_URL
 	? `https://${process.env.VERCEL_URL}/api/graphql`
-	: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL
+	: process.env.NEXT_PUBLIC_URL_API
 
 // Create an upload link for file uploads
 const uploadLink = createUploadLink({
