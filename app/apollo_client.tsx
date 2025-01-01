@@ -25,9 +25,9 @@ const uploadLink = createUploadLink({
 const httpLink = new HttpLink({
 	uri: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
 	credentials: 'include',
-	// headers: {
-	// 	'Content-Type': 'application/json',
-	// },
+	headers: {
+		'Content-Type': 'application/json',
+	},
 })
 
 // Combine links using ApolloLink
