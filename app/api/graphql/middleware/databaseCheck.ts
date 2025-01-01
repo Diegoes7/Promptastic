@@ -2,7 +2,7 @@ import { MiddlewareFn } from "type-graphql"
 import { AppDataSource, initializeDatabase } from "@app/api/db/typeorm.config"
 
 export const DatabaseCheckMiddleware: MiddlewareFn = async ({ context }, next) => {
-  if (!AppDataSource) {
+  if (!AppDataSource.isInitialized) {
     try {
       await initializeDatabase()
       console.log("Database initialized by middleware.")

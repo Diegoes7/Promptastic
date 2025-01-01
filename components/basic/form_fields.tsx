@@ -60,7 +60,7 @@ export const TextAreaField = ({
 }: TextAreaFieldProps) => {
 	return (
 		<label htmlFor={htmlFor}>
-			<span className='font-satoshi font-semibold text-base text-[#020e10]'>
+			<span className='font-satoshi font-semibold text-base text-black dark:text-white'>
 				{label}
 			</span>
 			<textarea

@@ -102,7 +102,6 @@ export const authOptions: AuthOptions = {
         }
       }
 
-      console.log('Session:', session)
       return session
     },
     async signIn({ profile, credentials }: { profile?: ProfileProps, credentials?: CredentialsPops }): Promise<string | boolean> {
