@@ -13,7 +13,10 @@ import { PaginatedPrompts } from 'generated/graphql'
 
 // Create an upload link for file uploads
 const uploadLink = createUploadLink({
-	uri: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
+	// uri: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
+	uri: process.env.VERCEL_URL
+		? `https://${process.env.VERCEL_URL}/api/graphql`
+		: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
 	credentials: 'include', // Include credentials for file uploads as well
 	headers: {
 		'Apollo-Require-Preflight': 'true', // Required for file uploads
@@ -23,7 +26,10 @@ const uploadLink = createUploadLink({
 
 // Create a regular HTTP link for standard queries
 const httpLink = new HttpLink({
-	uri: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
+	// uri: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
+	uri: process.env.VERCEL_URL
+		? `https://${process.env.VERCEL_URL}/api/graphql`
+		: process.env.NEXT_PUBLIC_NEXTAUTH_URL_API_INTERNAL,
 	credentials: 'include',
 	headers: {
 		'Content-Type': 'application/json',
