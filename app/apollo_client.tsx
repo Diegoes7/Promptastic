@@ -32,6 +32,10 @@ const httpLink = new HttpLink({
 	headers: {
 		'Content-Type': 'application/json',
 	},
+	fetch: async (uri, options) => {
+		console.log('Fetching:', uri, options)
+		return fetch(uri, options)
+	},
 })
 
 // Combine links using ApolloLink
