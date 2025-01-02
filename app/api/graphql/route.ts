@@ -1,6 +1,4 @@
-export const config = {
-  runtime: 'nodejs',
-};
+export const runtime = "nodejs"
 
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { ApolloServer } from '@apollo/server'
