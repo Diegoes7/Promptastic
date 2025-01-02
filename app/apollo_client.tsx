@@ -11,8 +11,8 @@ import {
 import { createUploadLink } from 'apollo-upload-client'
 import { PaginatedPrompts } from 'generated/graphql'
 
-const uri = process.env.VERCEL_URL
-	? `https://${process.env.VERCEL_URL}/api/graphql`
+const uri = process.env.NEXT_PUBLIC_VERCEL_URL
+	? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/graphql`
 	: process.env.NEXT_PUBLIC_URL_API
 
 // Create an upload link for file uploads
