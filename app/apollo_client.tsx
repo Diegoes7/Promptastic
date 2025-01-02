@@ -11,13 +11,24 @@ import {
 import { createUploadLink } from 'apollo-upload-client'
 import { PaginatedPrompts } from 'generated/graphql'
 
-const uri = process.env.NEXT_PUBLIC_VERCEL_URL
-	? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/graphql`
-	: process.env.NEXT_PUBLIC_URL_API
+// Utility function to determine the API URL
+const getApiUrl = (req?: Request): string => {
+	if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+		return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/graphql`
+	}
+	if (req?.headers?.get('host')) {
+		return `https://${req.headers.get('host')}/api/graphql`
+	}
+	return process.env.NEXT_PUBLIC_URL_API! // Local fallback
+}
+
+//* const uri = process.env.NEXT_PUBLIC_VERCEL_URL
+//* 	? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/graphql`
+//* */ 	: process.env.NEXT_PUBLIC_URL_API
 
 // Create an upload link for file uploads
 const uploadLink = createUploadLink({
-	uri: uri,
+	uri: getApiUrl(),
 	credentials: 'include', // Include credentials for file uploads as well
 	headers: {
 		'Apollo-Require-Preflight': 'true', // Required for file uploads
@@ -27,7 +38,7 @@ const uploadLink = createUploadLink({
 
 // Create a regular HTTP link for standard queries
 const httpLink = new HttpLink({
-	uri: uri,
+	uri: getApiUrl(),
 	credentials: 'include',
 	headers: {
 		'Content-Type': 'application/json',

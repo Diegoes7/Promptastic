@@ -1,3 +1,7 @@
+export const config = {
+  runtime: 'nodejs',
+};
+
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { ApolloServer } from '@apollo/server'
 import { schema } from './schema' // Assuming you have a GraphQL schema defined
@@ -10,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { uploadProcess } from 'graphql-upload-nextjs'
 import { DataSource } from 'typeorm'
 import Cors from 'cors'
+
 
 // Apollo Server setup
 const server = new ApolloServer({
@@ -66,7 +71,11 @@ const runCorsMiddleware = (req: NextRequest, res: NextResponse) => {
 
 // Updated request handler to ensure correct return type
 const requestHandler = async (req: NextRequest): Promise<NextResponse> => {
-  console.log('Incoming Request:', req.body)
+  // console.log('Incoming Request:', req.body)
+  console.log("Request Headers",req.headers)
+  console.log('Request Method:', req.method);
+
+  console.log("Vercel URL", process.env.NEXT_PUBLIC_VERCEL_URL)
   try {
     // Run CORS middleware
     const res = new NextResponse()
