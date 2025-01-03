@@ -4,7 +4,7 @@ import type { ContextProps } from "../../graphql/context"
 import { BaseEntity } from "typeorm"
 import { Prompt } from "../../db/entities/Prompt"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
-import { AppDataSource, initializeDatabase } from "../typeorm.config"
+import { initializeDatabase } from "../typeorm.config"
 
 
 @InputType('PromptInput')
@@ -40,9 +40,9 @@ export class PromptResolver extends BaseEntity {
     @Arg('cursor', () => String, { nullable: true }) cursor: string | null,
     @Ctx() { dataSource }: ContextProps
   ): Promise<PaginatedPrompts> {
-    if (!AppDataSource) {
+    // if (!AppDataSource.isInitialized) {
       await initializeDatabase()
-    }
+    // }
 
     const promptRepository = dataSource.getRepository(Prompt)
 
