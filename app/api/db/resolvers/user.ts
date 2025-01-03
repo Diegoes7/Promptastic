@@ -1,7 +1,8 @@
 import { Arg, Ctx, Field, InputType, Int, Mutation, Query, Resolver, UseMiddleware } from "type-graphql"
 import { User } from "../../db/entities/User"
 import type { ContextProps } from "../../graphql/context"
-import argon2 from 'argon2'
+import bcrypt from 'bcrypt'
+
 
 import { BaseEntity } from "typeorm"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
@@ -52,7 +53,8 @@ export class UserResolver extends BaseEntity {
     const { email, password, username, picture } = options
 
     const userRepository = dataSource.getRepository(User)
-    const hashedPassword = await argon2.hash(password)
+    const hashedPassword = await bcrypt.hash(password, 10) // 10 is the number of salt rounds
+
 
     const newUser = userRepository.create({
       username,
@@ -100,9 +102,9 @@ export class UserResolver extends BaseEntity {
       return "That user does not exists!"
     }
 
-    const valid = await argon2.verify(user.password as any, password)
+    const isValid = await bcrypt.compare(password, password);
 
-    if (!valid) {
+    if (!isValid) {
       return 'Incorrect password!'
     }
 

@@ -3,10 +3,11 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { AppDataSource, initializeDatabase } from '../db/typeorm.config'
 import { User } from '../db/entities/User'
-import argon2 from 'argon2'
 import { AdapterUser } from 'next-auth/adapters'
 import { TypeORMAdapter } from "@auth/typeorm-adapter"
 import { Picture } from '@app/api/db/entities/Picture'
+import bcrypt from 'bcrypt'
+
 
 interface NextAuthUser {
   id: string
@@ -60,7 +61,7 @@ export const authOptions: AuthOptions = {
         }
 
         //$ Compare the provided password with the stored hash
-        const isValidPassword = await argon2.verify(user.password, credentials!.password)
+        const isValidPassword = await bcrypt.compare(user.password, credentials!.password)
 
         if (!isValidPassword) {
           throw new Error('Invalid password')
@@ -149,7 +150,7 @@ export const authOptions: AuthOptions = {
 
           // Verify the password if the user exists
           if (user) {
-            const isPasswordValid = await argon2.verify(user.password, credentials.password)
+            const isPasswordValid = await bcrypt.compare(user.password, credentials.password)
             if (isPasswordValid) {
               return true // Allow sign-in if password is valid
             }
