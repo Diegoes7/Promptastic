@@ -8,6 +8,7 @@ import { Picture } from '../db/entities/Picture'
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
+  url: process.env.DATABASE_URL,
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT?.replace(/^https:\/\//, '') || ''),
   username: process.env.DB_USERNAME,
