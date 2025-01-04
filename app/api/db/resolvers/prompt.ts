@@ -41,7 +41,7 @@ export class PromptResolver extends BaseEntity {
     @Ctx() { dataSource }: ContextProps
   ): Promise<PaginatedPrompts> {
     // if (!AppDataSource.isInitialized) {
-      await initializeDatabase()
+    await initializeDatabase()
     // }
 
     const promptRepository = dataSource.getRepository(Prompt)
@@ -114,10 +114,10 @@ export class PromptResolver extends BaseEntity {
   async createPrompt(@Arg('input') input: PromptInput,
     @Ctx() { session, dataSource }: ContextProps,
   ): Promise<Prompt> {
-    if (!dataSource) {
-      // await initializeDatabase()
-      throw new Error('Data source not initialized')
-    }
+    await initializeDatabase()
+    // if (!dataSource) {
+    //   throw new Error('Data source not initialized')
+    // }
     const promptRepository = dataSource.getRepository(Prompt)
 
     // const newPrompt = await promptRepository.create({
