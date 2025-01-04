@@ -40,8 +40,6 @@ const Avatar = ({
 	const image = user?.getOtherUser?.picture || ''
 	const imageSource = picture ? picture : image
 
-	console.log(data?.getUserPicture)
-
 	if (picture === '' && !user?.getOtherUser?.image) {
 		return <ConsistentColorName width={'37px'} height={'37px'} name={name} />
 	}

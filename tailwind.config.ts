@@ -24,7 +24,9 @@ module.exports = {
       },
       screens: {
         'xs': '450px',
-      }
+        'max-sm': { max: '639px' }, // For screens <= 639px
+        'custom-px': { max: '385px' }, // Applies for screens <= 380px
+      },
     },
   },
   plugins: [],

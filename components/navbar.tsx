@@ -29,13 +29,6 @@ const Navbar = () => {
 	const userID = session?.user && parseInt((session as MyOwnSession).userID!)
 	const name = session?.user?.name || ''
 	const buttonSize = width > 600 ? 'md' : 'xs'
-	// const { loading, disabled, handleNavigation } =
-	// 	useNavigationWithLoading('/create_prompt')
-	// const {
-	// 	loading: signOutLoading,
-	// 	disabled: signOutDisabled,
-	// 	handleNavigation: handleNavigationSignOut,
-	// } = useNavigationWithLoading('/')
 
 	const handlePopUp = useCallback(() => {
 		setIsOpen(!isOpen)
@@ -46,7 +39,7 @@ const Navbar = () => {
 	}, [])
 
 	return (
-		<nav className='flex-between gap-1 items-center w-full mb-6 pt-6 customSticky shadow-lg text-base sm:text-sm'>
+		<nav className='flex-between gap-1 items-center w-full mb-6 pt-6 customSticky shadow-lg text-base sm:text-sm custom-px:text-xs'>
 			<Link href='/' className='flex gap-2 flex-center'>
 				<Image
 					src='/assets/images/logo.svg'

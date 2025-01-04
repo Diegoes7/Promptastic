@@ -31,15 +31,19 @@ type TruncatedTextProps = {
 	minHeight?: string
 }
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import ReactDOM from 'react-dom'
 
-const TruncatedText = ({ text, minHeight, maxLength = 57 }: TruncatedTextProps) => {
+const TruncatedText = ({
+	text = '',
+	minHeight,
+	maxLength = 57,
+}: TruncatedTextProps) => {
 	const [hover, setHover] = useState(false)
 	const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
 	const ref = useRef<HTMLDivElement>(null)
 
-	const handleMouseEnter = (event: React.MouseEvent) => {
+	const handleMouseEnter = (/*event: React.MouseEvent */) => {
 		// Only calculate position and show tooltip if text exceeds maxLength
 		if (text.length > maxLength) {
 			setHover(true)
@@ -54,8 +58,8 @@ const TruncatedText = ({ text, minHeight, maxLength = 57 }: TruncatedTextProps) 
 		}
 	}
 
-	const handleMouseLeave = () => setHover(false)
-	
+	const handleMouseLeave = useCallback(() => setHover(false), [hover])
+
 	return (
 		<div
 			className={`relative group ${minHeight}`}

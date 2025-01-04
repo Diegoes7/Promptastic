@@ -6,6 +6,7 @@ import Button from './basic/button/Button'
 import { MdOutlineCancelScheduleSend } from 'react-icons/md'
 import { AiFillEdit } from 'react-icons/ai'
 import { MdAddToPhotos } from 'react-icons/md'
+import { useRouter, usePathname } from 'next/navigation'
 
 type FormProps = {
 	type: string
@@ -22,15 +23,20 @@ const PromptForm = ({
 	submitting,
 	handleSubmit,
 }: FormProps) => {
+	const router = useRouter()
+	const pathname = usePathname()
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target
 		const updatedPost = { ...post, [name]: value }
-		console.log('Updated Post:', updatedPost) // Debugging output
 		if (updatedPost) {
 			setPost(updatedPost)
 		}
+	}
+
+	const handleCancel = () => {
+		router.push('/') // Navigates to the homepage
 	}
 
 	return (
@@ -84,16 +90,17 @@ const PromptForm = ({
 						<Button
 							buttonStyle={{ color: 'gray', rounded: 'full', size: 'md' }}
 							rightIcon={<MdOutlineCancelScheduleSend />}
+							onClick={handleCancel}
 						>
 							Cancel
 						</Button>
 					</Link>
-					{post.prompt.length > 0 ? (
+					{pathname === '/update_prompt' && post.prompt.length > 0 ? (
 						<Button
 							type='submit'
 							isLoading={submitting}
 							buttonStyle={{ color: 'glassBlue', rounded: 'full', size: 'md' }}
-							leftIcon={<AiFillEdit />}
+							rightIcon={<AiFillEdit />}
 						>
 							Update Prompt
 						</Button>
