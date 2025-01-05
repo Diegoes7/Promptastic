@@ -75,21 +75,39 @@ const client = new ApolloClient({
 						merge(
 							existing: PaginatedPrompts | undefined,
 							incoming: PaginatedPrompts
-						): PaginatedPrompts {
+					): PaginatedPrompts {
+							const existingPrompts = existing?.prompts || [];
 							const incomingIds = new Set(
-								incoming.prompts.map((prompt) => prompt.id)
-							)
-							const mergedPrompts = [
-								...incoming.prompts,
-								...(existing?.prompts.filter(
+									incoming.prompts.map((prompt) => prompt.id)
+							);
+
+							const filteredExistingPrompts = existingPrompts.filter(
 									(prompt) => !incomingIds.has(prompt.id)
-								) || []),
-							]
+							);
+
 							return {
-								...incoming,
-								prompts: mergedPrompts,
-							}
-						},
+									...incoming,
+									prompts: [...filteredExistingPrompts, ...incoming.prompts],
+							};
+					},
+						// merge(
+						// 	existing: PaginatedPrompts | undefined,
+						// 	incoming: PaginatedPrompts
+						// ): PaginatedPrompts {
+						// 	const incomingIds = new Set(
+						// 		incoming.prompts.map((prompt) => prompt.id)
+						// 	)
+						// 	const mergedPrompts = [
+						// 		...incoming.prompts,
+						// 		...(existing?.prompts.filter(
+						// 			(prompt) => !incomingIds.has(prompt.id)
+						// 		) || []),
+						// 	]
+						// 	return {
+						// 		...incoming,
+						// 		prompts: mergedPrompts,
+						// 	}
+						// },
 					},
 				},
 			},

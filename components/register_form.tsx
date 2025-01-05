@@ -1,10 +1,9 @@
 'use client'
 
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useCallback } from 'react'
 import { InputField } from './basic/form_fields'
 import Link from 'next/link'
 import Button from './basic/button/Button'
-import useNavigationWithLoading from '@app/utils/useNavigationWithLoading'
 import {
 	MdOutlineAssignmentInd,
 	MdOutlineCancelScheduleSend,
@@ -24,17 +23,25 @@ type UseFormProps = {
 	handleSubmit: (e: FormEvent) => void
 }
 
-const RegisterForm = ({ user, setUser, handleSubmit }: UseFormProps) => {
-	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		// Handle the case where an event is passed
-		const { name, value } = e.target // Destructure name and value from the event target
-		const localUser = { ...user, [name]: value }
-		setUser(localUser)
-	}
-	const { loading, disabled, handleNavigation } =
-		useNavigationWithLoading('/create_prompt')
+const RegisterForm = ({
+	user,
+	setUser,
+	handleSubmit,
+	submitting,
+}: UseFormProps) => {
+	const handleChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			e.preventDefault()
+
+			console.log('Refresh the form', e)
+
+			// Handle the case where an event is passed
+			const { name, value } = e.target // Destructure name and value from the event target
+			const localUser = { ...user, [name]: value }
+			setUser(localUser)
+		},
+		[user]
+	)
 
 	return (
 		<section className='w-full max-w-full flex-center flex-col p-6'>
@@ -90,7 +97,9 @@ const RegisterForm = ({ user, setUser, handleSubmit }: UseFormProps) => {
 						</Button>
 					</Link>
 					<Button
-						onClick={disabled ? undefined : handleNavigation}
+						type='submit'
+						// onClick={handleSubmit}
+						isLoading={submitting}
 						buttonStyle={{ color: 'teal', rounded: 'full', size: 'md' }}
 						rightIcon={<MdOutlineAssignmentInd />}
 					>

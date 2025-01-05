@@ -26,7 +26,8 @@ export class FavoriteResolver {
   }
 
   @Query(() => [Favorite])
-  async myFavoritePrompts(@Ctx() { session }: ContextProps): Promise<Favorite[] | null> {
+  async myFavoritePrompts(@Ctx() { session }: ContextProps
+  ): Promise<Favorite[] | null> {
     if (!session || !session.userID) {
       console.log('Session or userID is undefined:', session)
       return null
@@ -79,11 +80,11 @@ export class FavoriteResolver {
     return newFavorite
   }
 
-  @Mutation(() => Int) // Using Int if you only want to return the ID
+  @Mutation(() => Int)
   @UseMiddleware(isAuth)
   async removeFromFavorites(
     @Arg('favoriteID', () => Int) favoriteID: number,
-  ): Promise<number> { // Change return type to number for the ID
+  ): Promise<number> {
     const existingFavorite = await Favorite.findOne({
       where: { id: favoriteID }
     })

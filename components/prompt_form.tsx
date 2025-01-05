@@ -109,7 +109,7 @@ const PromptForm = ({
 							type='submit'
 							isLoading={submitting}
 							buttonStyle={{ color: 'glassBlue', rounded: 'full', size: 'md' }}
-							leftIcon={<MdAddToPhotos />}
+							rightIcon={<MdAddToPhotos />}
 						>
 							Create Prompt
 						</Button>

@@ -31,6 +31,7 @@ const Avatar = ({
 			getOtherUserId: userId,
 		},
 	})
+
 	const { data, loading } = useGetUserPictureQuery({
 		variables: {
 			userId: userId,
@@ -40,8 +41,8 @@ const Avatar = ({
 	const image = user?.getOtherUser?.picture || ''
 	const imageSource = picture ? picture : image
 
-	if (picture === '' && !user?.getOtherUser?.image) {
-		return <ConsistentColorName width={'37px'} height={'37px'} name={name} />
+	if (imageSource === '') {
+		return <ConsistentColorName width={'37px'} height={'37px'} name={name} onClick={onClick}/>
 	}
 
 	if (loading) {
@@ -52,11 +53,9 @@ const Avatar = ({
 		<Image
 			height={height}
 			width={width}
-			// src={imagePath}
 			src={imageSource}
 			alt={alt}
 			data-user-id={userId}
-			// className='h-11 w-11 rounded-full object-fill mr-4'
 			className={`rounded-full object-fill border-2 border-white ${
 				isLarge ? 'h-[5.75em] w-[5.75em]' : 'h-11 w-11'
 			}`}

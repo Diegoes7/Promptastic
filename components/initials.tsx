@@ -28,14 +28,11 @@ const stringToColor = (str: string): string => {
 }
 
 // React component that sets consistent background and text color based on initials of the name
-interface ConsistentColorNameProps {
+type ConsistentColorNameProps = {
 	name: string
-	// width: React.CSSProperties;
-	// height: React.CSSProperties;
 	width: string
 	height: string
-	onClick?: () => void
-}
+} & React.HTMLAttributes<HTMLDivElement>
 
 const ConsistentColorName = ({
 	name,

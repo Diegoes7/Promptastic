@@ -9,12 +9,7 @@ import Skeleton from './skeleton'
 import useInfiniteScroll from '@app/utils/useLoadMore'
 
 const Feed = () => {
-	const {
-		data: allData,
-		loading,
-		fetchMore,
-		variables,
-	} = usePromptsQuery({
+	const { data, loading, fetchMore, variables } = usePromptsQuery({
 		variables: {
 			limit: 10,
 			cursor: null,
@@ -24,8 +19,8 @@ const Feed = () => {
 	const [searchText, setSearchText] = React.useState('')
 	const [posts, setPosts] = React.useState<Post[]>([])
 
-	const allPrompts = allData?.prompts?.prompts
-	const hasMore = allData?.prompts?.hasMore
+	const allPrompts = data?.prompts?.prompts
+	const hasMore = data?.prompts?.hasMore
 
 	const searchedResults = useSearch(searchText, posts)
 
@@ -65,7 +60,7 @@ const Feed = () => {
 		})
 	}
 
-	// Infinite scroll hook
+	//* Infinite scroll hook
 	const observerRef = useInfiniteScroll({
 		onLoadMore: handlePagination,
 		threshold: 0.9, // Trigger at 90% visibility
@@ -73,7 +68,7 @@ const Feed = () => {
 
 	const handleSearchChange = React.useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			// if (allPrompts && allPrompts?.length > 0) {
+			//* if (allPrompts && allPrompts?.length > 0) {
 			setSearchText(e.target.value)
 			// }
 		},

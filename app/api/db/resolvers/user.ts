@@ -2,8 +2,6 @@ import { Arg, Ctx, Field, InputType, Int, Mutation, Query, Resolver, UseMiddlewa
 import { User } from "../../db/entities/User"
 import type { ContextProps } from "../../graphql/context"
 import bcrypt from 'bcrypt'
-
-
 import { BaseEntity } from "typeorm"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
 
@@ -42,18 +40,19 @@ export class UserResolver extends BaseEntity {
   @UseMiddleware(DatabaseCheckMiddleware)
   async getOtherUser(@Arg('id', () => Int) id: number, @Ctx() { dataSource }: ContextProps): Promise<User | null> {
     const user = await dataSource.getRepository(User).findOne({ where: { id } })
-    return user || null // Return null if the user is not found
+    return user || null //? Return null if the user is not found
   }
 
   //$ Mutations
   @Mutation(() => User)
+  @UseMiddleware(DatabaseCheckMiddleware)
   async register(
     @Arg('options') options: UserInput,
     @Ctx() { dataSource }: ContextProps): Promise<User> {
     const { email, password, username, picture } = options
 
     const userRepository = dataSource.getRepository(User)
-    const hashedPassword = await bcrypt.hash(password, 10) // 10 is the number of salt rounds
+    const hashedPassword = await bcrypt.hash(password, 10) //* 10 is the number of salt rounds
 
 
     const newUser = userRepository.create({
@@ -102,7 +101,7 @@ export class UserResolver extends BaseEntity {
       return "That user does not exists!"
     }
 
-    const isValid = await bcrypt.compare(password, password);
+    const isValid = await bcrypt.compare(password, user.password)
 
     if (!isValid) {
       return 'Incorrect password!'

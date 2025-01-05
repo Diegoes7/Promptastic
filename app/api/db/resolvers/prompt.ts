@@ -40,9 +40,7 @@ export class PromptResolver extends BaseEntity {
     @Arg('cursor', () => String, { nullable: true }) cursor: string | null,
     @Ctx() { dataSource }: ContextProps
   ): Promise<PaginatedPrompts> {
-    // if (!AppDataSource.isInitialized) {
-    await initializeDatabase()
-    // }
+    !dataSource && await initializeDatabase()
 
     const promptRepository = dataSource.getRepository(Prompt)
 
@@ -78,8 +76,10 @@ export class PromptResolver extends BaseEntity {
 
   @Query(() => Prompt, { nullable: true })
   @UseMiddleware(DatabaseCheckMiddleware)
-  async getPromptById(@Arg('id', () => Int) id: number, @Ctx() { dataSource }: ContextProps): Promise<Prompt | null> {
-    // return await Prompt.findOne({ where: { id } });
+  async getPromptById(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { dataSource }: ContextProps
+  ): Promise<Prompt | null> {
     const promptRepository = dataSource.getRepository(Prompt)
     return await promptRepository.findOne({
       where: { id }, // Find the prompt by its ID
@@ -114,17 +114,9 @@ export class PromptResolver extends BaseEntity {
   async createPrompt(@Arg('input') input: PromptInput,
     @Ctx() { session, dataSource }: ContextProps,
   ): Promise<Prompt> {
-    await initializeDatabase()
-    // if (!dataSource) {
-    //   throw new Error('Data source not initialized')
-    // }
-    const promptRepository = dataSource.getRepository(Prompt)
+    !dataSource && await initializeDatabase()
 
-    // const newPrompt = await promptRepository.create({
-    //   ...input,
-    //   creatorId: session.userID,
-    // } ).save()
-    // Save the new prompt
+    const promptRepository = dataSource.getRepository(Prompt)
 
     const newPrompt = await promptRepository.save({
       ...input,
@@ -176,8 +168,10 @@ export class PromptResolver extends BaseEntity {
 
   @Mutation(() => Int)
   @UseMiddleware(DatabaseCheckMiddleware)
-  async deletePrompt(@Arg('id', () => Int) id: number,
-    @Ctx() { dataSource }: ContextProps): Promise<number> {
+  async deletePrompt(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { dataSource }: ContextProps
+  ): Promise<number> {
     const promptRepository = dataSource.getRepository(Prompt)
 
     const prompt = await promptRepository.findOneBy({ id })

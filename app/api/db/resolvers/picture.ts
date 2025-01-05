@@ -21,16 +21,10 @@ export class PictureResolver {
     return found
   }
 
-  // Fetch all pictures (to display)
-  // @Query(() => [Picture])
-  // async getAllPictures() {
-  //   return await Picture.find()
-  // }
-
   @Mutation(() => Boolean)
   async uploadPicture(
     @Arg('file', () => GraphQLUpload) file: Promise<File>,
-    @Ctx() { session }: ContextProps // Assuming session contains the user ID
+    @Ctx() { session }: ContextProps 
   ): Promise<boolean> {
     if (!session || !session.userID) {
       throw new Error("User not authenticated")
@@ -85,13 +79,19 @@ export class PictureResolver {
       throw new Error('Picture not found')
     }
 
-    // Delete the file from the filesystem
+    //* Delete the file from the filesystem
     const filePath = path.join(__dirname, `../../uploads/${picture.filename}`)
     fs.unlinkSync(filePath)
 
-    // Delete from the database
+    //* Delete from the database
     await Picture.remove(picture)
     return true
   }
+
+   // Fetch all pictures (to display)
+  // @Query(() => [Picture])
+  // async getAllPictures() {
+  //   return await Picture.find()
+  // }
 
 }

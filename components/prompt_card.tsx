@@ -149,9 +149,13 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 						<div className='flex flex-col gap-x-4 w-full'>
 							<h3 className='w-[85%] truncate whitespace-nowrap overflow-hidden text-ellipsis font-satoshi font-semibold text-gray-900 text-inherit'>
 								{post.creator?.username || ''}
+								{/* this about it <TruncatedText
+									maxLength={17}
+									minHeight=''
+									text={post.creator?.username || ''}
+								/> */}
 							</h3>
-							<div className='w-[85%] max-w-[75%] p-1 font-inter text-sm text-gray-500 break-words whitespace-normal'>
-								{/* {post.creator?.email || ''} */}
+							<div className='p-1 font-inter text-sm text-gray-500 break-words whitespace-normal'>
 								<TruncatedText
 									maxLength={17}
 									minHeight=''
@@ -160,11 +164,14 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 							</div>
 						</div>
 					</div>
-					<p className='my-4 font-satoshi text-sm text-gray-700 text-inherit'>
-						{post.title}
-					</p>
+					<div className='my-4 font-satoshi text-sm text-gray-700 text-inherit'>
+						<TruncatedText
+							maxLength={57}
+							minHeight='min-h-[3em]'
+							text={post.title}
+						/>
+					</div>
 					<div className='my-4 font-satoshi text-sm text-gray-700 max-w-[90%] text-inherit'>
-						{/* <p className='whitespace-normal break-words'>{post.prompt}</p> */}
 						<TruncatedText
 							maxLength={57}
 							minHeight='min-h-[3em]'

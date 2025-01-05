@@ -61,7 +61,7 @@ export const authOptions: AuthOptions = {
         }
 
         //$ Compare the provided password with the stored hash
-        const isValidPassword = await bcrypt.compare(user.password, credentials!.password)
+        const isValidPassword = await bcrypt.compare(credentials!.password, user.password)
 
         if (!isValidPassword) {
           throw new Error('Invalid password')
@@ -150,7 +150,7 @@ export const authOptions: AuthOptions = {
 
           // Verify the password if the user exists
           if (user) {
-            const isPasswordValid = await bcrypt.compare(user.password, credentials.password)
+            const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
             if (isPasswordValid) {
               return true // Allow sign-in if password is valid
             }

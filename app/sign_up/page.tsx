@@ -19,7 +19,7 @@ export type LogInUser = {
 const SignIn = () => {
 	const { data: session } = useSession()
 	const {
-		loading: navLoading,
+		loading: registerLoading,
 		disabled,
 		handleNavigation,
 	} = useNavigationWithLoading('/register')
@@ -79,6 +79,7 @@ const SignIn = () => {
 					<h1 className='mb-4'>If you do NOT have account, register.</h1>
 					<Link href='/register'>
 						<Button
+							isLoading={registerLoading}
 							onClick={disabled ? undefined : handleNavigation}
 							className='px-[70px] text-lg'
 							buttonStyle={{
@@ -89,7 +90,7 @@ const SignIn = () => {
 							}}
 							rightIcon={<MdOutlineAssignmentInd />}
 						>
-							Register
+							Go To Register
 						</Button>
 					</Link>
 				</div>
