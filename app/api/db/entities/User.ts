@@ -5,7 +5,7 @@ import { Favorite } from "./Favorite"
 import { Picture } from "./Picture"
 
 @ObjectType('User')  // Unique name for GraphQL schema
-@Entity()
+@Entity({ name: "user" })
 export class User extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
