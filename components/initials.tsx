@@ -70,7 +70,7 @@ const ConsistentColorName = ({
 					justifyContent: 'center',
 				}}
 			>
-				{initials}
+				{initials.slice(0, 2)}
 			</h1>
 		</div>
 	)

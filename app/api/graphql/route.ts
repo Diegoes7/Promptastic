@@ -5,7 +5,7 @@ import { ApolloServer } from '@apollo/server'
 import { schema } from './schema' // Assuming you have a GraphQL schema defined
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/authOptions'
-import { initializeDatabase } from '../db/typeorm.config'
+import { AppDataSource, initializeDatabase } from '../db/typeorm.config'
 import { ContextProps } from './context'
 import { supabase } from '../db/supabase_client'
 import { NextRequest, NextResponse } from 'next/server'
@@ -20,14 +20,13 @@ const server = new ApolloServer({
   csrfPrevention: false,
 })
 
-// let dataSource: DataSource
-
-// if (!AppDataSource.isInitialized) {
-const dataSource = await initializeDatabase() as DataSource
-// }
-
 const handleContext = async (req: NextRequest): Promise<ContextProps> => {
   const session = await getServerSession(authOptions)
+  // Ensure the data source is initialized
+  const dataSource = AppDataSource.isInitialized
+    ? AppDataSource
+    : await initializeDatabase()
+
   return { req, session, dataSource, supabaseClient: supabase }
 }
 
@@ -49,29 +48,29 @@ const runCorsMiddleware = (req: NextRequest, res: NextResponse) => {
     const resAdapter = {
       statusCode: res.status || 200,
       setHeader: (key: string, value: string) => {
-        res.headers.set(key, value);
+        res.headers.set(key, value)
       },
       end: () => {
-        resolve();
+        resolve()
       },
-    };
+    }
 
     cors(req as any, resAdapter as any, (result: any) => {
       if (result instanceof Error) {
-        reject(result);
+        reject(result)
       } else {
-        resolve();
+        resolve()
       }
-    });
-  });
-};
+    })
+  })
+}
 
 
 // Updated request handler to ensure correct return type
 const requestHandler = async (req: NextRequest): Promise<NextResponse> => {
   // console.log('Incoming Request:', req.body)
-  console.log("Request Headers",req.headers)
-  console.log('Request Method:', req.method);
+  console.log("Request Headers", req.headers)
+  console.log('Request Method:', req.method)
 
   console.log("Vercel URL", process.env.NEXT_PUBLIC_VERCEL_URL)
   try {

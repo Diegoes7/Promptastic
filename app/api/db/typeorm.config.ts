@@ -23,15 +23,17 @@ export const AppDataSource = new DataSource({
 })
 
 
-export const initializeDatabase = async () => {
+export const initializeDatabase = async (): Promise<DataSource> => {
   if (!AppDataSource.isInitialized) {
     await AppDataSource.initialize()
       .then(() => {
         console.log('Data Source has been initialized!')
       })
       .catch((err) => {
-        console.error('Error during Data Source initialization', err)
+        console.error('Error during Data Source initialization:', err)
+        throw err // Re-throw the error to propagate initialization failure
       })
-    return AppDataSource
   }
-}
+  return AppDataSource
+};
+
