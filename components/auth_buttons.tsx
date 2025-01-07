@@ -9,10 +9,15 @@ import Button from './basic/button/Button'
 export function GoogleSignInButton() {
 	const [loading, setLoading] = React.useState(false)
 
-	const handleClick = () => {
+	const handleClick = React.useCallback(() => {
 		setLoading(true)
+
+		setTimeout(() => {
+			setLoading(false)
+		}, 5000)
+
 		signIn('google')
-	}
+	}, [])
 
 	return (
 		<Button

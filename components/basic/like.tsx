@@ -33,9 +33,10 @@ const Like = ({ post }: LikeProps) => {
 		hideNotification,
 	} = useNotification()
 
-	const [isLiked, setIsliked] = React.useState<boolean>(false)
+	const [isLiked, setIsliked] = React.useState(false)
 
 	React.useEffect(() => {
+		//* when i click so change liked
 		const liked = favorites?.myFavoritePrompts.some(
 			(f) => f.prompt.id === post.id
 		)
@@ -79,7 +80,7 @@ const Like = ({ post }: LikeProps) => {
 								}
 							},
 						})
-						setIsliked(true) // Optimistic UI update
+						// setIsliked(true) // Optimistic UI update
 					} catch (error) {
 						console.error('Error adding to favorites:', error)
 					}
@@ -183,3 +184,6 @@ const Like = ({ post }: LikeProps) => {
 }
 
 export default Like
+
+
+//* Can get my favorites from session.userID, get the user.favorites
