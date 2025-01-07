@@ -34,18 +34,32 @@ export class FavoriteResolver {
     }
 
     const userId = session.userID
-    const user = await User.findOne({
-      where: { id: userId },
-      relations: ['favorites', 'favorites.prompt', 'favorites.prompt.creator'],
-    })
+    // Use QueryBuilder to carefully select required fields
+    const favoritePrompts = await Favorite.createQueryBuilder('favorite')
+      .innerJoinAndSelect('favorite.prompt', 'prompt')
+      .innerJoinAndSelect('prompt.creator', 'creator')
+      .where('favorite.userId = :userId', { userId })
+      // .select([
+      //   'favorite.id', // Include favorite ID
+      //   'prompt.id',    // Include prompt ID
+      //   'prompt.title', // Include prompt title
+      //   'creator.id',   // Include creator ID
+      //   'creator.name', // Include creator name
+      // ])
+      .getMany()
 
-    if (!user) {
-      throw new Error('User not found')
-    }
+    // const user = await User.findOne({
+    //   where: { id: userId },
+    //   relations: ['favorites', 'favorites.prompt', 'favorites.prompt.creator'],
+    // })
 
-    const favoritePrompts = await Promise.all(
-      (await user.favorites).map(async (favorite: Favorite) => await favorite)
-    )
+    // if (!user) {
+    //   throw new Error('User not found')
+    // }
+
+    // const favoritePrompts = await Promise.all(
+    //   (await user.favorites).map(async (favorite: Favorite) => await favorite)
+    // )
 
     return favoritePrompts
   }
