@@ -11,12 +11,12 @@ export class Favorite extends BaseEntity {
   id!: number
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.favorites, { eager: false })
+  @ManyToOne(() => User, (user) => user.favorites, { lazy: true })
   @JoinColumn({ name: "userId" })
   user!: Promise<User>
 
   @Field(() => Prompt)
-  @ManyToOne(() => Prompt, (prompt) => prompt.favorites, { eager: false })
+  @ManyToOne(() => Prompt, (prompt) => prompt.favorites, { lazy: true })
   @JoinColumn({ name: "promptId" })
   prompt!: Promise<Prompt>
 }

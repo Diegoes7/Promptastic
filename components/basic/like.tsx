@@ -57,28 +57,29 @@ const Like = ({ post }: LikeProps) => {
 							variables: {
 								promptId: parseInt(post.id!), // Assuming post.id is always valid
 							},
-							update(cache, { data }) {
-								if (data?.addToFavorites) {
-									// Read the current favorites from the cache
-									const existingFavorites =
-										cache.readQuery<MyFavoritePromptsQuery>({
-											query: MyFavoritePromptsDocument,
-										})
+							refetchQueries: [{ query: MyFavoritePromptsDocument }],
+							// update(cache, { data }) {
+							// 	if (data?.addToFavorites) {
+							// 		// Read the current favorites from the cache
+							// 		const existingFavorites =
+							// 			cache.readQuery<MyFavoritePromptsQuery>({
+							// 				query: MyFavoritePromptsDocument,
+							// 			})
 
-									if (existingFavorites) {
-										// Add the new favorite to the cache
-										cache.writeQuery({
-											query: MyFavoritePromptsDocument,
-											data: {
-												myFavoritePrompts: [
-													...existingFavorites.myFavoritePrompts,
-													data.addToFavorites,
-												],
-											},
-										})
-									}
-								}
-							},
+							// 		if (existingFavorites) {
+							// 			// Add the new favorite to the cache
+							// 			cache.writeQuery({
+							// 				query: MyFavoritePromptsDocument,
+							// 				data: {
+							// 					myFavoritePrompts: [
+							// 						...existingFavorites.myFavoritePrompts,
+							// 						data.addToFavorites,
+							// 					],
+							// 				},
+							// 			})
+							// 		}
+							// 	}
+							// },
 						})
 						// setIsliked(true) // Optimistic UI update
 					} catch (error) {
