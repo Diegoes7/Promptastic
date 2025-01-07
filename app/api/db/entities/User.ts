@@ -44,7 +44,7 @@ export class User extends BaseEntity {
 
   @Field(() => [Favorite])
   @OneToMany(() => Favorite, (favorite) => favorite.user)
-  favorites!: Promise<Favorite[]>
+  favorites!: Favorite[]
 
   @Field(() => Picture, { nullable: true })
   @OneToMany(() => Picture, (picture) => picture)
