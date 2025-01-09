@@ -72,7 +72,9 @@ export class FavoriteResolver {
   ): Promise<Favorite> {
     const userId = session.userID
     const user = await User.findOne({ where: { id: userId } })
-    const prompt = await Prompt.findOne({ where: { id: promptId }, relations: ['creator'], })
+    console.log('Favorite User', user)
+    const prompt = await Prompt.findOne({ where: { id: promptId }})
+    console.log('Favorite Prompt', prompt)
 
     if (!user || !prompt) {
       throw new Error('User or prompt not found')
@@ -89,6 +91,7 @@ export class FavoriteResolver {
     const newFavorite = new Favorite()
     newFavorite.user = Promise.resolve(user)
     newFavorite.prompt = Promise.resolve(prompt)
+    console.log('addToFavorites', newFavorite)
 
     await newFavorite.save()
     return newFavorite
