@@ -219,14 +219,14 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 						)}
 					</div>
 				</div>
+				{isVisible && (
+					<Notification
+						message={message}
+						onConfirm={onConfirm}
+						onCancel={onCancel}
+					/>
+				)}
 			</div>
-			{isVisible && (
-				<Notification
-					message={message}
-					onConfirm={onConfirm}
-					onCancel={onCancel}
-				/>
-			)}
 		</>
 	)
 }

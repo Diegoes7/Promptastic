@@ -4,7 +4,8 @@ import { Prompt } from './Prompt'
 import { Field, ID, ObjectType } from 'type-graphql'
 
 @ObjectType('Favorite')
-@Entity({ name: "favorite" })
+// @Entity({ name: "favorite" })
+@Entity()
 export class Favorite extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -16,7 +17,7 @@ export class Favorite extends BaseEntity {
   user!: Promise<User>
 
   @Field(() => Prompt)
-  @ManyToOne(() => Prompt, (prompt) => prompt.favorites, { lazy: true })
+  @ManyToOne(() => Prompt, (prompt) => prompt.favorites, { onDelete: 'CASCADE', lazy: true })
   @JoinColumn({ name: "promptId" })
   prompt!: Promise<Prompt>
 }

@@ -5,7 +5,8 @@ import { Favorite } from './Favorite'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
 
 @ObjectType('Prompt')
-@Entity({ name: "prompt" })
+// @Entity({ name: "prompt" })
+@Entity()
 export class Prompt extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -45,6 +46,6 @@ export class Prompt extends BaseEntity {
   creatorId!: number
 
   @Field(() => [Favorite])
-  @OneToMany(() => Favorite, (favorite) => favorite.prompt)
+  @OneToMany(() => Favorite, (favorite) => favorite.prompt, { cascade: ['remove'], onDelete: 'CASCADE' })
   favorites!: Favorite[]
 }
