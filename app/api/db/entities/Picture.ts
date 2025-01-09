@@ -3,8 +3,7 @@ import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from 't
 import { User } from './User'
 
 @ObjectType('Picture')
-// @Entity({ name: "picture" })
-@Entity()
+@Entity({ name: "picture" })
 export class Picture extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
