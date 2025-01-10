@@ -10,6 +10,6 @@ import { DatabaseCheckMiddleware } from './middleware/databaseCheck'
 export const schema = await buildSchema({
   resolvers: [UserResolver, PromptResolver, FavoriteResolver, PictureResolver],
   globalMiddlewares: [DatabaseCheckMiddleware], // Apply globally
-  validate: false,
+  validate: false, // Disable validation temporarily
 })
 

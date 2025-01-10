@@ -1,12 +1,23 @@
-import { Resolver, Query, Arg, Ctx, Mutation, UseMiddleware, Int } from 'type-graphql'
+import { Resolver, Query, Arg, Ctx, Mutation, UseMiddleware, Int, FieldResolver, Root, ObjectType } from 'type-graphql'
 import { User } from '../../db/entities/User'
 import { Prompt } from '../../db/entities/Prompt'
 import { Favorite } from '../../db/entities/Favorite'
 import type { ContextProps } from '@app/api/graphql/context'
 import { isAuth } from '@app/middleware'
 
-@Resolver()
+@Resolver(() => Favorite)
 export class FavoriteResolver {
+
+  @FieldResolver(() => User)
+  async user(@Root() favorite: Favorite): Promise<User> {
+    return await User.findOneOrFail({ where: { id: (await favorite.user).id } })
+  }
+
+  @FieldResolver(() => Prompt)
+  async prompt(@Root() favorite: Favorite): Promise<Prompt> {
+    return await Prompt.findOneOrFail({ where: { id: (await favorite.prompt).id } })
+  }
+
   @Query(() => [Favorite])
   async getUserFavoritePrompts(@Arg('userId', () => Int) userId: number): Promise<Favorite[] | null> {
     const user = await User.findOne({

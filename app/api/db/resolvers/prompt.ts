@@ -1,10 +1,11 @@
 import { isAuth } from "../../../middleware"
-import { Arg, Ctx, Field, InputType, Int, Mutation, ObjectType, Query, Resolver, UseMiddleware, } from "type-graphql"
+import { Arg, Ctx, Field, FieldResolver, InputType, Int, Mutation, ObjectType, Query, Resolver, Root, UseMiddleware, } from "type-graphql"
 import type { ContextProps } from "../../graphql/context"
 import { BaseEntity } from "typeorm"
-import { Prompt } from "../../db/entities/Prompt"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
 import { initializeDatabase } from "../typeorm.config"
+import { Prompt } from "../../db/entities/Prompt"
+import { User } from "../../db/entities/User"
 
 
 @InputType('PromptInput')
@@ -33,6 +34,12 @@ class PaginatedPrompts {
 
 @Resolver(Prompt)
 export class PromptResolver extends BaseEntity {
+
+  @FieldResolver(() => User, { nullable: true })
+  async creator(@Root() prompt: Prompt): Promise<User | null> {
+    return await User.findOne({ where: { id: (await prompt.creator).id } })
+  }
+
   @Query(() => PaginatedPrompts, { nullable: true })
   @UseMiddleware(DatabaseCheckMiddleware)
   async prompts(

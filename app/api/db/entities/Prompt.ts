@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm'
 import { User } from './User'
 import { Favorite } from './Favorite'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
@@ -36,8 +36,10 @@ export class Prompt extends BaseEntity {
   updatedAt!: Date
 
   @Field(() => User, { nullable: true }) //* Mark the field as nullable
-  @ManyToOne(() => User, (user) => user.prompts)
-  creator: User | null = null;
+  @ManyToOne(() => User, (user) => user.prompts, { lazy: true })
+  @JoinColumn({ name: "creatorId" })
+  creator!: Promise<User>
+  // creator: User | null = null;
 
   @Field(() => Int, { nullable: true })
   @Column({ nullable: true })

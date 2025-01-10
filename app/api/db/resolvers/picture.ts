@@ -9,7 +9,7 @@ import { User } from '../../db//entities/User'
 import { pipeline } from 'stream'
 import { DatabaseCheckMiddleware } from '@app/api/graphql/middleware/databaseCheck'
 
-@Resolver()
+@Resolver(Picture)
 export class PictureResolver {
 
   @Query(() => Picture, { nullable: true })
