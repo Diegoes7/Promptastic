@@ -1,5 +1,5 @@
-query GetUserPicture($userId: Int!) {
-	getUserPicture(userId: $userId) {
+query GetUserPicture($creatorId: Int!) {
+	getUserPicture(creatorId: $creatorId) {
 		...Picture
 	}
 }

@@ -14,9 +14,9 @@ export class PictureResolver {
 
   @Query(() => Picture, { nullable: true })
   @UseMiddleware(DatabaseCheckMiddleware)
-  async getUserPicture(@Arg('userId', () => Int) userId: number,
+  async getUserPicture(@Arg('creatorId', () => Int) creatorId: number,
   ): Promise<Picture | undefined | null> {
-    const picture = await Picture.findOne({ where: { userId } })
+    const picture = await Picture.findOne({ where: { creatorId } })
     const found = picture ? picture : undefined
     return found
   }
@@ -60,7 +60,7 @@ export class PictureResolver {
       picture.filename = uniqueFilename
       picture.mimetype = mimeType
       picture.path = `/uploads/${uniqueFilename}`
-      picture.userId = session.userID
+      picture.creatorId = session.userID
 
       await picture.save()
       return true

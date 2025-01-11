@@ -34,7 +34,7 @@ const Avatar = ({
 
 	const { data, loading } = useGetUserPictureQuery({
 		variables: {
-			userId: userId,
+			creatorId: userId,
 		},
 	})
 	const picture = data && data?.getUserPicture?.path

@@ -40,7 +40,6 @@ export class User extends BaseEntity {
   updatedAt!: Date
 
   @OneToMany(() => Prompt, prompt => prompt.creator)
-  @JoinColumn({ name: "promptId" })
   prompts!: Prompt[]
 
   @Field(() => [Favorite])

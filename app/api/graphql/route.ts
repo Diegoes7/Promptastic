@@ -2,7 +2,7 @@ export const runtime = "nodejs"
 
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { ApolloServer } from '@apollo/server'
-import { schema } from './schema' // Assuming you have a GraphQL schema defined
+import { schema } from './schema'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/authOptions'
 import { AppDataSource, initializeDatabase } from '../db/typeorm.config'
@@ -10,14 +10,15 @@ import { ContextProps } from './context'
 import { supabase } from '../db/supabase_client'
 import { NextRequest, NextResponse } from 'next/server'
 import { uploadProcess } from 'graphql-upload-nextjs'
-import { DataSource } from 'typeorm'
 import Cors from 'cors'
 
+const isDev = process.env.NODE_ENV !== 'production';
 
 // Apollo Server setup
 const server = new ApolloServer({
   schema,
   csrfPrevention: false,
+  introspection: true,
 })
 
 const handleContext = async (req: NextRequest): Promise<ContextProps> => {
@@ -69,10 +70,9 @@ const runCorsMiddleware = (req: NextRequest, res: NextResponse) => {
 // Updated request handler to ensure correct return type
 const requestHandler = async (req: NextRequest): Promise<NextResponse> => {
   // console.log('Incoming Request:', req.body)
-  console.log("Request Headers", req.headers)
-  console.log('Request Method:', req.method)
+  // console.log("Request Headers", req.headers)
+  // console.log('Request Method:', req.method)
 
-  console.log("Vercel URL", process.env.NEXT_PUBLIC_VERCEL_URL)
   try {
     // Run CORS middleware
     const res = new NextResponse()

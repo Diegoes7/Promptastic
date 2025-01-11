@@ -23,7 +23,7 @@ export class Picture extends BaseEntity {
 
   @Field(() => Int)
   @Column()
-  userId!: number
+  creatorId!: number
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.picture)

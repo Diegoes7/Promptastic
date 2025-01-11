@@ -35,10 +35,10 @@ class PaginatedPrompts {
 @Resolver(Prompt)
 export class PromptResolver extends BaseEntity {
 
-  @FieldResolver(() => User, { nullable: true })
-  async creator(@Root() prompt: Prompt): Promise<User | null> {
-    return await User.findOne({ where: { id: (await prompt.creator).id } })
-  }
+  // @FieldResolver(() => User, { nullable: true })
+  // async creator(@Root() prompt: Prompt): Promise<User | null> {
+  //   return await User.findOne({ where: { id: (await prompt.creator).id } })
+  // }
 
   @Query(() => PaginatedPrompts, { nullable: true })
   @UseMiddleware(DatabaseCheckMiddleware)

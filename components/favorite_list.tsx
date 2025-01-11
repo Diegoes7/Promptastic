@@ -50,7 +50,7 @@ const FavoriteList = ({ data, profilePath, extended }: FavoriteListProps) => {
 					try {
 						await unLikedPrompt({
 							variables: {
-								favoriteID: parseInt(f.id),
+								promptId: parseInt(f.prompt.id),
 							},
 							update(cache, { data }) {
 								if (data?.removeFromFavorites) {
@@ -134,7 +134,13 @@ const FavoriteList = ({ data, profilePath, extended }: FavoriteListProps) => {
 			<section
 				className={`${extend} pr-4 h-[350px] px-2 pt-2 bg-gray-200 border rounded-md border-blue-300 overflow-y-auto overflow-x-hidden bg-white dark:bg-slate-700`}
 			>
-				<div>{favList}</div>
+				<div>
+					{favList?.length === 0 ? (
+						<span className='w-[70%] p-4 my-8'> You do not have any favorite prompt yet.</span>
+					) : (
+						favList
+					)}
+				</div>
 			</section>
 		</div>
 	)

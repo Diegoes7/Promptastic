@@ -49,6 +49,7 @@ const Profile = ({
 	const [updateUser] = useUpdateUserMutation()
 
 	const profilePath = path === '/profile'
+	const nameInitials = profilePath ? session?.user?.name : userName
 
 	const avatarID = otherUserID
 		? // ? parseInt(otherUserID)
@@ -114,7 +115,7 @@ const Profile = ({
 						width={57}
 						height={57}
 						userId={avatarID}
-						name={session?.user?.name || ''}
+						name={nameInitials || ''}
 						alt='user picture'
 						isLarge={true}
 					/>

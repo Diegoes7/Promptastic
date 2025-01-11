@@ -3,5 +3,5 @@ fragment Picture on Picture {
 	filename
 	mimetype
 	path
-	userId
+	creatorId
 }

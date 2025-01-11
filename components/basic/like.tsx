@@ -80,7 +80,6 @@ const Like = ({ post }: LikeProps) => {
 								}
 							},
 						})
-						// setIsliked(true) // Optimistic UI update
 					} catch (error) {
 						console.error('Error adding to favorites:', error)
 					}
@@ -95,21 +94,21 @@ const Like = ({ post }: LikeProps) => {
 		[addToFavorite, session, showNotification, hideNotification]
 	)
 
-	const prompt = favorites?.myFavoritePrompts.filter(
-		(f) => f.prompt.id === post.id
-	)[0]
+	// const prompt = favorites?.myFavoritePrompts.filter(
+	// 	(f) => f.prompt.id === post.id
+	// )[0]
 
 	const [unLikedPrompt] = useRemoveFromFavoritesMutation()
 
 	const handleUnliked = useCallback(
-		async (prompt: Post) => {
+		async (post: Post) => {
 			showNotification(
 				`${(session as MyOwnSession).user?.name}, Are you sure you want unlike "${post.title}"?`,
 				async () => {
 					try {
 						await unLikedPrompt({
 							variables: {
-								favoriteID: parseInt(prompt?.id!), // Assuming post.id is valid
+								promptId: parseInt(post.id!), // Assuming post.id is valid
 							},
 							update(cache, { data }) {
 								if (data?.removeFromFavorites) {
@@ -158,7 +157,7 @@ const Like = ({ post }: LikeProps) => {
 			{isLiked ? (
 				<Button
 					buttonStyle={{ color: 'pink', rounded: 'full', size: 'xs' }}
-					onClick={() => handleUnliked(prompt as any)}
+					onClick={() => handleUnliked(post)}
 					leftIcon={<FcLikePlaceholder className='mr-2' />}
 				>
 					Liked
@@ -184,6 +183,5 @@ const Like = ({ post }: LikeProps) => {
 }
 
 export default Like
-
 
 //* Can get my favorites from session.userID, get the user.favorites

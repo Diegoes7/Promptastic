@@ -1,12 +1,14 @@
 import React, { useState, ChangeEvent, useEffect, FormEvent } from 'react'
 import Image from 'next/image'
-import { useUploadPictureMutation } from 'generated/graphql'
+import { UploadPictureDocument, useUploadPictureMutation } from 'generated/graphql'
 
 export const defaultAvatar =
 	'/assets/images/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png'
 
 const AvatarUploader = () => {
-	const [upload] = useUploadPictureMutation()
+	const [upload] = useUploadPictureMutation( {
+		refetchQueries: [UploadPictureDocument]
+	})
 	const [imageSrc, setImageSrc] = useState(defaultAvatar)
 	const [file, setFile] = useState<File | null>(null) // State to hold the selected file
 	const [error, setError] = useState<string | null>(null) // State for error messages

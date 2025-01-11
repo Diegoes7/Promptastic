@@ -36,10 +36,8 @@ export class Prompt extends BaseEntity {
   updatedAt!: Date
 
   @Field(() => User, { nullable: true }) //* Mark the field as nullable
-  @ManyToOne(() => User, (user) => user.prompts, { lazy: true })
-  @JoinColumn({ name: "creatorId" })
-  creator!: Promise<User>
-  // creator: User | null = null;
+  @ManyToOne(() => User, (creator) => creator.prompts, { lazy: true })
+  creator: User | null = null;
 
   @Field(() => Int, { nullable: true })
   @Column({ nullable: true })

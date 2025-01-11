@@ -1,0 +1,4 @@
+
+1. add notification after upload picture
+2. refresh queries after upload picture
+3. need to see and add functionality to add url image

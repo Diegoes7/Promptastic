@@ -132,7 +132,7 @@ export const authOptions: AuthOptions = {
           const savedPicture = AppDataSource.getRepository(Picture).create({
             filename: "Google Profile Picture",
             path: newUser.picture,
-            userId: newUser.id, // Use the ID from the saved user
+            creatorId: newUser.id, // Use the ID from the saved user
           })
           await pictureRepository.save(savedPicture)
         }

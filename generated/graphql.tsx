@@ -23,6 +23,7 @@ export type Favorite = {
   __typename?: 'Favorite';
   id: Scalars['ID']['output'];
   prompt: Prompt;
+  promptId: Scalars['ID']['output'];
   user: User;
 };
 
@@ -80,7 +81,7 @@ export type MutationRegisterArgs = {
 
 
 export type MutationRemoveFromFavoritesArgs = {
-  favoriteID: Scalars['Int']['input'];
+  promptId: Scalars['Int']['input'];
 };
 
 
@@ -113,12 +114,12 @@ export type PaginatedPrompts = {
 
 export type Picture = {
   __typename?: 'Picture';
+  creatorId: Scalars['Int']['output'];
   filename: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   mimetype?: Maybe<Scalars['String']['output']>;
   path?: Maybe<Scalars['String']['output']>;
   user: User;
-  userId: Scalars['Int']['output'];
 };
 
 export type Prompt = {
@@ -177,7 +178,7 @@ export type QueryGetUserFavoritePromptsArgs = {
 
 
 export type QueryGetUserPictureArgs = {
-  userId: Scalars['Int']['input'];
+  creatorId: Scalars['Int']['input'];
 };
 
 
@@ -207,25 +208,25 @@ export type UserInput = {
   username: Scalars['String']['input'];
 };
 
-export type PictureFragment = { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number };
+export type PictureFragment = { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number };
 
-export type PromptFragment = { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null };
+export type PromptFragment = { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null };
 
-export type UserFragment = { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null };
+export type UserFragment = { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null };
 
 export type AddToFavoritesMutationVariables = Exact<{
   promptId: Scalars['Int']['input'];
 }>;
 
 
-export type AddToFavoritesMutation = { __typename?: 'Mutation', addToFavorites: { __typename?: 'Favorite', id: string, user: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null }, prompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null } } };
+export type AddToFavoritesMutation = { __typename?: 'Mutation', addToFavorites: { __typename: 'Favorite' } };
 
 export type CreatePromptMutationVariables = Exact<{
   input: PromptInput;
 }>;
 
 
-export type CreatePromptMutation = { __typename?: 'Mutation', createPrompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null } };
+export type CreatePromptMutation = { __typename?: 'Mutation', createPrompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null } };
 
 export type DeletePictureMutationVariables = Exact<{
   deletePictureId: Scalars['Int']['input'];
@@ -261,17 +262,17 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } };
 
 export type RegisterMutationVariables = Exact<{
   options: UserInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'User', password?: string | null, id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'User', password?: string | null, id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } };
 
 export type RemoveFromFavoritesMutationVariables = Exact<{
-  favoriteID: Scalars['Int']['input'];
+  promptId: Scalars['Int']['input'];
 }>;
 
 
@@ -283,7 +284,7 @@ export type UpdatePromptMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePromptMutation = { __typename?: 'Mutation', updatePrompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null } };
+export type UpdatePromptMutation = { __typename?: 'Mutation', updatePrompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null } };
 
 export type UpdateUserMutationVariables = Exact<{
   username: Scalars['String']['input'];
@@ -291,7 +292,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } };
 
 export type UploadPictureMutationVariables = Exact<{
   file: Scalars['Upload']['input'];
@@ -305,33 +306,33 @@ export type GetUserFavoritePromptsQueryVariables = Exact<{
 }>;
 
 
-export type GetUserFavoritePromptsQuery = { __typename?: 'Query', getUserFavoritePrompts: Array<{ __typename?: 'Favorite', id: string, prompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null }, user: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } }> };
+export type GetUserFavoritePromptsQuery = { __typename?: 'Query', getUserFavoritePrompts: Array<{ __typename?: 'Favorite', id: string, prompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null }, user: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } }> };
 
 export type GetOtherUserQueryVariables = Exact<{
   getOtherUserId: Scalars['Int']['input'];
 }>;
 
 
-export type GetOtherUserQuery = { __typename?: 'Query', getOtherUser?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null };
+export type GetOtherUserQuery = { __typename?: 'Query', getOtherUser?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null };
 
 export type GetUserPictureQueryVariables = Exact<{
-  userId: Scalars['Int']['input'];
+  creatorId: Scalars['Int']['input'];
 }>;
 
 
-export type GetUserPictureQuery = { __typename?: 'Query', getUserPicture?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null };
+export type GetUserPictureQuery = { __typename?: 'Query', getUserPicture?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null };
 
 export type GetPromptByIdQueryVariables = Exact<{
   getPromptByIdId: Scalars['Int']['input'];
 }>;
 
 
-export type GetPromptByIdQuery = { __typename?: 'Query', getPromptById?: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null } | null };
+export type GetPromptByIdQuery = { __typename?: 'Query', getPromptById?: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null } | null };
 
 export type MyFavoritePromptsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyFavoritePromptsQuery = { __typename?: 'Query', myFavoritePrompts: Array<{ __typename?: 'Favorite', id: string, prompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null }, user: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } }> };
+export type MyFavoritePromptsQuery = { __typename?: 'Query', myFavoritePrompts: Array<{ __typename?: 'Favorite', id: string, prompt: { __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null }, user: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } }> };
 
 export type PromptsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
@@ -339,24 +340,24 @@ export type PromptsQueryVariables = Exact<{
 }>;
 
 
-export type PromptsQuery = { __typename?: 'Query', prompts?: { __typename?: 'PaginatedPrompts', hasMore: boolean, prompts: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null }> } | null };
+export type PromptsQuery = { __typename?: 'Query', prompts?: { __typename?: 'PaginatedPrompts', hasMore: boolean, prompts: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null }> } | null };
 
 export type GetPromptsUserByIdQueryVariables = Exact<{
   getPromptsUserById: Scalars['Int']['input'];
 }>;
 
 
-export type GetPromptsUserByIdQuery = { __typename?: 'Query', getPromptsUserById?: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null }> | null };
+export type GetPromptsUserByIdQuery = { __typename?: 'Query', getPromptsUserById?: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null }> | null };
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null };
 
 export type GetUserPromptsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserPromptsQuery = { __typename?: 'Query', getUserPrompts?: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, userId: number } | null } | null }> | null };
+export type GetUserPromptsQuery = { __typename?: 'Query', getUserPrompts?: Array<{ __typename?: 'Prompt', id: string, title: string, tag: string, prompt: string, likes: number, creatorId?: number | null, createdAt: any, updatedAt: any, creator?: { __typename?: 'User', id: string, username: string, email: string, picture?: string | null, createdAt: any, updatedAt: any, image?: { __typename?: 'Picture', id: string, filename: string, mimetype?: string | null, path?: string | null, creatorId: number } | null } | null }> | null };
 
 export const PictureFragmentDoc = gql`
     fragment Picture on Picture {
@@ -364,7 +365,7 @@ export const PictureFragmentDoc = gql`
   filename
   mimetype
   path
-  userId
+  creatorId
 }
     `;
 export const UserFragmentDoc = gql`
@@ -398,17 +399,10 @@ export const PromptFragmentDoc = gql`
 export const AddToFavoritesDocument = gql`
     mutation addToFavorites($promptId: Int!) {
   addToFavorites(promptId: $promptId) {
-    id
-    user {
-      ...User
-    }
-    prompt {
-      ...Prompt
-    }
+    __typename
   }
 }
-    ${UserFragmentDoc}
-${PromptFragmentDoc}`;
+    `;
 export type AddToFavoritesMutationFn = Apollo.MutationFunction<AddToFavoritesMutation, AddToFavoritesMutationVariables>;
 
 /**
@@ -661,8 +655,8 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const RemoveFromFavoritesDocument = gql`
-    mutation RemoveFromFavorites($favoriteID: Int!) {
-  removeFromFavorites(favoriteID: $favoriteID)
+    mutation RemoveFromFavorites($promptId: Int!) {
+  removeFromFavorites(promptId: $promptId)
 }
     `;
 export type RemoveFromFavoritesMutationFn = Apollo.MutationFunction<RemoveFromFavoritesMutation, RemoveFromFavoritesMutationVariables>;
@@ -680,7 +674,7 @@ export type RemoveFromFavoritesMutationFn = Apollo.MutationFunction<RemoveFromFa
  * @example
  * const [removeFromFavoritesMutation, { data, loading, error }] = useRemoveFromFavoritesMutation({
  *   variables: {
- *      favoriteID: // value for 'favoriteID'
+ *      promptId: // value for 'promptId'
  *   },
  * });
  */
@@ -878,8 +872,8 @@ export type GetOtherUserLazyQueryHookResult = ReturnType<typeof useGetOtherUserL
 export type GetOtherUserSuspenseQueryHookResult = ReturnType<typeof useGetOtherUserSuspenseQuery>;
 export type GetOtherUserQueryResult = Apollo.QueryResult<GetOtherUserQuery, GetOtherUserQueryVariables>;
 export const GetUserPictureDocument = gql`
-    query GetUserPicture($userId: Int!) {
-  getUserPicture(userId: $userId) {
+    query GetUserPicture($creatorId: Int!) {
+  getUserPicture(creatorId: $creatorId) {
     ...Picture
   }
 }
@@ -897,7 +891,7 @@ export const GetUserPictureDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserPictureQuery({
  *   variables: {
- *      userId: // value for 'userId'
+ *      creatorId: // value for 'creatorId'
  *   },
  * });
  */

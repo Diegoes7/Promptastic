@@ -8,15 +8,15 @@ import { isAuth } from '@app/middleware'
 @Resolver(() => Favorite)
 export class FavoriteResolver {
 
-  @FieldResolver(() => User)
-  async user(@Root() favorite: Favorite): Promise<User> {
-    return await User.findOneOrFail({ where: { id: (await favorite.user).id } })
-  }
+  // @FieldResolver(() => User)
+  // async user(@Root() favorite: Favorite): Promise<User> {
+  //   return await User.findOneOrFail({ where: { id: (await favorite.user).id } })
+  // }
 
-  @FieldResolver(() => Prompt)
-  async prompt(@Root() favorite: Favorite): Promise<Prompt> {
-    return await Prompt.findOneOrFail({ where: { id: (await favorite.prompt).id } })
-  }
+  // @FieldResolver(() => Prompt)
+  // async prompt(@Root() favorite: Favorite): Promise<Prompt> {
+  //   return await Prompt.findOneOrFail({ where: { id: (await favorite.prompt).id } })
+  // }
 
   @Query(() => [Favorite])
   async getUserFavoritePrompts(@Arg('userId', () => Int) userId: number): Promise<Favorite[] | null> {
@@ -80,10 +80,10 @@ export class FavoriteResolver {
   async addToFavorites(
     @Arg('promptId', () => Int) promptId: number,
     @Ctx() { session }: ContextProps
-  ): Promise<Favorite> {
+  ): Promise<boolean> {
     const userId = session.userID
     const user = await User.findOne({ where: { id: userId } })
-    const prompt = await Prompt.findOne({ where: { id: promptId }, relations: ['creator'], })
+    const prompt = await Prompt.findOne({ where: { id: promptId } })
 
     if (!user || !prompt) {
       throw new Error('User or prompt not found')
@@ -103,16 +103,16 @@ export class FavoriteResolver {
     console.log('addToFavorites', newFavorite)
 
     await newFavorite.save()
-    return newFavorite
+    return true
   }
 
   @Mutation(() => Int)
   @UseMiddleware(isAuth)
   async removeFromFavorites(
-    @Arg('favoriteID', () => Int) favoriteID: number,
+    @Arg('promptId', () => Int) promptId: number,
   ): Promise<number> {
     const existingFavorite = await Favorite.findOne({
-      where: { id: favoriteID }
+      where: { promptId: promptId }
     })
 
     if (!existingFavorite) {
