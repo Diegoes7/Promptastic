@@ -80,7 +80,7 @@ export class FavoriteResolver {
   async addToFavorites(
     @Arg('promptId', () => Int) promptId: number,
     @Ctx() { session }: ContextProps
-  ): Promise<boolean> {
+  ): Promise<Favorite> {
     const userId = session.userID
     const user = await User.findOne({ where: { id: userId } })
     const prompt = await Prompt.findOne({ where: { id: promptId } })
@@ -103,7 +103,7 @@ export class FavoriteResolver {
     console.log('addToFavorites', newFavorite)
 
     await newFavorite.save()
-    return true
+    return newFavorite
   }
 
   @Mutation(() => Int)

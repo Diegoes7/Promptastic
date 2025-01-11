@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
   entities: [Favorite, User, Prompt, Picture],
   // relationLoadStrategy: "query", // Ensures relations are lazy-loaded with queries
   // synchronize: process.env.NODE_ENV === "development",
-  synchronize: true,
+  synchronize: false,
   logging: process.env.NODE_ENV === "development",
   // migrations: ['./migrations/*.sql'],
   subscribers: [],

@@ -14,12 +14,12 @@ export class Favorite extends BaseEntity {
   @Column()
   promptId!: number
 
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   @ManyToOne(() => User, (user) => user.favorites, { lazy: true })
   @JoinColumn({ name: "userId" })
   user!: Promise<User>
 
-  @Field(() => Prompt)
+  @Field(() => Prompt, { nullable: true })
   @ManyToOne(() => Prompt, (prompt) => prompt.favorites, { onDelete: 'CASCADE', lazy: true })
   @JoinColumn({ name: "promptId" })
   prompt!: Promise<Prompt>

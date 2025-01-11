@@ -1,8 +1,10 @@
-# fragment Favorite on Favorite {
-	# creator {
-	# 	...User
-	# }
-	# favorites {
-	# 	Favorite
-	# }
-# }
+fragment Favorite on Favorite {
+	id
+	promptId
+	prompt {
+		...Prompt
+	}
+	user {
+		...User
+	}
+}

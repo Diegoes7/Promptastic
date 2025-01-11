@@ -25,7 +25,7 @@ export class Picture extends BaseEntity {
   @Column()
   creatorId!: number
 
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.picture)
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (user) => user.picture, { lazy: true })
   user!: Promise<User>  // Add the relationship with User
 }

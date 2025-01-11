@@ -65,9 +65,12 @@ const client = new ApolloClient({
 	link: combinedLink,
 	cache: new InMemoryCache({
 		typePolicies: {
-			// Prompt: {
-			// 	keyFields: ['id'], // Ensure prompts are uniquely identified by `id`
-			// },
+			Favorite: {
+				keyFields: ['id'], // Use the 'id' field to uniquely identify Favorite entities
+			},
+			Prompt: {
+				keyFields: ['id'], // Ensure prompts are uniquely identified by `id`
+			},
 			Query: {
 				fields: {
 					prompts: {
@@ -75,21 +78,21 @@ const client = new ApolloClient({
 						merge(
 							existing: PaginatedPrompts | undefined,
 							incoming: PaginatedPrompts
-					): PaginatedPrompts {
-							const existingPrompts = existing?.prompts || [];
+						): PaginatedPrompts {
+							const existingPrompts = existing?.prompts || []
 							const incomingIds = new Set(
-									incoming.prompts.map((prompt) => prompt.id)
-							);
+								incoming.prompts.map((prompt) => prompt.id)
+							)
 
 							const filteredExistingPrompts = existingPrompts.filter(
-									(prompt) => !incomingIds.has(prompt.id)
-							);
+								(prompt) => !incomingIds.has(prompt.id)
+							)
 
 							return {
-									...incoming,
-									prompts: [...filteredExistingPrompts, ...incoming.prompts],
-							};
-					},
+								...incoming,
+								prompts: [...filteredExistingPrompts, ...incoming.prompts],
+							}
+						},
 						// merge(
 						// 	existing: PaginatedPrompts | undefined,
 						// 	incoming: PaginatedPrompts

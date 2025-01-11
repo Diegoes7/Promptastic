@@ -1,11 +1,5 @@
 query GetUserFavoritePrompts($userId: Int!) {
 	getUserFavoritePrompts(userId: $userId) {
-		id
-		prompt {
-			...Prompt
-		}
-		user {
-			...User
-		}
+		...Favorite
 	}
 }

@@ -39,10 +39,11 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt!: Date
 
+  @Field(() => Prompt, { nullable: true })
   @OneToMany(() => Prompt, prompt => prompt.creator)
   prompts!: Prompt[]
 
-  @Field(() => [Favorite])
+  @Field(() => [Favorite], { nullable: true })
   @OneToMany(() => Favorite, (favorite) => favorite.user)
   favorites!: Favorite[]
 

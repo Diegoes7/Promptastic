@@ -37,13 +37,13 @@ export class Prompt extends BaseEntity {
 
   @Field(() => User, { nullable: true }) //* Mark the field as nullable
   @ManyToOne(() => User, (creator) => creator.prompts, { lazy: true })
-  creator: User | null = null;
+  creator!: Promise<User>
 
   @Field(() => Int, { nullable: true })
   @Column({ nullable: true })
   creatorId!: number
 
-  @Field(() => [Favorite])
-  @OneToMany(() => Favorite, (favorite) => favorite.prompt, { cascade: ['remove'], onDelete: 'CASCADE' })
-  favorites!: Favorite[]
+  @Field(() => [Favorite], { nullable: true })
+  @OneToMany(() => Favorite, (favorite) => favorite.prompt, { cascade: ['remove'], onDelete: 'CASCADE', lazy: true })
+  favorites!: Promise<Favorite[]>
 }

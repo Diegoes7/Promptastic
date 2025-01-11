@@ -1,14 +1,5 @@
 mutation addToFavorites($promptId: Int!) {
 	addToFavorites(promptId: $promptId) {
-		__typename
+		...Favorite
 	}
-	# {
-	# id
-	# user {
-	# 	...User
-	# }
-	# prompt {
-	# 	...Prompt
-	# }
-	# }
 }

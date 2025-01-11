@@ -18,7 +18,8 @@ import { useParams } from 'next/navigation'
 
 export type FavoriteProps = {
 	id: string
-	prompt: any
+	promptId: string
+	prompt?: any
 	user?: any | User | null | undefined // must be User
 }
 

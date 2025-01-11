@@ -38,7 +38,7 @@ const Like = ({ post }: LikeProps) => {
 	React.useEffect(() => {
 		//* when i click so change liked
 		const liked = favorites?.myFavoritePrompts.some(
-			(f) => f.prompt.id === post.id
+			(f) => f.prompt?.id === post.id
 		)
 		setIsliked(!!liked)
 	}, [favorites, post.id])
