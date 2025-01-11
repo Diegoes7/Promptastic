@@ -1,4 +1,4 @@
-import { Resolver, Query, Arg, Ctx, Mutation, UseMiddleware, Int, FieldResolver, Root, ObjectType } from 'type-graphql'
+import { Resolver, Query, Arg, Ctx, Mutation, UseMiddleware, Int, FieldResolver, Root } from 'type-graphql'
 import { User } from '../../db/entities/User'
 import { Prompt } from '../../db/entities/Prompt'
 import { Favorite } from '../../db/entities/Favorite'
@@ -8,15 +8,16 @@ import { isAuth } from '@app/middleware'
 @Resolver(() => Favorite)
 export class FavoriteResolver {
 
-  // @FieldResolver(() => User)
-  // async user(@Root() favorite: Favorite): Promise<User> {
-  //   return await User.findOneOrFail({ where: { id: (await favorite.user).id } })
-  // }
+  // Field resolver to fetch the User of a Favorite
+  @FieldResolver(() => User)
+  async user(@Root() favorite: Favorite): Promise<User | null> {
+    return await User.findOne({ where: { id: favorite.userId } }) // Resolve the user related to Favorite lazily
+  }
 
-  // @FieldResolver(() => Prompt)
-  // async prompt(@Root() favorite: Favorite): Promise<Prompt> {
-  //   return await Prompt.findOneOrFail({ where: { id: (await favorite.prompt).id } })
-  // }
+  @FieldResolver(() => Prompt)
+  async prompt(@Root() favorite: Favorite): Promise<Prompt | null> {
+    return await Prompt.findOne({ where: { id: favorite.promptId } })
+  }
 
   @Query(() => [Favorite])
   async getUserFavoritePrompts(@Arg('userId', () => Int) userId: number): Promise<Favorite[] | null> {
@@ -50,27 +51,7 @@ export class FavoriteResolver {
       .innerJoinAndSelect('favorite.prompt', 'prompt')
       .innerJoinAndSelect('prompt.creator', 'creator')
       .where('favorite.userId = :userId', { userId })
-      // .select([
-      //   'favorite.id', // Include favorite ID
-      //   'prompt.id',    // Include prompt ID
-      //   'prompt.title', // Include prompt title
-      //   'creator.id',   // Include creator ID
-      //   'creator.name', // Include creator name
-      // ])
       .getMany()
-
-    // const user = await User.findOne({
-    //   where: { id: userId },
-    //   relations: ['favorites', 'favorites.prompt', 'favorites.prompt.creator'],
-    // })
-
-    // if (!user) {
-    //   throw new Error('User not found')
-    // }
-
-    // const favoritePrompts = await Promise.all(
-    //   (await user.favorites).map(async (favorite: Favorite) => await favorite)
-    // )
 
     return favoritePrompts
   }
@@ -82,6 +63,8 @@ export class FavoriteResolver {
     @Ctx() { session }: ContextProps
   ): Promise<Favorite> {
     const userId = session.userID
+
+    //* Fetch the user and prompt
     const user = await User.findOne({ where: { id: userId } })
     const prompt = await Prompt.findOne({ where: { id: promptId } })
 
@@ -90,7 +73,10 @@ export class FavoriteResolver {
     }
 
     const existingFavorite = await Favorite.findOne({
-      where: { user: { id: userId }, prompt: { id: promptId } },
+      where: {
+        user: { id: userId },
+        prompt: { id: promptId }
+      },
     })
 
     if (existingFavorite) {
@@ -100,9 +86,8 @@ export class FavoriteResolver {
     const newFavorite = new Favorite()
     newFavorite.user = Promise.resolve(user)
     newFavorite.prompt = Promise.resolve(prompt)
-    console.log('addToFavorites', newFavorite)
-
     await newFavorite.save()
+
     return newFavorite
   }
 
@@ -125,55 +110,4 @@ export class FavoriteResolver {
     return favoriteId // Return only the ID
   }
 
-
-  // @Mutation(() => Favorite)
-  // @UseMiddleware(isAuth)
-  // async removeFromFavorites(
-  //   @Arg('favoriteId', () => Int) favoriteId: number
-  // ): Promise<Favorite> {
-  //   // Find the favorite by its unique ID
-  //   const favorite = await Favorite.findOne({ where: { id: favoriteId } })
-
-  //   if (!favorite) {
-  //     throw new Error('Favorite not found')
-  //   }
-
-  //   // Remove the favorite entry
-  //   await Favorite.remove(favorite)
-  //   return favorite
-  // }
-
-
-  //   @Mutation(() => Favorite)
-  //   @UseMiddleware(isAuth)
-  //   async toggleFavorite(
-  //     @Arg('promptId', () => Int) promptId: number,
-  //     @Ctx() { session }: ContextProps
-  //   ): Promise<Favorite> {
-  //     const userId = session.userID
-  //     const user = await User.findOne({ where: { id: userId } })
-  //     const prompt = await Prompt.findOne({ where: { id: promptId } })
-
-  //     if (!user || !prompt) {
-  //       throw new Error('User or prompt not found')
-  //     }
-
-  //     // Check if the prompt is already favorited
-  //     const existingFavorite = await Favorite.findOne({
-  //       where: { user: { id: userId }, prompt: { id: promptId } },
-  //     })
-
-  //     if (existingFavorite) {
-  //       // If it exists, remove it
-  //        await Favorite.remove(existingFavorite)
-  //       return existingFavorite // Return false when favorite is removed
-  //     }
-
-  //     const newFavorite = new Favorite()
-  //     newFavorite.user = Promise.resolve(user)
-  //     newFavorite.prompt = Promise.resolve(prompt)
-
-  //     await newFavorite.save() // Save the favorite
-  //     return newFavorite // Return true when favorite is added
-  //   }
 }

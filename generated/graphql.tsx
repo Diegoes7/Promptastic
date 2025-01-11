@@ -25,6 +25,7 @@ export type Favorite = {
   prompt?: Maybe<Prompt>;
   promptId: Scalars['ID']['output'];
   user?: Maybe<User>;
+  userId: Scalars['ID']['output'];
 };
 
 export type Mutation = {
@@ -134,6 +135,7 @@ export type Prompt = {
   tag: Scalars['String']['output'];
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTimeISO']['output'];
+  user: User;
 };
 
 export type PromptInput = {

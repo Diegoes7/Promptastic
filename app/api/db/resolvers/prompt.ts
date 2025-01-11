@@ -5,6 +5,7 @@ import { BaseEntity } from "typeorm"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
 import { initializeDatabase } from "../typeorm.config"
 import { Prompt } from "../../db/entities/Prompt"
+import { Favorite } from "../../db/entities/Favorite"
 import { User } from "../../db/entities/User"
 
 
@@ -35,10 +36,16 @@ class PaginatedPrompts {
 @Resolver(Prompt)
 export class PromptResolver extends BaseEntity {
 
-  // @FieldResolver(() => User, { nullable: true })
-  // async creator(@Root() prompt: Prompt): Promise<User | null> {
-  //   return await User.findOne({ where: { id: (await prompt.creator).id } })
-  // }
+  // Resolve the User related to Prompt
+  @FieldResolver(() => User)
+  async user(@Root() prompt: Prompt): Promise<User | null> {
+    return await User.findOne({ where: { id: prompt.creatorId } }) // Resolve User lazily
+  }
+
+  @FieldResolver(() => [Favorite])
+  async favorites(@Root() prompt: Prompt): Promise<Favorite[]> {
+    return await Favorite.find({ where: { promptId: prompt.id } })
+  }
 
   @Query(() => PaginatedPrompts, { nullable: true })
   @UseMiddleware(DatabaseCheckMiddleware)

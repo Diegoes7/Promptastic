@@ -1,4 +1,4 @@
-import { Arg, Ctx, Int, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Int, Mutation, Query, Resolver, Root, UseMiddleware } from 'type-graphql'
 import { GraphQLUpload, type File } from 'graphql-upload-nextjs'
 import { Picture } from '../../db/entities/Picture'
 import { v4 as uuidv4 } from 'uuid'
@@ -12,6 +12,12 @@ import { DatabaseCheckMiddleware } from '@app/api/graphql/middleware/databaseChe
 @Resolver(Picture)
 export class PictureResolver {
 
+  // Field resolver to fetch the User of a Favorite
+  @FieldResolver(() => User)
+  async user(@Root() picture: Picture): Promise<User | null> {
+    return await User.findOne({ where: { id: picture.creatorId } }) // Resolve the user related to Favorite lazily
+  }
+
   @Query(() => Picture, { nullable: true })
   @UseMiddleware(DatabaseCheckMiddleware)
   async getUserPicture(@Arg('creatorId', () => Int) creatorId: number,
@@ -24,7 +30,7 @@ export class PictureResolver {
   @Mutation(() => Boolean)
   async uploadPicture(
     @Arg('file', () => GraphQLUpload) file: Promise<File>,
-    @Ctx() { session }: ContextProps 
+    @Ctx() { session }: ContextProps
   ): Promise<boolean> {
     if (!session || !session.userID) {
       throw new Error("User not authenticated")
@@ -88,7 +94,7 @@ export class PictureResolver {
     return true
   }
 
-   // Fetch all pictures (to display)
+  // Fetch all pictures (to display)
   // @Query(() => [Picture])
   // async getAllPictures() {
   //   return await Picture.find()
