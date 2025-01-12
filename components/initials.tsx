@@ -50,7 +50,7 @@ const ConsistentColorName = ({
 			style={{
 				backgroundColor,
 				color: textColor,
-				padding: '10px',
+				padding: '12px',
 				borderRadius: '50%',
 				display: 'inline-flex',
 				justifyContent: 'center',

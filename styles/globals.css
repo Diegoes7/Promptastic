@@ -110,7 +110,7 @@
 }
 
 .head_text {
-	@apply mt-5 text-4xl font-extrabold leading-[1.15] text-inherit sm:text-5xl;
+	@apply mt-2 text-4xl font-extrabold leading-[1.15] text-inherit sm:text-5xl;
 }
 
 .orange_gradient {

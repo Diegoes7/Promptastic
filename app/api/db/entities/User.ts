@@ -39,6 +39,10 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt!: Date
 
+  @Field(() => ID)
+  @Column({ nullable: true })
+  promptId!: number
+
   @Field(() => Prompt, { nullable: true })
   @OneToMany(() => Prompt, prompt => prompt.creator)
   prompts!: Prompt[]

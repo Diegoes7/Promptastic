@@ -42,7 +42,14 @@ const Avatar = ({
 	const imageSource = picture ? picture : image
 
 	if (imageSource === '') {
-		return <ConsistentColorName width={'37px'} height={'37px'} name={name} onClick={onClick}/>
+		return (
+			<ConsistentColorName
+				width={'1.83em'}
+				height={'1.83em'}
+				name={name}
+				onClick={onClick}
+			/>
+		)
 	}
 
 	if (loading) {
@@ -57,7 +64,7 @@ const Avatar = ({
 			alt={alt}
 			data-user-id={userId}
 			className={`rounded-full object-fill border-2 border-white ${
-				isLarge ? 'h-[5.75em] w-[5.75em]' : 'h-11 w-11'
+				isLarge ? 'h-[5.90em] w-[5.90em]' : 'h-11 w-11'
 			}`}
 			onClick={onClick}
 			{...props}

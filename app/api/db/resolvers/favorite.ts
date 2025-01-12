@@ -8,11 +8,11 @@ import { isAuth } from '@app/middleware'
 @Resolver(() => Favorite)
 export class FavoriteResolver {
 
-  // Field resolver to fetch the User of a Favorite
-  @FieldResolver(() => User)
-  async user(@Root() favorite: Favorite): Promise<User | null> {
-    return await User.findOne({ where: { id: favorite.userId } }) // Resolve the user related to Favorite lazily
-  }
+   // Field resolver to fetch the User of a Favorite
+   @FieldResolver(() => User)
+   async user(@Root() favorite: Favorite): Promise<User | null> {
+     return await User.findOne({ where: { id: favorite.userId } }); // Resolve the user related to Favorite lazily
+   }
 
   @FieldResolver(() => Prompt)
   async prompt(@Root() favorite: Favorite): Promise<Prompt | null> {

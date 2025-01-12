@@ -20,7 +20,7 @@ export class Favorite extends BaseEntity {
 
   @Field(() => User, { nullable: true })
   @ManyToOne(() => User, (user) => user.favorites, { lazy: true })
-  @JoinColumn({ name: "userId" })
+  // @JoinColumn({ name: "userId" })
   user!: Promise<User>
 
   @Field(() => Prompt, { nullable: true })

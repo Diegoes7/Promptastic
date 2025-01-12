@@ -1,9 +1,11 @@
-import { Arg, Ctx, Field, InputType, Int, Mutation, Query, Resolver, UseMiddleware } from "type-graphql"
+import { Arg, Ctx, Field, FieldResolver, InputType, Int, Mutation, Query, Resolver, Root, UseMiddleware } from "type-graphql"
 import { User } from "../../db/entities/User"
 import type { ContextProps } from "../../graphql/context"
 import bcrypt from 'bcrypt'
 import { BaseEntity } from "typeorm"
 import { DatabaseCheckMiddleware } from "@app/api/graphql/middleware/databaseCheck"
+import { Favorite } from "../../db/entities/Favorite"
+import { Prompt } from "../../db/entities/Prompt"
 
 @InputType('UserInput')
 export class UserInput {
@@ -23,6 +25,16 @@ export class UserInput {
 
 @Resolver(User)
 export class UserResolver extends BaseEntity {
+
+  @FieldResolver(() => [Favorite])
+  async favorites(@Root() user: User): Promise<Favorite[]> {
+    return await Favorite.find({ where: { userId: user.id } })
+  }
+
+  @FieldResolver(() => [Prompt])
+  async prompts(@Root() user: User): Promise<Prompt[]> {
+    return await Prompt.find({ where: { id: user.promptId } })
+  }
 
   @Query(() => User, { nullable: true })
   user(@Ctx() { session }: ContextProps) {

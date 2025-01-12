@@ -77,8 +77,8 @@ const Navbar = () => {
 						<Link href='/profile' className='dropdown_link'>
 							{session && (
 								<Avatar
-									width={37}
-									height={37}
+									width={38}
+									height={38}
 									userId={userID!}
 									name={name}
 									alt='user picture'
@@ -89,7 +89,7 @@ const Navbar = () => {
 				) : (
 					<SignUpButton buttonSize={buttonSize} />
 				)}
-				<div className='flex items-center ml-4'>
+				<div className='flex items-center ml-4 transition-transform duration-300 hover:scale-105'>
 					<ThemeSwitch />
 				</div>
 			</div>
