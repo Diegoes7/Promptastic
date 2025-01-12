@@ -8,31 +8,39 @@ import { isAuth } from '@app/middleware'
 @Resolver(() => Favorite)
 export class FavoriteResolver {
 
-   // Field resolver to fetch the User of a Favorite
-   @FieldResolver(() => User)
-   async user(@Root() favorite: Favorite): Promise<User | null> {
-     return await User.findOne({ where: { id: favorite.userId } }); // Resolve the user related to Favorite lazily
-   }
+  // Field resolver to fetch the User of a Favorite
+  @FieldResolver(() => User)
+  async user(@Root() favorite: Favorite): Promise<User | null> {
+    const { User } = require('../../db/entities/User')
+    return await User.findOne({ where: { id: favorite.userId } }) // Resolve the user related to Favorite lazily
+  }
 
   @FieldResolver(() => Prompt)
   async prompt(@Root() favorite: Favorite): Promise<Prompt | null> {
+    const { Prompt } = require('../../db/entities/Prompt')
     return await Prompt.findOne({ where: { id: favorite.promptId } })
   }
 
   @Query(() => [Favorite])
   async getUserFavoritePrompts(@Arg('userId', () => Int) userId: number): Promise<Favorite[] | null> {
-    const user = await User.findOne({
-      where: { id: userId },
-      relations: ['favorites', 'favorites.prompt', 'favorites.prompt.creator'],
-    })
+    // const user = await User.findOne({
+    //   where: { id: userId },
+    //   relations: ['favorites', 'favorites.prompt', 'favorites.prompt.creator'],
+    // })
 
-    if (!user) {
+    const favoritePrompts = await Favorite.createQueryBuilder('favorite')
+      .leftJoinAndSelect('favorite.prompt', 'prompt')
+      .leftJoinAndSelect('favorite.user', 'user')
+      .where('favorite.userId = :userId', { userId })
+      .getMany()
+
+    if (!favoritePrompts) {
       throw new Error('User not found')
     }
 
-    const favoritePrompts = await Promise.all(
-      (await user.favorites).map(async (favorite: Favorite) => await favorite)
-    )
+    // const favoritePrompts = await Promise.all(
+    //   (await user.favorites).map(async (favorite: Favorite) => await favorite)
+    // )
 
     return favoritePrompts
   }

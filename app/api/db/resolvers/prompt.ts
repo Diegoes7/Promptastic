@@ -39,11 +39,13 @@ export class PromptResolver extends BaseEntity {
   // Resolve the User related to Prompt
   @FieldResolver(() => User)
   async user(@Root() prompt: Prompt): Promise<User | null> {
+    const { User } = require('../../db/entities/User')
     return await User.findOne({ where: { id: prompt.creatorId } }) // Resolve User lazily
   }
 
   @FieldResolver(() => [Favorite])
   async favorites(@Root() prompt: Prompt): Promise<Favorite[]> {
+    const { Favorite } = require('../../db/entities/Favorite')
     return await Favorite.find({ where: { promptId: prompt.id } })
   }
 

@@ -28,11 +28,13 @@ export class UserResolver extends BaseEntity {
 
   @FieldResolver(() => [Favorite])
   async favorites(@Root() user: User): Promise<Favorite[]> {
+    const { Favorite } = require('../../db/entities/Favorite')
     return await Favorite.find({ where: { userId: user.id } })
   }
 
   @FieldResolver(() => [Prompt])
   async prompts(@Root() user: User): Promise<Prompt[]> {
+    const { Prompt } = require('../../db/entities/Prompt')
     return await Prompt.find({ where: { id: user.promptId } })
   }
 

@@ -1,4 +1,6 @@
 
+-Error handling, need to show when smt wrong
+
 1. Add notification after upload picture
 2. Refresh queries after upload picture
 3. need to see and add functionality to add url image
