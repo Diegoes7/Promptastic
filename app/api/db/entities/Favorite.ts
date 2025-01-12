@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, BaseEntity, JoinColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, ManyToOne, BaseEntity, JoinColumn, PrimaryColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { Prompt } from './Prompt'
 import { User } from './User'
@@ -11,17 +11,17 @@ export class Favorite extends BaseEntity {
   id!: number
 
   @Field(() => ID)
-  @Column()
+  @PrimaryColumn()
   userId!: number
 
   @Field(() => ID)
-  @Column()
+  @PrimaryColumn()
   promptId!: number
 
-  @Field(() => User, { nullable: true })
-  @ManyToOne(() => User, { lazy: true })
-  @JoinColumn({ name: "userId" })
-  user!: Promise<User>
+  // @Field(() => User, { nullable: true })
+  // @ManyToOne(() => User, { lazy: true })
+  // @JoinColumn({ name: "userId" })
+  // user!: Promise<User>
 
   @Field(() => Prompt, { nullable: true })
   @ManyToOne(() => Prompt, { onDelete: 'CASCADE', nullable: true, lazy: true })

@@ -9,11 +9,11 @@ import { isAuth } from '@app/middleware'
 export class FavoriteResolver {
 
   // Field resolver to fetch the User of a Favorite
-  @FieldResolver(() => User)
-  async user(@Root() favorite: Favorite): Promise<User | null> {
-    const { User } = require('../../db/entities/User')
-    return await User.findOne({ where: { id: favorite.userId } }) // Resolve the user related to Favorite lazily
-  }
+  // @FieldResolver(() => User)
+  // async user(@Root() favorite: Favorite): Promise<User | null> {
+  //   const { User } = require('../../db/entities/User')
+  //   return await User.findOne({ where: { id: favorite.userId } }) // Resolve the user related to Favorite lazily
+  // }
 
   @FieldResolver(() => Prompt)
   async prompt(@Root() favorite: Favorite): Promise<Prompt | null> {
@@ -82,7 +82,7 @@ export class FavoriteResolver {
 
     const existingFavorite = await Favorite.findOne({
       where: {
-        user: { id: userId },
+        // user: { id: userId },
         prompt: { id: promptId }
       },
     })
@@ -92,8 +92,9 @@ export class FavoriteResolver {
     }
 
     const newFavorite = new Favorite()
-    newFavorite.user = Promise.resolve(user)
+    // newFavorite.user = Promise.resolve(user)
     newFavorite.prompt = Promise.resolve(prompt)
+    newFavorite.userId = userId
     await newFavorite.save()
 
     return newFavorite
