@@ -6,8 +6,7 @@ import { Field, ID, Int, ObjectType } from 'type-graphql'
 
 // @ObjectType('Prompt')
 @ObjectType()
-// @Entity({ name: "prompt" })
-@Entity()
+@Entity({ name: "prompt" })
 export class Prompt extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()

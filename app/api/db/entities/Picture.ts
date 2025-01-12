@@ -2,11 +2,9 @@ import { Field, ID, ObjectType, Int } from 'type-graphql'
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
 import { User } from './User'
 
-// @ObjectType('Picture')
+@ObjectType('Picture')
 @ObjectType()
-// @Entity({ name: "picture" })
-@Entity()
-
+@Entity({ name: "picture" })
 export class Picture extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
