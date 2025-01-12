@@ -4,8 +4,7 @@ import { Prompt } from "./Prompt"
 import { Favorite } from "./Favorite"
 import { Picture } from "./Picture"
 
-// @ObjectType('User')  // Unique name for GraphQL schema
-@ObjectType()
+@ObjectType('User')  // Unique name for GraphQL schema
 @Entity({ name: "user" })
 export class User extends BaseEntity {
   @Field(() => ID)
