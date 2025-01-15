@@ -173,7 +173,7 @@
 }
 
 .dropdown_link {
-	@apply text-sm font-inter text-gray-700 hover:underline hover:text-blue-500  font-medium dark:text-white;
+	@apply text-sm font-inter text-gray-700 flex items-center gap-2 hover:underline hover:text-blue-500  font-medium dark:text-white;
 }
 
 /* PromptCard Component */

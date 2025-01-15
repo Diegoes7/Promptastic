@@ -15,6 +15,7 @@ import {
 	User,
 } from '../../generated/graphql'
 import Spinner from '../../components/basic/spinner'
+import ErrorMessage from 'components/basic/error_message'
 
 export type Post = {
 	id?: string
@@ -26,7 +27,7 @@ export type Post = {
 }
 
 const CreatePrompt = () => {
-	const [create, { loading }] = useCreatePromptMutation({
+	const [create, { loading, error }] = useCreatePromptMutation({
 		update(cache, { data }) {
 			cache.modify({
 				fields: {
@@ -72,20 +73,23 @@ const CreatePrompt = () => {
 				})
 				router.push('/')
 			} catch (error) {
-				console.log(error)
+				return <ErrorMessage message={(error as any).message || 'Error'} />
 			}
 		},
 		[post.prompt, post.tag, session?.user]
 	)
 
 	return (
-		<PromptForm
-			type='Create'
-			post={post}
-			setPost={setPost}
-			submitting={loading}
-			handleSubmit={createPrompt}
-		/>
+		<>
+			<PromptForm
+				type='Create'
+				post={post}
+				setPost={setPost}
+				submitting={loading}
+				handleSubmit={createPrompt}
+			/>
+			{error && <ErrorMessage message={error.message} />}
+		</>
 	)
 }
 

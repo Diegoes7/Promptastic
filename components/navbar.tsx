@@ -20,15 +20,20 @@ import { FaPowerOff } from 'react-icons/fa6'
 import { MdOutlineNoteAdd } from 'react-icons/md'
 
 import useNavigationWithLoading from '../app/utils/useNavigationWithLoading'
+import Tooltip from './basic/tooltip'
+import { useTheme } from 'next-themes'
 
 const Navbar = () => {
 	const width = useWindowWidth()
+	const theme = useTheme()
 	const { data: session } = useSession()
 	const [isOpen, setIsOpen] = React.useState(false)
 	const [isClient, setIsClient] = React.useState(false)
+
 	const userID = session?.user && parseInt((session as MyOwnSession).userID!)
 	const name = session?.user?.name || ''
 	const buttonSize = width > 600 ? 'md' : 'xs'
+	const theme1 = theme?.theme === 'dark' ? 'light' : 'dark'
 
 	const handlePopUp = useCallback(() => {
 		setIsOpen(!isOpen)
@@ -54,13 +59,19 @@ const Navbar = () => {
 					</span>
 				}
 			</Link>
-			<Button
-				onClick={handlePopUp}
-				buttonStyle={{ color: 'glassBlue', rounded: 'full', size: buttonSize }}
-				rightIcon={<FaMedal />}
-			>
-				Trendy
-			</Button>
+			<Tooltip text='Check most popular and your favorite prompts'>
+				<Button
+					onClick={handlePopUp}
+					buttonStyle={{
+						color: 'glassBlue',
+						rounded: 'full',
+						size: buttonSize,
+					}}
+					rightIcon={<FaMedal />}
+				>
+					Trendy
+				</Button>
+			</Tooltip>
 			<ChatgtpButton buttonSize={buttonSize} />
 
 			<Popup setIsOPen={handlePopUp} isOpen={isOpen}>
@@ -76,21 +87,25 @@ const Navbar = () => {
 						</div>
 						<Link href='/profile' className='dropdown_link'>
 							{session && (
-								<Avatar
-									width={38}
-									height={38}
-									userId={userID!}
-									name={name}
-									alt='user picture'
-								/>
+								<Tooltip text='Avatar'>
+									<Avatar
+										width={38}
+										height={38}
+										userId={userID!}
+										name={name}
+										alt='user picture'
+									/>
+								</Tooltip>
 							)}
 						</Link>
 					</div>
 				) : (
 					<SignUpButton buttonSize={buttonSize} />
 				)}
-				<div className='flex items-center ml-4 transition-transform duration-300 hover:scale-105'>
-					<ThemeSwitch />
+				<div className='flex items-center ml-4 hover:scale-110 transition-transform duration-300'>
+					<Tooltip text={`Switch to ${theme1} mode`}>
+						<ThemeSwitch />
+					</Tooltip>
 				</div>
 			</div>
 			<AvatarMenu userId={userID} name={name} buttonSize={buttonSize} />
@@ -110,19 +125,21 @@ export const CreatePromptButton = ({ buttonSize }: ButtonProps) => {
 	const color = disabled ? 'gray' : 'orange'
 
 	return (
-		<Button
-			buttonStyle={{
-				color: 'black',
-				rounded: 'full',
-				size: buttonSize as any,
-			}}
-			disabled={disabled}
-			isLoading={loading}
-			onClick={disabled ? undefined : handleNavigation}
-			rightIcon={<MdOutlineNoteAdd />}
-		>
-			Create Prompt
-		</Button>
+		<Tooltip text='Go to the prompt form'>
+			<Button
+				buttonStyle={{
+					color: 'black',
+					rounded: 'full',
+					size: buttonSize as any,
+				}}
+				disabled={disabled}
+				isLoading={loading}
+				onClick={disabled ? undefined : handleNavigation}
+				rightIcon={<MdOutlineNoteAdd />}
+			>
+				Create Prompt
+			</Button>
+		</Tooltip>
 	)
 }
 
@@ -132,19 +149,21 @@ export const SignUpButton = ({ buttonSize }: ButtonProps) => {
 	const color = disabled ? 'gray' : 'orange'
 
 	return (
-		<Button
-			buttonStyle={{
-				color: color,
-				rounded: 'full',
-				size: buttonSize as any,
-			}}
-			onClick={disabled ? undefined : handleNavigation}
-			isLoading={loading}
-			disabled={disabled}
-			rightIcon={<FaSignInAlt />}
-		>
-			Sign Up
-		</Button>
+		<Tooltip text='Navigate to sing in and sign up page'>
+			<Button
+				buttonStyle={{
+					color: color,
+					rounded: 'full',
+					size: buttonSize as any,
+				}}
+				onClick={disabled ? undefined : handleNavigation}
+				isLoading={loading}
+				disabled={disabled}
+				rightIcon={<FaSignInAlt />}
+			>
+				Sign Up
+			</Button>
+		</Tooltip>
 	)
 }
 
@@ -159,19 +178,21 @@ export const SignOutButton = ({ buttonSize }: ButtonProps) => {
 	}, [])
 
 	return (
-		<Button
-			buttonStyle={{
-				color: 'black',
-				rounded: 'full',
-				size: buttonSize as any,
-			}}
-			// disabled={disabled}
-			isLoading={loading}
-			onClick={handleSignOut}
-			rightIcon={<FaPowerOff />}
-		>
-			Sign out
-		</Button>
+		<Tooltip text='Sign out from the app'>
+			<Button
+				buttonStyle={{
+					color: 'black',
+					rounded: 'full',
+					size: buttonSize as any,
+				}}
+				// disabled={disabled}
+				isLoading={loading}
+				onClick={handleSignOut}
+				rightIcon={<FaPowerOff />}
+			>
+				Sign out
+			</Button>
+		</Tooltip>
 	)
 }
 
@@ -182,16 +203,18 @@ type ChatgtpButtonProps = {
 export const ChatgtpButton = ({ buttonSize }: ChatgtpButtonProps) => {
 	return (
 		<Link href='https://chatgpt.com/' target='_blank'>
-			<Button
-				buttonStyle={{
-					color: 'yellow',
-					rounded: 'full',
-					size: buttonSize,
-				}}
-				rightIcon={<FiExternalLink />}
-			>
-				ChatGTP
-			</Button>
+			<Tooltip text='Test prompts in AI'>
+				<Button
+					buttonStyle={{
+						color: 'yellow',
+						rounded: 'full',
+						size: buttonSize,
+					}}
+					rightIcon={<FiExternalLink />}
+				>
+					ChatGTP
+				</Button>
+			</Tooltip>
 		</Link>
 	)
 }

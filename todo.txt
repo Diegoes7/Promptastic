@@ -1,8 +1,7 @@
 
--Error handling, need to show when smt wrong
 
 1. Add notification after upload picture
 2. Refresh queries after upload picture
 3. need to see and add functionality to add url image
 4. change password through the email
-5. Tooltip, will be great, show some additional info
+5. Need to add category to narrow down search

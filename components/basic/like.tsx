@@ -15,6 +15,8 @@ import Notification from '../basic/notification'
 import { Post } from '@app/create_prompt/page'
 import { useSession } from 'next-auth/react'
 import { MyOwnSession } from '@app/api/auth/authOptions'
+import ErrorMessage from './error_message'
+import Tooltip from './tooltip'
 
 type LikeProps = {
 	post: PromptFragment
@@ -22,8 +24,9 @@ type LikeProps = {
 
 const Like = ({ post }: LikeProps) => {
 	const { data: session } = useSession()
-	const { data: favorites } = useMyFavoritePromptsQuery()
-	const [addToFavorite, { loading }] = useAddToFavoritesMutation()
+	const { data: favorites, error } = useMyFavoritePromptsQuery()
+	const [addToFavorite, { loading, error: errorAddFavorite }] =
+		useAddToFavoritesMutation()
 	const {
 		isVisible,
 		message,
@@ -155,6 +158,7 @@ const Like = ({ post }: LikeProps) => {
 	return (
 		<div className='flex gap-3 pt-1'>
 			{isLiked ? (
+				<Tooltip text='Remove from your collection'>
 				<Button
 					buttonStyle={{ color: 'pink', rounded: 'full', size: 'xs' }}
 					onClick={() => handleUnliked(post)}
@@ -162,14 +166,17 @@ const Like = ({ post }: LikeProps) => {
 				>
 					Liked
 				</Button>
+				</Tooltip>
 			) : (
-				<Button
-					buttonStyle={{ color: 'pink', rounded: 'full', size: 'xs' }}
-					onClick={() => handleFavorite(post)}
-					leftIcon={<FaRegHeart className='mr-2' />}
-				>
-					Like
-				</Button>
+				<Tooltip text='Add this prompt to your collection for easy access'>
+					<Button
+						buttonStyle={{ color: 'pink', rounded: 'full', size: 'xs' }}
+						onClick={() => handleFavorite(post)}
+						leftIcon={<FaRegHeart className='mr-2' />}
+					>
+						Like
+					</Button>
+				</Tooltip>
 			)}
 			{isVisible && (
 				<Notification
@@ -178,6 +185,8 @@ const Like = ({ post }: LikeProps) => {
 					onCancel={onCancel}
 				/>
 			)}
+			{error && <ErrorMessage message={error.message} />}
+			{errorAddFavorite && <ErrorMessage message={errorAddFavorite.message} />}
 		</div>
 	)
 }

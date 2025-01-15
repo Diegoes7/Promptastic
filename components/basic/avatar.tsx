@@ -5,6 +5,7 @@ import Image from 'next/image'
 import React, { ImgHTMLAttributes } from 'react'
 import Spinner from './spinner'
 import ConsistentColorName from 'components/initials'
+import ErrorMessage from './error_message'
 
 type AvatarProps = {
 	height: number
@@ -26,13 +27,13 @@ const Avatar = ({
 	isLarge,
 	...props
 }: AvatarProps) => {
-	const { data: user } = useGetOtherUserQuery({
+	const { data: user, error: errorOtherUser } = useGetOtherUserQuery({
 		variables: {
 			getOtherUserId: userId,
 		},
 	})
 
-	const { data, loading } = useGetUserPictureQuery({
+	const { data, loading, error } = useGetUserPictureQuery({
 		variables: {
 			creatorId: userId,
 		},
@@ -57,18 +58,22 @@ const Avatar = ({
 	}
 
 	return (
-		<Image
-			height={height}
-			width={width}
-			src={imageSource}
-			alt={alt}
-			data-user-id={userId}
-			className={`rounded-full object-fill border-2 border-white ${
-				isLarge ? 'h-[5.90em] w-[5.90em]' : 'h-11 w-11'
-			}`}
-			onClick={onClick}
-			{...props}
-		/>
+		<div className='min-w-[50px]'>
+			<Image
+				height={height}
+				width={width}
+				src={imageSource}
+				alt={alt}
+				data-user-id={userId}
+				className={`rounded-full object-fill border-2 border-white ${
+					isLarge ? 'h-[5.90em] w-[5.90em]' : 'h-11 w-11'
+				}`}
+				onClick={onClick}
+				{...props}
+			/>
+			{error && <ErrorMessage message={error.message} />}
+			{errorOtherUser && <ErrorMessage message={errorOtherUser.message} />}
+		</div>
 	)
 }
 

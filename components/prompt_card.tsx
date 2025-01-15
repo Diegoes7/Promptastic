@@ -22,6 +22,7 @@ import Button from './basic/button/Button'
 import { AiFillEdit } from 'react-icons/ai'
 import { MdDeleteForever } from 'react-icons/md'
 import TruncatedText from './basic/trancate._text'
+import Tooltip from './basic/tooltip'
 
 type PromptCardProps = {
 	post: PromptFragment | any
@@ -125,35 +126,38 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 		<>
 			<div className='prompt_card shadow-lg rounded text-inherit'>
 				<div className='copy_btn' onClick={handleCopy}>
-					<Image
-						src={
-							copied === post.prompt
-								? '/assets/icons/tick.svg'
-								: '/assets/icons/copy.svg'
-						}
-						alt={copied === post.prompt ? 'tick_icon' : 'copy_icon'}
-						width={12}
-						height={12}
-					/>
+					<Tooltip text='Click to copy the content'>
+						<Image
+							src={
+								copied === post.prompt
+									? '/assets/icons/tick.svg'
+									: '/assets/icons/copy.svg'
+							}
+							alt={copied === post.prompt ? 'tick_icon' : 'copy_icon'}
+							width={12}
+							height={12}
+						/>
+					</Tooltip>
 				</div>
 				<div className='min-w-[230px] cursor-pointer'>
-					<div className='flex flex-nowrap items-center pt-4 pr-4 gap-4'>
-						<Avatar
-							width={37}
-							height={37}
-							userId={userId}
-							name={username}
-							alt='user picture'
-							onClick={handleProfileClick}
-						/>
+					<div className='flex items-center gap-4'>
+						<Tooltip text={`Go to ${username} account details`}>
+							<Avatar
+								width={37}
+								height={37}
+								userId={userId}
+								name={username}
+								alt='user picture'
+								onClick={handleProfileClick}
+							/>
+						</Tooltip>
 						<div className='flex flex-col gap-x-4 w-full'>
 							<h3 className='w-[85%] truncate whitespace-nowrap overflow-hidden text-ellipsis font-satoshi font-semibold text-gray-900 text-inherit'>
-								{post.creator?.username || ''}
-								{/* this about it <TruncatedText
+								<TruncatedText
 									maxLength={17}
 									minHeight=''
-									text={post.creator?.username || ''}
-								/> */}
+									text={username || ''}
+								/>
 							</h3>
 							<div className='p-1 font-inter text-sm text-gray-500 break-words whitespace-normal'>
 								<TruncatedText
@@ -189,44 +193,48 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 						{!session?.user ? null : +(session as SessionUser)?.userID ===
 						  post.creatorId ? (
 							<div className='flex gap-3 pt-1'>
-								<Button
-									onClick={() => handleEdit(post)}
-									// isLoading={submitting}
-									buttonStyle={{
-										color: 'green',
-										rounded: 'full',
-										size: 'xs',
-									}}
-									leftIcon={<AiFillEdit />}
-								>
-									Edit
-								</Button>
-								<Button
-									onClick={() => handleDelete(post)}
-									// isLoading={submitting}
-									buttonStyle={{
-										color: 'red',
-										rounded: 'full',
-										size: 'xs',
-									}}
-									leftIcon={<MdDeleteForever />}
-								>
-									Delete
-								</Button>
+								<Tooltip text='Change the content of your prompt'>
+									<Button
+										onClick={() => handleEdit(post)}
+										// isLoading={submitting}
+										buttonStyle={{
+											color: 'green',
+											rounded: 'full',
+											size: 'xs',
+										}}
+										leftIcon={<AiFillEdit />}
+									>
+										Edit
+									</Button>
+								</Tooltip>
+								<Tooltip text='Delete permanently the prompt'>
+									<Button
+										onClick={() => handleDelete(post)}
+										// isLoading={submitting}
+										buttonStyle={{
+											color: 'red',
+											rounded: 'full',
+											size: 'xs',
+										}}
+										leftIcon={<MdDeleteForever />}
+									>
+										Delete
+									</Button>
+								</Tooltip>
 							</div>
 						) : (
 							<Like post={post} />
 						)}
 					</div>
 				</div>
-				{isVisible && (
-					<Notification
-						message={message}
-						onConfirm={onConfirm}
-						onCancel={onCancel}
-					/>
-				)}
 			</div>
+			{isVisible && (
+				<Notification
+					message={message}
+					onConfirm={onConfirm}
+					onCancel={onCancel}
+				/>
+			)}
 		</>
 	)
 }

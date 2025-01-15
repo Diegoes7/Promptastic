@@ -7,6 +7,7 @@ import {
 	useGetPromptsUserByIdQuery,
 	User,
 } from '../../../generated/graphql'
+import ErrorMessage from 'components/basic/error_message'
 
 export type ProfileProps = {
 	params: {
@@ -16,10 +17,14 @@ export type ProfileProps = {
 
 const UserProfile = ({ params }: ProfileProps) => {
 	const otherUserID = parseInt(params.id)
-	const { data, loading } = useGetOtherUserQuery({
+	const {
+		data,
+		loading,
+		error: errorOtherUser,
+	} = useGetOtherUserQuery({
 		variables: {
 			// getOtherUserId: parseInt(params.id),
-			getOtherUserId: otherUserID
+			getOtherUserId: otherUserID,
 		},
 	})
 	const userProfile = data?.getOtherUser && data?.getOtherUser
@@ -51,6 +56,8 @@ const UserProfile = ({ params }: ProfileProps) => {
 				otherUserID={otherUserID}
 				loading={promptsLoading}
 			/>
+			{error && <ErrorMessage message={error.message} />}
+			{errorOtherUser && <ErrorMessage message={errorOtherUser.message} />}
 		</>
 	)
 }

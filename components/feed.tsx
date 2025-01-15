@@ -7,9 +7,11 @@ import useSearch from '../app/utils/useSearch'
 import { Post } from '@app/create_prompt/page'
 import Skeleton from './skeleton'
 import useInfiniteScroll from '@app/utils/useLoadMore'
+import ErrorMessage from './basic/error_message'
+import Tooltip from './basic/tooltip'
 
 const Feed = () => {
-	const { data, loading, fetchMore, variables } = usePromptsQuery({
+	const { data, loading, error, fetchMore, variables } = usePromptsQuery({
 		variables: {
 			limit: 10,
 			cursor: null,
@@ -87,22 +89,21 @@ const Feed = () => {
 					className='search_input peer text-gray-700'
 				/>
 			</form>
+			<div className='flex-col align-center justify-center'>
+				<h1 className='pb-4 flex justify-center mt-3 text-xl'>
+					Last Added Prompts
+				</h1>
+				<hr className='w-[700px] p-2' />
+			</div>
 			{loading && <Skeleton count={6} />}
 			{allPrompts?.length === 0 && !loading ? (
 				<div className='mt-8 text-xl'>No Prompts to show!</div>
 			) : (
-				<>
-					<div className='flex-col align-center justify-center'>
-						<h1 className='pb-4 flex justify-center mt-3 text-xl'>
-							Last Added Prompts
-						</h1>
-						<hr className='w-[700px] p-2' />
-					</div>
-					<PromptList loading={loading} data={searchedResults} />
-				</>
+				<PromptList loading={loading} data={searchedResults} />
 			)}
 			{/* Trigger Element */}
 			{hasMore ? <div ref={observerRef} className='h-1'></div> : null}
+			{error && <ErrorMessage message={error.message} />}
 		</section>
 	)
 }

@@ -7,9 +7,10 @@ import { SignUpButton } from './navbar'
 import Button from './basic/button/Button'
 import Avatar from './basic/avatar'
 import ThemeSwitch from './switch_theme'
+import { FaPowerOff, FaUserAstronaut } from 'react-icons/fa'
+import { MdOutlineNoteAdd } from 'react-icons/md'
 
 type AvatarMenuProp = {
-	// image: string
 	userId?: number
 	name: string
 	buttonSize: string
@@ -29,30 +30,29 @@ const AvatarMenu = ({ userId, name, buttonSize }: AvatarMenuProp) => {
 					<Avatar
 						width={37}
 						height={37}
-						// src={image}
 						userId={userId}
 						name={name}
 						alt='user picture'
 						onClick={() => setToggleDropdown(!toggleDropdown)}
 					/>
 					{toggleDropdown && (
-						<div className='dropdown'>
+						<div className='dropdown '>
 							<Link
 								href='/profile'
-								className='dropdown_link'
+								className='dropdown_link flex items-center gap-2'
 								onClick={() => setToggleDropdown(false)}
 							>
-								My profile
+								Profile <FaUserAstronaut />
 							</Link>
 							<Link
 								href='/create_prompt'
 								className='dropdown_link'
 								onClick={() => setToggleDropdown(false)}
 							>
-								Create Prompt
+								Create Prompt <MdOutlineNoteAdd />
 							</Link>
 							<Button
-								className='dropdown_link'
+								className='dropdown_link pr-0'
 								buttonStyle={{
 									// color: 'none',
 									rounded: 'none',
@@ -60,7 +60,7 @@ const AvatarMenu = ({ userId, name, buttonSize }: AvatarMenuProp) => {
 								}}
 								onClick={handleSignOut}
 							>
-								Sign out
+								Sign out <FaPowerOff />
 							</Button>
 						</div>
 					)}

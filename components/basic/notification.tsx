@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 
 interface NotificationProps {
 	message: string
@@ -7,9 +8,8 @@ interface NotificationProps {
 }
 
 const Notification = ({ message, onConfirm, onCancel }: NotificationProps) => {
-	return (
-		// <div className="fixed top-0 left-1/2 transform -translate-x-1/2 bg-white shadow-lg p-4 rounded border w-96 z-50">
-		<div className='absolute w-[300px] top-[10%] left-[3%] bg-white dark:bg-slate-700 text-inherit shadow-lg p-4 rounded border w-96 z-[999999]'>
+	return ReactDOM.createPortal(
+		<div className='fixed w-[300px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-700 text-inherit shadow-lg p-4 rounded border w-96 z-[999999]'>
 			<p className='text-inherit pb-4'>{message}</p>
 			<div className='mt-4 flex justify-end space-x-2'>
 				<button
@@ -25,7 +25,8 @@ const Notification = ({ message, onConfirm, onCancel }: NotificationProps) => {
 					Confirm
 				</button>
 			</div>
-		</div>
+		</div>,
+		document.body
 	)
 }
 

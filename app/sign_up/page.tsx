@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
 import { MdOutlineAssignmentInd } from 'react-icons/md'
+import ErrorMessage from 'components/basic/error_message'
 
 export type LogInUser = {
 	email: string
@@ -24,7 +25,7 @@ const SignIn = () => {
 		handleNavigation,
 	} = useNavigationWithLoading('/register')
 	const router = useRouter()
-	const [login, { loading }] = useLoginMutation()
+	const [login, { loading, error }] = useLoginMutation()
 	const [user, setUser] = useState<LogInUser>({
 		email: '',
 		password: '',
@@ -95,9 +96,7 @@ const SignIn = () => {
 					</Link>
 				</div>
 			</section>
-			{/* <section>
-				<Register />
-			</section> */}
+			{error && <ErrorMessage message={error.message} />}
 		</div>
 	)
 }

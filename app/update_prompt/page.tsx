@@ -8,11 +8,12 @@ import {
 	useUpdatePromptMutation,
 } from '../../generated/graphql'
 import { Post } from '@app/create_prompt/page'
+import ErrorMessage from 'components/basic/error_message'
 
 const UpdatePrompt = () => {
 	const router = useRouter()
 	const promptId = useSearchParams().get('id')
-	const { data: prompt } = useGetPromptByIdQuery({
+	const { data: prompt, error } = useGetPromptByIdQuery({
 		variables: {
 			getPromptByIdId: parseInt(promptId!),
 		},
@@ -30,7 +31,7 @@ const UpdatePrompt = () => {
 			)
 		},
 	})
-	
+
 	const data1 = prompt?.getPromptById
 	console.log(prompt?.getPromptById)
 	console.log(data1)
@@ -71,13 +72,16 @@ const UpdatePrompt = () => {
 	}
 
 	return (
-		<PromptForm
-			type='Edit'
-			post={post}
-			setPost={setPost}
-			submitting={submitting}
-			handleSubmit={updatePrompt}
-		/>
+		<>
+			<PromptForm
+				type='Edit'
+				post={post}
+				setPost={setPost}
+				submitting={submitting}
+				handleSubmit={updatePrompt}
+			/>
+			{error && <ErrorMessage message={error.message} />}
+		</>
 	)
 }
 

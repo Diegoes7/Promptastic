@@ -6,11 +6,12 @@ import { useGetUserPromptsQuery } from '../../generated/graphql'
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import ErrorMessage from 'components/basic/error_message'
 
 const MyProfile = () => {
 	const router = useRouter()
 	const { data: session } = useSession()
-	const { data, loading } = useGetUserPromptsQuery()
+	const { data, loading, error } = useGetUserPromptsQuery()
 	const myPrompts = data?.getUserPrompts || []
 
 	React.useEffect(() => {
@@ -31,6 +32,7 @@ const MyProfile = () => {
 				data={myPrompts}
 				loading={loading}
 			/>
+			{error && <ErrorMessage message={error.message} />}
 		</div>
 	)
 }
