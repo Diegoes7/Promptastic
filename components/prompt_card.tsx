@@ -14,7 +14,7 @@ import {
 import { SessionUser } from './profile'
 
 import Avatar from './basic/avatar'
-import Spinner from './basic/spinner'
+// import Spinner from './basic/spinner'
 import Like from './basic/like'
 import { useNotification } from '@app/utils/useNotification'
 import Notification from './basic/notification'
@@ -27,13 +27,15 @@ import Tooltip from './basic/tooltip'
 type PromptCardProps = {
 	post: PromptFragment | any
 	handleTagClick: (t: string) => void
+	mode?: boolean
 }
 
-const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
+const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 	const { data: session } = useSession()
 	const [deletePrompt, { loading }] = useDeletePromptMutation({
 		refetchQueries: [PromptsDocument],
 	})
+
 	const [updateLikes] = useUpdateLikesMutation({
 		// refetchQueries: [PromptsDocument],
 		update(cache, { data }) {
@@ -65,6 +67,7 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 	const username = post.creator?.username
 
 	const handleEdit = useCallback((post: Post) => {
+		//! need to close the pop_up modal when go to the page
 		router.push(`/update_prompt?id=${post.id}`)
 	}, [])
 
@@ -141,7 +144,7 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 				</div>
 				<div className='min-w-[230px] cursor-pointer'>
 					<div className='flex items-center gap-4'>
-						<Tooltip text={`Go to ${username} account details`}>
+						<Tooltip mode={mode} text={`Go to ${username} account details`}>
 							<Avatar
 								width={37}
 								height={37}
@@ -157,6 +160,7 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 									maxLength={17}
 									minHeight=''
 									text={username || ''}
+									overviewMode={mode}
 								/>
 							</h3>
 							<div className='p-1 font-inter text-sm text-gray-500 break-words whitespace-normal'>
@@ -164,6 +168,7 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 									maxLength={17}
 									minHeight=''
 									text={post.creator?.email}
+									overviewMode={mode}
 								/>
 							</div>
 						</div>
@@ -173,6 +178,7 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 							maxLength={57}
 							minHeight='min-h-[3em]'
 							text={post.title}
+							overviewMode={mode}
 						/>
 					</div>
 					<div className='my-4 font-satoshi text-sm text-gray-700 max-w-[90%] text-inherit'>
@@ -180,6 +186,7 @@ const PromptCard = ({ post, handleTagClick }: PromptCardProps) => {
 							maxLength={57}
 							minHeight='min-h-[3em]'
 							text={post.prompt}
+							overviewMode={mode}
 						/>
 					</div>
 					<p

@@ -6,7 +6,7 @@ import OverviewPrompt from './overview_prompt'
 import Spinner from './basic/spinner'
 
 const PopularPrompts = () => {
-	const { data, loading, variables, fetchMore } = usePromptsQuery({
+	const { data, loading /*variables, fetchMore */ } = usePromptsQuery({
 		variables: {
 			limit: 10,
 			cursor: null,
@@ -22,21 +22,21 @@ const PopularPrompts = () => {
 		return [...allPrompts].sort((a, b) => b.likes - a.likes)
 	}, [allPrompts])
 
-	function handlePagination() {
-		if (!allPrompts) return
-		const cursor1 = allPrompts[allPrompts?.length - 1].createdAt
-		const element = allPrompts[allPrompts.length - 1]
-		console.log('element: ', element)
-		fetchMore({
-			variables: {
-				limit: variables!.limit,
-				cursor: cursor1,
-			},
-		})
-	}
+	//! still need to think about it
+	// function handlePagination() {
+	// 	if (!allPrompts) return
+	// 	const cursor1 = allPrompts[allPrompts?.length - 1].createdAt
+	// 	const element = allPrompts[allPrompts.length - 1]
+	// 	console.log('element: ', element)
+	// 	fetchMore({
+	// 		variables: {
+	// 			limit: variables!.limit,
+	// 			cursor: cursor1,
+	// 		},
+	// 	})
+	// }
 
 	const popularPromptList = popularPrompts.map((p: any, inx) => (
-		// <div className='mb-1 overflow-y-auto overflow-x-hidden'>
 		<div className='p-1 rounded-lg' key={p.id}>
 			<OverviewPrompt prompt={p} index={++inx} />
 		</div>

@@ -74,7 +74,7 @@ const Navbar = () => {
 			</Tooltip>
 			<ChatgtpButton buttonSize={buttonSize} />
 
-			<Popup setIsOPen={handlePopUp} isOpen={isOpen}>
+			<Popup setIsOpen={handlePopUp} isOpen={isOpen}>
 				<MainLists />
 			</Popup>
 

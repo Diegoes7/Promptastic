@@ -21,7 +21,11 @@ const OverviewPrompt = ({ prompt, index }: OverviewPromptProps) => {
 				<span className='pl-4 text-black'>p: {prompt.likes}</span>
 
 				<div className='hidden group-hover:block absolute left-1/2 top-[10%] rounded-lg transform -translate-x-1/2 rounded z-[9999] shadow-lg max-w-md bg-white dark:bg-slate-700'>
-					<PromptCard post={prompt} handleTagClick={() => {}} />
+					<PromptCard
+						mode={true}
+						post={prompt}
+						handleTagClick={() => {}}
+					/>
 				</div>
 			</div>
 		</div>

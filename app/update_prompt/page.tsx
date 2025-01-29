@@ -18,12 +18,14 @@ const UpdatePrompt = () => {
 			getPromptByIdId: parseInt(promptId!),
 		},
 	})
+
 	const [post, setPost] = useState<Post>({
 		prompt: '',
 		title: '',
 		tag: '',
 		likes: 0,
 	})
+
 	const [update] = useUpdatePromptMutation({
 		onCompleted(data) {
 			setPost((prevItem) =>

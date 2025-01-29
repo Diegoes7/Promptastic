@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom'
 interface TooltipProps {
 	text: string // Text to show in the tooltip
 	children: ReactNode // Element to hover on
+	mode?: boolean
 }
 
-const Tooltip = ({ text, children }: TooltipProps) => {
+const Tooltip = ({ text, children, mode }: TooltipProps) => {
 	const [showTooltip, setShowTooltip] = useState(false)
 	const [tooltipPosition, setTooltipPosition] = useState<{
 		top: number
@@ -16,7 +17,7 @@ const Tooltip = ({ text, children }: TooltipProps) => {
 	const handleMouseEnter = (e: React.MouseEvent) => {
 		const rect = e.currentTarget.getBoundingClientRect()
 		setTooltipPosition({
-			top: rect.top + 17, // Adjust based on the distance you want above the element
+			top: rect.top + 30, // Adjust based on the distance you want above the element
 			left: rect.right - 60, // 20% to the right (you can adjust this value as needed)
 		})
 		setShowTooltip(true)
@@ -33,7 +34,8 @@ const Tooltip = ({ text, children }: TooltipProps) => {
 			onMouseLeave={handleMouseLeave}
 		>
 			{children}
-			{showTooltip &&
+			{!mode &&
+				showTooltip &&
 				tooltipPosition &&
 				ReactDOM.createPortal(
 					<div

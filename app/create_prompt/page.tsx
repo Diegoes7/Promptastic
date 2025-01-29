@@ -6,14 +6,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 import PromptForm from '../../components/prompt_form'
-import {
-	CreatePromptDocument,
-	PromptFragment,
-	PromptsDocument,
-	PromptsQuery,
-	useCreatePromptMutation,
-	User,
-} from '../../generated/graphql'
+import { useCreatePromptMutation, User } from '../../generated/graphql'
 import Spinner from '../../components/basic/spinner'
 import ErrorMessage from 'components/basic/error_message'
 

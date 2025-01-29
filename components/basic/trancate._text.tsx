@@ -29,6 +29,7 @@ type TruncatedTextProps = {
 	text: string
 	maxLength: number
 	minHeight?: string
+	overviewMode?: boolean
 }
 
 import React, { useState, useRef, useCallback } from 'react'
@@ -38,6 +39,7 @@ const TruncatedText = ({
 	text = '',
 	minHeight,
 	maxLength = 57,
+	overviewMode,
 }: TruncatedTextProps) => {
 	const [hover, setHover] = useState(false)
 	const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
@@ -71,6 +73,7 @@ const TruncatedText = ({
 				{text.length > maxLength ? text.slice(0, maxLength) + '...' : text}
 			</p>
 			{hover &&
+				!overviewMode &&
 				ReactDOM.createPortal(
 					<div
 						className='absolute bg-[#267889] text-white text-sm border border-gray-400 rounded-md p-2 z-[9999] shadow-lg'

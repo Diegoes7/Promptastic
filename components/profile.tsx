@@ -97,7 +97,7 @@ const Profile = ({
 
 	if (imageEditor) {
 		return (
-			<PopUp setIsOPen={handleUploadImage} isOpen={imageEditor}>
+			<PopUp setIsOpen={handleUploadImage} isOpen={imageEditor}>
 				<AvatarUploader />
 			</PopUp>
 		)

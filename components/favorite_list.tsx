@@ -46,7 +46,7 @@ const FavoriteList = ({ data, profilePath, extended }: FavoriteListProps) => {
 	const handleUnliked = React.useCallback(
 		(f: FavoriteProps) => {
 			showNotification(
-				`${f.user.username}, Are you sure you want to unlike "${f.prompt.title}"?`,
+				`${session?.user?.name}, Are you sure you want to unlike "${f.prompt.title}"?`,
 				async () => {
 					try {
 						await unLikedPrompt({
@@ -84,7 +84,7 @@ const FavoriteList = ({ data, profilePath, extended }: FavoriteListProps) => {
 						console.log(error)
 					}
 					console.log(
-						`Unlike ${f.prompt.title} ccreated by "${f.user.username}"`
+						`Unlike ${f.prompt.title} ccreated by "${session?.user?.name}"`
 					)
 					hideNotification()
 				},
@@ -137,7 +137,10 @@ const FavoriteList = ({ data, profilePath, extended }: FavoriteListProps) => {
 			>
 				<div>
 					{favList?.length === 0 ? (
-						<span className='w-[70%] p-4 my-8'> You do not have any favorite prompt yet.</span>
+						<span className='w-[70%] p-4 my-8'>
+							{' '}
+							You do not have any favorite prompt yet.
+						</span>
 					) : (
 						favList
 					)}

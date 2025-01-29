@@ -8,7 +8,6 @@ import { Post } from '@app/create_prompt/page'
 import Skeleton from './skeleton'
 import useInfiniteScroll from '@app/utils/useLoadMore'
 import ErrorMessage from './basic/error_message'
-import Tooltip from './basic/tooltip'
 
 const Feed = () => {
 	const { data, loading, error, fetchMore, variables } = usePromptsQuery({

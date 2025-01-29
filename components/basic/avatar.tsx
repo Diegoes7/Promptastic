@@ -45,8 +45,8 @@ const Avatar = ({
 	if (imageSource === '') {
 		return (
 			<ConsistentColorName
-				width={'1.83em'}
-				height={'1.83em'}
+				width={isLarge ? '2.30em' : '1.83em'}
+				height={isLarge ? '2.30em' : '1.83em'}
 				name={name}
 				onClick={onClick}
 			/>
