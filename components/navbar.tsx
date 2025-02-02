@@ -22,12 +22,14 @@ import { MdOutlineNoteAdd } from 'react-icons/md'
 import useNavigationWithLoading from '../app/utils/useNavigationWithLoading'
 import Tooltip from './basic/tooltip'
 import { useTheme } from 'next-themes'
+import useModal from '@app/utils/useModal'
+import customLoader from './basic/custom_image_loader'
 
 const Navbar = () => {
+	const { openModal, toggleModal, isOpen } = useModal()
 	const width = useWindowWidth()
 	const theme = useTheme()
 	const { data: session } = useSession()
-	const [isOpen, setIsOpen] = React.useState(false)
 	const [isClient, setIsClient] = React.useState(false)
 
 	const userID = session?.user && parseInt((session as MyOwnSession).userID!)
@@ -35,18 +37,15 @@ const Navbar = () => {
 	const buttonSize = width > 600 ? 'md' : 'xs'
 	const theme1 = theme?.theme === 'dark' ? 'light' : 'dark'
 
-	const handlePopUp = useCallback(() => {
-		setIsOpen(!isOpen)
-	}, [isOpen])
-
 	React.useEffect(() => {
-		setIsClient(true)
+		setIsClient(true) //! resolve differences between back & front end /hydration
 	}, [])
 
 	return (
 		<nav className='flex-between gap-1 items-center w-full mb-6 pt-6 customSticky shadow-lg text-base sm:text-sm custom-px:text-xs'>
 			<Link href='/' className='flex gap-2 flex-center'>
 				<Image
+				loader={customLoader}
 					src='/assets/images/logo.svg'
 					alt='Promptastic logo'
 					width={37}
@@ -61,7 +60,7 @@ const Navbar = () => {
 			</Link>
 			<Tooltip text='Check most popular and your favorite prompts'>
 				<Button
-					onClick={handlePopUp}
+					onClick={openModal}
 					buttonStyle={{
 						color: 'glassBlue',
 						rounded: 'full',
@@ -74,7 +73,7 @@ const Navbar = () => {
 			</Tooltip>
 			<ChatgtpButton buttonSize={buttonSize} />
 
-			<Popup setIsOpen={handlePopUp} isOpen={isOpen}>
+			<Popup onClose={toggleModal} isOpen={isOpen}>
 				<MainLists />
 			</Popup>
 

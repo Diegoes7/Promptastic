@@ -4,6 +4,7 @@ import Provider from '../components/providers'
 import '../styles/globals.css'
 import { Session } from 'next-auth'
 import { CustomThemeProvider } from './theme_provider'
+import ModalProvider from './utils/context_provider'
 
 export const metadata = {
 	title: 'Promptastic',
@@ -25,10 +26,12 @@ const RootLayout = ({ children, session }: RootLayoutProps) => {
 				<CustomThemeProvider>
 					<Provider session={session}>
 						<div className='main'>{/* <div className='gradient' /> */}</div>
-						<main className='app bg-inherit'>
-							<Navbar />
-							{children}
-						</main>
+						<ModalProvider>
+							<main className='app bg-inherit'>
+								<Navbar />
+								{children}
+							</main>
+						</ModalProvider>
 					</Provider>
 				</CustomThemeProvider>
 			</body>

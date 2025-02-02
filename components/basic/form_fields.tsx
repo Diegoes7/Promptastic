@@ -34,7 +34,7 @@ export const InputField = ({
 				type='text'
 				placeholder={placeholder}
 				required
-				className='form_input'
+				className='form_input focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all'
 			/>
 		</label>
 	)
@@ -71,7 +71,7 @@ export const TextAreaField = ({
 				onChange={handleChange}
 				placeholder={placeholder}
 				required
-				className='form_textarea'
+				className='form_textarea focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all'
 			/>
 		</label>
 	)

@@ -23,6 +23,8 @@ import { AiFillEdit } from 'react-icons/ai'
 import { MdDeleteForever } from 'react-icons/md'
 import TruncatedText from './basic/trancate._text'
 import Tooltip from './basic/tooltip'
+import useModal from '@app/utils/useModal'
+import customLoader from './basic/custom_image_loader'
 
 type PromptCardProps = {
 	post: PromptFragment | any
@@ -31,7 +33,7 @@ type PromptCardProps = {
 }
 
 const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
-	const { data: session } = useSession()
+	const { data: session } = useSession() as { data: SessionUser | null }
 	const [deletePrompt, { loading }] = useDeletePromptMutation({
 		refetchQueries: [PromptsDocument],
 	})
@@ -59,6 +61,7 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 		showNotification,
 		hideNotification,
 	} = useNotification()
+	const { closeModal } = useModal()
 
 	const router = useRouter()
 	const [copied, setCopied] = useState('')
@@ -67,7 +70,7 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 	const username = post.creator?.username
 
 	const handleEdit = useCallback((post: Post) => {
-		//! need to close the pop_up modal when go to the page
+		closeModal()
 		router.push(`/update_prompt?id=${post.id}`)
 	}, [])
 
@@ -97,10 +100,11 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 	)
 
 	const handleProfileClick = () => {
-		if (post.creatorId === (session as any)?.userID) {
+		if (post.creatorId === session?.userID) {
 			router.push('/profile')
 		}
-
+		closeModal()
+    
 		router.push(`/profile/${post.creatorId}?name=${post.creator?.username}`)
 	}
 
@@ -131,6 +135,7 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 				<div className='copy_btn' onClick={handleCopy}>
 					<Tooltip text='Click to copy the content'>
 						<Image
+							loader={customLoader}
 							src={
 								copied === post.prompt
 									? '/assets/icons/tick.svg'

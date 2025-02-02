@@ -97,7 +97,7 @@ const Profile = ({
 
 	if (imageEditor) {
 		return (
-			<PopUp setIsOpen={handleUploadImage} isOpen={imageEditor}>
+			<PopUp onClose={handleUploadImage} isOpen={imageEditor}>
 				<AvatarUploader />
 			</PopUp>
 		)
@@ -187,10 +187,6 @@ const Profile = ({
 			<div className='mt-10 p-2 flex flex-col md:flex-row gap-6 items-center md:items-start md:justify-start justify-center'>
 				<PromptList loading={loading} data={data} />
 				<FavoriteList profilePath={profilePath} data={usedFavorites} />
-
-				{/* {(session as MyOwnSession)?.userID && profilePath ? (
-					<FavoriteList data={usedFavorites} />
-				) : null} */}
 			</div>
 		</section>
 	)

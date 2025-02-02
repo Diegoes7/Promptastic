@@ -22,7 +22,9 @@ const nextConfig = {
 		return config
 	},
 	images: {
-		domains: ['lh3.googleusercontent.com', 'static.wikia.nocookie.net', 'localhost'], // Add the domain you need to support
+		domains: ['lh3.googleusercontent.com', 'media.4-paws.org', 'static.wikia.nocookie.net', 'localhost'], // Add the domain you need to support
+		loader: 'custom',
+		// dangerouslyAllowAllDomains: true,
 	},
 }
 
