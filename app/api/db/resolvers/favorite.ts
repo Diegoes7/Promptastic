@@ -23,10 +23,6 @@ export class FavoriteResolver {
 
   @Query(() => [Favorite])
   async getUserFavoritePrompts(@Arg('userId', () => Int) userId: number): Promise<Favorite[] | null> {
-    // const user = await User.findOne({
-    //   where: { id: userId },
-    //   relations: ['favorites', 'favorites.prompt', 'favorites.prompt.creator'],
-    // })
 
     const favoritePrompts = await Favorite.createQueryBuilder('favorite')
       .leftJoinAndSelect('favorite.prompt', 'prompt')
@@ -37,10 +33,6 @@ export class FavoriteResolver {
     if (!favoritePrompts) {
       throw new Error('User not found')
     }
-
-    // const favoritePrompts = await Promise.all(
-    //   (await user.favorites).map(async (favorite: Favorite) => await favorite)
-    // )
 
     return favoritePrompts
   }
@@ -57,7 +49,6 @@ export class FavoriteResolver {
     // Use QueryBuilder to carefully select required fields
     const favoritePrompts = await Favorite.createQueryBuilder('favorite')
       .innerJoinAndSelect('favorite.prompt', 'prompt')
-      .innerJoinAndSelect('prompt.creator', 'creator')
       .where('favorite.userId = :userId', { userId })
       .getMany()
 

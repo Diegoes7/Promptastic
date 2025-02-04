@@ -69,9 +69,9 @@ const Feed = () => {
 
 	const handleSearchChange = React.useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			//* if (allPrompts && allPrompts?.length > 0) {
+			if (allPrompts && allPrompts?.length > 0) {
 			setSearchText(e.target.value)
-			// }
+			}
 		},
 		[]
 	)
@@ -100,6 +100,7 @@ const Feed = () => {
 			) : (
 				<PromptList loading={loading} data={searchedResults} />
 			)}
+			
 			{/* Trigger Element */}
 			{hasMore ? <div ref={observerRef} className='h-1'></div> : null}
 			{error && <ErrorMessage message={error.message} />}

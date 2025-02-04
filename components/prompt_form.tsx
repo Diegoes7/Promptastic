@@ -36,7 +36,8 @@ const PromptForm = ({
 	}
 
 	const handleCancel = () => {
-		router.push('/') // Navigates to the homepage
+		// router.push('/') //$ Navigates to the homepage
+		router.back() //$ Goes back to the previous page
 	}
 
 	return (

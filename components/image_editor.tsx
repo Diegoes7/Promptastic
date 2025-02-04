@@ -1,17 +1,23 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react'
 import Image from 'next/image'
 import {
-	UploadPictureDocument,
+	GetUserPictureDocument,
 	useUploadPictureMutation,
 } from 'generated/graphql'
 import customLoader from './basic/custom_image_loader'
 
+type AvatarUploaderProps = {
+	userId: number
+}
+
 export const defaultAvatar =
 	'/assets/images/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png'
 
-const AvatarUploader = () => {
+const AvatarUploader = ({ userId }: AvatarUploaderProps) => {
 	const [upload] = useUploadPictureMutation({
-		refetchQueries: [UploadPictureDocument],
+		refetchQueries: [
+			{ query: GetUserPictureDocument, variables: { creatorId: userId } },
+		],
 	})
 	const [imageSrc, setImageSrc] = useState('')
 	const [file, setFile] = useState<File | null>(null) // State to hold the selected file
@@ -32,8 +38,8 @@ const AvatarUploader = () => {
 	const handleUrlChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		const imageUrl = event.target.value
 		setImageSrc(imageUrl)
-		setFile(null) // Clear file state
-		setError(null) // Reset error state
+		setFile(null) //! Clear file state
+		setError(null) //! Reset error state
 	}
 
 	// Convert image URL to a File object
@@ -86,12 +92,30 @@ const AvatarUploader = () => {
 		}
 
 		try {
-			await upload({
+			const result = await upload({
 				variables: {
 					file: uploadFile,
 				},
+				update: (cache, { data }) => {
+					if (data?.uploadPicture) {
+						// Update the cache with the new picture
+						cache.writeQuery({
+							query: GetUserPictureDocument,
+							variables: { creatorId: userId }, // Include variables if needed
+							data: {
+								getUserPicture: data.uploadPicture,
+							},
+						})
+					}
+				},
 			})
-			alert('Upload successful!')
+
+			if (result.data?.uploadPicture) {
+				alert(
+					`Image with name "${uploadFile.name}" and size: ${uploadFile.size} was upload successful!`
+				)
+				setImageSrc(imageSrc) // Update the image source with the new picture
+			}
 		} catch (error) {
 			console.error('Error uploading file:', error)
 			setError('Failed to upload image. Please try again.')
@@ -107,7 +131,7 @@ const AvatarUploader = () => {
 					src={imageSrc || defaultAvatar}
 					width={100} // Fallback width
 					height={100} // Fallback height
-					className='rounded-full w-24 h-24 object-cover'
+					className={`rounded-full ${imageSrc ? 'w-40 h-40' : 'w-24 h-24'} object-cover`}
 				/>
 			</div>
 			{error && <p className='text-red-500'>{error}</p>}

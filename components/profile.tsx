@@ -50,6 +50,7 @@ const Profile = ({
 
 	const profilePath = path === '/profile'
 	const nameInitials = profilePath ? session?.user?.name : userName
+	const sessionUser = parseInt((session as SessionUser)?.userID)
 
 	const avatarID = otherUserID
 		? // ? parseInt(otherUserID)
@@ -98,7 +99,7 @@ const Profile = ({
 	if (imageEditor) {
 		return (
 			<PopUp onClose={handleUploadImage} isOpen={imageEditor}>
-				<AvatarUploader />
+				<AvatarUploader userId={sessionUser} />
 			</PopUp>
 		)
 	}
@@ -132,7 +133,7 @@ const Profile = ({
 						</Button>
 					)}
 				</div>
-				<div>
+				<div className='flex-col self-center items-center sm:flex-start'>
 					{session?.user && profilePath ? (
 						<form onSubmit={handleSubmit} className='pb-4'>
 							<div className='flex h-100%'>

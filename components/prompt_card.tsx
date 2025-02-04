@@ -25,6 +25,7 @@ import TruncatedText from './basic/trancate._text'
 import Tooltip from './basic/tooltip'
 import useModal from '@app/utils/useModal'
 import customLoader from './basic/custom_image_loader'
+import ErrorMessage from './basic/error_message'
 
 type PromptCardProps = {
 	post: PromptFragment | any
@@ -33,6 +34,9 @@ type PromptCardProps = {
 }
 
 const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
+	//! Guard clause for undefined/null post
+	if (!post) return null
+
 	const { data: session } = useSession() as { data: SessionUser | null }
 	const [deletePrompt, { loading }] = useDeletePromptMutation({
 		refetchQueries: [PromptsDocument],
@@ -99,14 +103,25 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 		[deletePrompt]
 	)
 
-	const handleProfileClick = () => {
-		if (post.creatorId === session?.userID) {
-			router.push('/profile')
+	const handleProfileClick = React.useCallback(() => {
+		// Capture values early to avoid stale references
+		const creatorId = post?.creatorId
+		const creatorUsername = post?.creator?.username
+
+		if (!creatorId || !creatorUsername) {
+			console.error('Post data is incomplete')
+			return <ErrorMessage message='Post data is incomplete' />
 		}
+
+		if (creatorId === parseInt((session as SessionUser)?.userID)) {
+			router.push('/profile')
+			closeModal()
+			return // Exit early to prevent double navigation
+		}
+
 		closeModal()
-    
-		router.push(`/profile/${post.creatorId}?name=${post.creator?.username}`)
-	}
+		router.push(`/profile/${creatorId}?name=${creatorUsername}`)
+	}, [])
 
 	const handleCopy = useCallback(async () => {
 		setCopied(post.prompt)
@@ -162,7 +177,7 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 						<div className='flex flex-col gap-x-4 w-full'>
 							<h3 className='w-[85%] truncate whitespace-nowrap overflow-hidden text-ellipsis font-satoshi font-semibold text-gray-900 text-inherit'>
 								<TruncatedText
-									maxLength={17}
+									maxLength={13}
 									minHeight=''
 									text={username || ''}
 									overviewMode={mode}
