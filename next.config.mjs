@@ -13,12 +13,17 @@ const nextConfig = {
 			config.experiments = {}
 		}
 		config.experiments.topLevelAwait = true
-		config.resolve.alias = {
+		;(config.resolve.alias = {
 			...config.resolve.alias,
 			'react-native-sqlite-storage': false,
 			mysql: false,
 			'@sap/hana-client/extension/Stream': false,
-		}
+		}),
+			// Disable aggressive circular dependency checks
+			config.module.rules.push({
+				test: /\.ts$/,
+				parser: { requireEnsure: false },
+			})
 		return config
 	},
 	images: {
