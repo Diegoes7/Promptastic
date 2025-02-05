@@ -3,13 +3,11 @@
 import React, { FormEvent, useState } from 'react'
 import { User } from '../../components/register_form'
 import { useRegisterMutation } from '../../generated/graphql'
-import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import RegisterForm from '../../components/register_form'
 import ErrorMessage from 'components/basic/error_message'
 
 const Register = () => {
-	const router = useRouter()
 	const [register, { loading, error }] = useRegisterMutation()
 	const [user, setUser] = useState<User>({
 		username: '',
@@ -36,7 +34,6 @@ const Register = () => {
 					callbackUrl: `${window.location.origin}/`,
 				})
 				console.log(response)
-				router.push('/')
 			} catch (error) {
 				console.log(error)
 			}

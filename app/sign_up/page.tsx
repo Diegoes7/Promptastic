@@ -56,7 +56,6 @@ const SignIn = () => {
 					callbackUrl: `${window.location.origin}/`,
 				})
 				console.log(response)
-				router.push('/')
 			} catch (error) {
 				console.log(error)
 			}

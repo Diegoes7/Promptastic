@@ -139,10 +139,9 @@ export class PromptResolver extends BaseEntity {
       creatorId: session.userID,
     })
 
-    // Fetch the newly created prompt with the `creator` relation
     const savedPrompt = await promptRepository.findOne({
       where: { id: newPrompt.id },
-      relations: ['creator'], // Load the creator relation
+      // relations: ['creator'], // Load the creator relation
     })
 
     if (!savedPrompt) {
