@@ -44,8 +44,8 @@ export class User extends BaseEntity {
   promptId!: number
 
   @Field(() => Prompt, { nullable: true })
-  @OneToMany(() => Prompt, prompt => prompt.creator)
-  prompts!: Relation<Prompt[]>
+  @OneToMany(() => Prompt, prompt => prompt.creator, { lazy: true })
+  prompts!: Promise<Prompt[]>
 
   @Field(() => Picture, { nullable: true })
   @OneToMany(() => Picture, (picture) => picture)

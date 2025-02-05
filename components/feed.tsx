@@ -61,7 +61,7 @@ const Feed = () => {
 		})
 	}
 
-	//* Infinite scroll hook
+	//$ Infinite scroll hook
 	const observerRef = useInfiniteScroll({
 		onLoadMore: handlePagination,
 		threshold: 0.9, // Trigger at 90% visibility
@@ -69,8 +69,8 @@ const Feed = () => {
 
 	const handleSearchChange = React.useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			if (allPrompts && allPrompts?.length > 0) {
-			setSearchText(e.target.value)
+			if (allPrompts) {
+				setSearchText(e.target.value)
 			}
 		},
 		[]
@@ -100,7 +100,7 @@ const Feed = () => {
 			) : (
 				<PromptList loading={loading} data={searchedResults} />
 			)}
-			
+
 			{/* Trigger Element */}
 			{hasMore ? <div ref={observerRef} className='h-1'></div> : null}
 			{error && <ErrorMessage message={error.message} />}
