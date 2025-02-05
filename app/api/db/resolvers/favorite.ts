@@ -26,7 +26,6 @@ export class FavoriteResolver {
 
     const favoritePrompts = await Favorite.createQueryBuilder('favorite')
       .leftJoinAndSelect('favorite.prompt', 'prompt')
-      .leftJoinAndSelect('favorite.user', 'user')
       .where('favorite.userId = :userId', { userId })
       .getMany()
 
@@ -63,33 +62,35 @@ export class FavoriteResolver {
   ): Promise<Favorite> {
     const userId = session.userID
 
-    //* Fetch the user and prompt
-    const user = await User.findOne({ where: { id: userId } })
-    const prompt = await Prompt.findOne({ where: { id: promptId } })
+    // Validate user and prompt exist
+    const user = await User.findOneBy({ id: userId })
+    const prompt = await Prompt.findOneBy({ id: promptId })
 
     if (!user || !prompt) {
       throw new Error('User or prompt not found')
     }
 
+    // Check if this user already favorited the prompt
     const existingFavorite = await Favorite.findOne({
       where: {
-        // user: { id: userId },
-        prompt: { id: promptId }
-      },
+        userId: userId,    // Check the user ID
+        promptId: promptId // Check the prompt ID
+      }
     })
 
     if (existingFavorite) {
-      throw new Error('Already added to favorites')
+      throw new Error('This prompt is already in your favorites')
     }
 
+    // Create and save new favorite
     const newFavorite = new Favorite()
-    // newFavorite.user = Promise.resolve(user)
-    newFavorite.prompt = Promise.resolve(prompt)
     newFavorite.userId = userId
+    newFavorite.promptId = promptId
     await newFavorite.save()
 
     return newFavorite
   }
+
 
   @Mutation(() => Int)
   @UseMiddleware(isAuth)

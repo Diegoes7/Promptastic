@@ -158,18 +158,6 @@ export class PromptResolver extends BaseEntity {
   async updatePrompt(@Arg('id', () => Int) id: number, @Arg('input') input: PromptInput,
     @Ctx() { session, dataSource }: ContextProps):
     Promise<Prompt | null> {
-    // const promptRepository = dataSource.getRepository(Prompt);
-
-    // const promptToUpdate = await promptRepository.findOne({ where: { id } });
-
-    // if (!promptToUpdate) {
-    //   return null; // Prompt not found
-    // }
-
-    // console.log(promptToUpdate);
-
-    // promptRepository.merge(promptToUpdate, input); // Merge the new data into the existing prompt
-    // return await promptRepository.save(promptToUpdate); // Save the updated prompt
     const result = await dataSource
       .createQueryBuilder()
       .update(Prompt)
