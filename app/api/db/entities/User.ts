@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from "type-graphql"
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { type Relation } from 'typeorm'
 import { Prompt } from "./Prompt"
-// import { Favorite } from "./Favorite"
 import { Picture } from "./Picture"
 
 @ObjectType('User')  // Unique name for GraphQL schema
@@ -45,7 +45,7 @@ export class User extends BaseEntity {
 
   @Field(() => Prompt, { nullable: true })
   @OneToMany(() => Prompt, prompt => prompt.creator)
-  prompts!: Prompt[]
+  prompts!: Relation<Prompt[]>
 
   @Field(() => Picture, { nullable: true })
   @OneToMany(() => Picture, (picture) => picture)

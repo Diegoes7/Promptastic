@@ -1,5 +1,6 @@
 import 'reflect-metadata'
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { type Relation } from 'typeorm'
 import { User } from './User'
 import { Favorite } from './Favorite'
 import { Field, ID, Int, ObjectType } from 'type-graphql'
@@ -37,12 +38,12 @@ export class Prompt extends BaseEntity {
 
   @Field(() => User, { nullable: true }) //* Mark the field as nullable
   @ManyToOne(() => User, (creator) => creator.prompts, { lazy: true })
-  creator!: Promise<User>
+  creator!: Relation<User>
 
   @Field(() => Int, { nullable: true })
   @Column({ nullable: true })
   creatorId!: number
-  
+
   @Field(() => [Favorite], { nullable: true })
   @OneToMany(() => Favorite, (favorite) => favorite.prompt, { cascade: ['remove'], onDelete: 'CASCADE', lazy: true })
   favorites?: Favorite[]
