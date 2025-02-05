@@ -39,7 +39,7 @@ export class PromptResolver extends BaseEntity {
   // Resolve the User related to Prompt
   @FieldResolver(() => User)
   async user(@Root() prompt: Prompt): Promise<User | null> {
-    const { User } = require('../../db/entities/User')
+    // const { User } = require('../../db/entities/User')
     return await User.findOne({ where: { id: prompt.creatorId } }) // Resolve User lazily
   }
 
@@ -141,7 +141,6 @@ export class PromptResolver extends BaseEntity {
 
     const savedPrompt = await promptRepository.findOne({
       where: { id: newPrompt.id },
-      // relations: ['creator'], // Load the creator relation
     })
 
     if (!savedPrompt) {

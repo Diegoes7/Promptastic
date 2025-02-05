@@ -47,10 +47,6 @@ export class User extends BaseEntity {
   @OneToMany(() => Prompt, prompt => prompt.creator)
   prompts!: Prompt[]
 
-  // @Field(() => [Favorite], { nullable: true })
-  // @OneToMany(() => Favorite, (favorite) => favorite.user)
-  // favorites!: Favorite[]
-
   @Field(() => Picture, { nullable: true })
   @OneToMany(() => Picture, (picture) => picture)
   image!: Picture

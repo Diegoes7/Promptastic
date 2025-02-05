@@ -46,9 +46,4 @@ export class Prompt extends BaseEntity {
   @Field(() => [Favorite], { nullable: true })
   @OneToMany(() => Favorite, (favorite) => favorite.prompt, { cascade: ['remove'], onDelete: 'CASCADE', lazy: true })
   favorites?: Favorite[]
-
-  // @Field(() => [Favorite], { nullable: true })
-  // @OneToMany(() => Favorite, (favorite) => favorite.prompt, { cascade: ['remove'], onDelete: 'CASCADE', lazy: true })
-  // favorites!: Promise<Favorite[]>
-  // Define the inverse relation: A prompt can have many favorites
 }
