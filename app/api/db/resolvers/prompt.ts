@@ -127,28 +127,40 @@ export class PromptResolver extends BaseEntity {
   @Mutation(() => Prompt)
   @UseMiddleware(isAuth)
   @UseMiddleware(DatabaseCheckMiddleware)
-  async createPrompt(@Arg('input') input: PromptInput,
+  async createPrompt(
+    @Arg('input') input: PromptInput,
     @Ctx() { session, dataSource }: ContextProps,
   ): Promise<Prompt> {
-    !dataSource && await initializeDatabase()
+    if (!dataSource) {
+      await initializeDatabase()
+    }
 
-    const promptRepository = dataSource.getRepository(Prompt)
+    // Insert new prompt using Query Builder
+    const insertResult = await dataSource
+      .createQueryBuilder()
+      .insert()
+      .into(Prompt)
+      .values({
+        ...input,
+        creatorId: session.userID,
+      })
+      .execute()
 
-    const newPrompt = await promptRepository.save({
-      ...input,
-      creatorId: session.userID,
-    })
+    // Get the ID of the newly inserted prompt
+    const newPromptId = insertResult.generatedMaps[0].id
 
-    const savedPrompt = await promptRepository.findOne({
-      where: { id: newPrompt.id },
-    })
+    // Fetch the complete prompt using Query Builder
+    const savedPrompt = await dataSource
+      .createQueryBuilder(Prompt, 'prompt')
+      .where('prompt.id = :id', { id: newPromptId })
+      .getOne()
 
     if (!savedPrompt) {
-      throw new Error('Failed to fetch the newly created prompt with relations')
+      throw new Error('Failed to fetch the newly created prompt')
     }
 
     return savedPrompt
-  };
+  }
 
   @Mutation(() => Prompt)
   @UseMiddleware(DatabaseCheckMiddleware)
@@ -176,13 +188,18 @@ export class PromptResolver extends BaseEntity {
   ): Promise<number> {
     const promptRepository = dataSource.getRepository(Prompt)
 
-    const prompt = await promptRepository.findOneBy({ id })
-    if (!prompt) {
+    const result = await promptRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Prompt)
+      .where("id = :id", { id })
+      .execute()
+
+    if (result.affected === 0) {
       throw new Error('Prompt not found')
     }
 
-    await promptRepository.remove(prompt)
-    return id // Return the deleted prompt's ID
+    return id
   }
 
   @Mutation(() => Boolean)

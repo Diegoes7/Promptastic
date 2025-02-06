@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   // username: process.env.DB_USERNAME,
   // password: process.env.DB_PASSWORD,
   // database: process.env.DB_NAME,
-  entities: [Favorite, User, Prompt, Picture],
+  entities: [Favorite, Prompt, User, Picture],
   // relationLoadStrategy: "query", // Ensures relations are lazy-loaded with queries
   // synchronize: process.env.NODE_ENV === "development",
   synchronize: true,
