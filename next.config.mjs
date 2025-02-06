@@ -13,12 +13,12 @@ const nextConfig = {
 			config.experiments = {}
 		}
 		config.experiments.topLevelAwait = true
-		;(config.resolve.alias = {
+		config.resolve.alias = {
 			...config.resolve.alias,
 			'react-native-sqlite-storage': false,
 			mysql: false,
 			'@sap/hana-client/extension/Stream': false,
-		})
+		}
 		return config
 	},
 	images: {
@@ -29,6 +29,16 @@ const nextConfig = {
 			'localhost',
 		], // Add the domain you need to support
 		loader: 'custom',
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: '**', // Allows images from any domain
+			},
+			{
+				protocol: 'http',
+				hostname: '**', // Allows images from any HTTP source
+			},
+		],
 		// dangerouslyAllowAllDomains: true,
 	},
 }
