@@ -108,7 +108,7 @@ const FavoriteList = ({ data, profilePath, extended }: FavoriteListProps) => {
 					// session as MyOwnSession).userID === id
 					<Button
 						className='p-2'
-						buttonStyle={{ color: 'black', rounded: 'lg', size: 'xs' }}
+						buttonStyle={{ color: 'red', rounded: 'lg', size: 'xs' }}
 						onClick={() => handleUnliked(f)}
 					>
 						<MdCancel />
@@ -128,14 +128,12 @@ const FavoriteList = ({ data, profilePath, extended }: FavoriteListProps) => {
 	const extend = extended ? 'w-[90%]' : 'w-[350px]'
 
 	return (
-		// <div className={`${extend} pr-4 h-90%`}>
 		<div className='relative'>
 			<h1 className='pb-4'>My Favorites</h1>
-			{/* <section className='h-[300px] w-full w-[360px] min-w-[300px] px-4 pt-4 bg-gray-200 border rounded-md border-blue-300 overflow-y-auto overflow-x-hidden'> */}
 			<section
-				className={`${extend} pr-4 h-[350px] px-2 pt-2 bg-gray-200 border rounded-md border-blue-300 overflow-y-auto overflow-x-hidden bg-white dark:bg-slate-700`}
+				className={`${extend} h-[350px] px-2 pt-2 bg-gray-200 border rounded-md border-blue-300 overflow-y-auto overflow-x-hidden bg-white dark:bg-slate-700`}
 			>
-				<div>
+				<div className='w-full'>
 					{favList?.length === 0 ? (
 						<span className='w-[70%] p-4 my-8'>
 							{' '}

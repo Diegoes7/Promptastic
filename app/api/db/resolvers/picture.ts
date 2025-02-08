@@ -8,6 +8,8 @@ import type { ContextProps } from '@app/api/graphql/context'
 import { User } from '../../db//entities/User'
 import { pipeline } from 'stream'
 import { DatabaseCheckMiddleware } from '@app/api/graphql/middleware/databaseCheck'
+import { tmpdir } from 'os'
+import { supabase } from '../supabase_client'
 
 @Resolver(Picture)
 export class PictureResolver {
@@ -38,13 +40,17 @@ export class PictureResolver {
 
     try {
       const { createReadStream, encoding, fileName, fileSize, mimeType } = await file
-      const uniqueFilename = `${uuidv4()}-${fileName}`
+      const uniqueFilename = `private/${uuidv4()}-${fileName}`
       // Use a Promise to handle the asynchronous file saving operation.
-      new Promise((resolve, reject) => {
+      const uploadDir = process.env.NODE_ENV === 'production' ? tmpdir() : './public/uploads'
+      // const tempFilePath = path.join(uploadDir, uniqueFilename)
+      const tempFilePath = `${uploadDir}/${uniqueFilename}`
+
+      await new Promise((resolve, reject) => {
         pipeline(
           createReadStream(),
           // This example stores the file in the 'public' directory for simplicity, you should NEVER do this.
-          createWriteStream(`./public/uploads/${uniqueFilename}`),
+          createWriteStream(tempFilePath),
           (error) => {
             if (error) {
               console.error('File upload pipeline error:', error)
@@ -57,6 +63,17 @@ export class PictureResolver {
           }
         )
       })
+
+      // Upload file to Supabase
+      const { data, error } = await supabase.storage
+        .from('uploads')
+        // .from(tempFilePath)
+        .upload(uniqueFilename, createReadStream(), { contentType: mimeType, duplex: 'half' })
+
+      if (error) {
+        console.error("Supabase upload failed:", error)
+        throw new Error(`Supabase upload failed: ${error.message}`)
+      }
 
       // Get the user and save the picture with user reference
       const user = await User.findOne({ where: { id: session.userID } })
@@ -77,7 +94,6 @@ export class PictureResolver {
     }
   }
 
-
   @Mutation(() => Boolean)
   async deletePicture(@Arg('id', () => Int) id: number): Promise<boolean> {
     const picture = await Picture.findOne({ where: { id } })
@@ -85,9 +101,23 @@ export class PictureResolver {
       throw new Error('Picture not found')
     }
 
-    //* Delete the file from the filesystem
-    const filePath = path.join(__dirname, `../../uploads/${picture.filename}`)
-    fs.unlinkSync(filePath)
+    // Determine the file path for local environment (./public/uploads)
+    const filePath = path.join(process.cwd(), 'public', 'uploads', picture.filename)
+
+    // Check if the file exists and delete it
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath)
+    }
+
+    // Delete the file from Supabase Storage
+    const { error } = await supabase.storage
+      .from('uploads') // Your bucket name
+      .remove([picture.filename])
+
+    if (error) {
+      console.error('Error deleting file from Supabase:', error)
+      throw new Error('Failed to delete file from storage.')
+    }
 
     //* Delete from the database
     await Picture.remove(picture)

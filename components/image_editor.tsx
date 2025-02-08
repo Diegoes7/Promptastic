@@ -5,6 +5,8 @@ import {
 	useUploadPictureMutation,
 } from 'generated/graphql'
 import customLoader from './basic/custom_image_loader'
+import Spinner from './basic/spinner'
+import { SP } from 'next/dist/shared/lib/utils'
 
 type AvatarUploaderProps = {
 	userId: number
@@ -14,7 +16,7 @@ export const defaultAvatar =
 	'/assets/images/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png'
 
 const AvatarUploader = ({ userId }: AvatarUploaderProps) => {
-	const [upload] = useUploadPictureMutation({
+	const [upload, { loading }] = useUploadPictureMutation({
 		refetchQueries: [
 			{ query: GetUserPictureDocument, variables: { creatorId: userId } },
 		],
@@ -65,7 +67,7 @@ const AvatarUploader = ({ userId }: AvatarUploaderProps) => {
 
 	// Handle clearing the image
 	const handleClear = () => {
-		setImageSrc(defaultAvatar)
+		setImageSrc('')
 		setFile(null)
 		setError(null)
 	}
@@ -171,6 +173,7 @@ const AvatarUploader = ({ userId }: AvatarUploaderProps) => {
 						Upload
 					</button>
 				</form>
+				{loading ? <Spinner customColor='#fffff7' /> : null}
 			</div>
 		</div>
 	)

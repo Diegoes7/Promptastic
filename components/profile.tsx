@@ -1,6 +1,9 @@
 import React, { FormEvent, useCallback } from 'react'
 import {
+	DeletePictureDocument,
+	useDeletePictureMutation,
 	useGetUserFavoritePromptsQuery,
+	useGetUserPictureQuery,
 	useMyFavoritePromptsQuery,
 	User,
 	useUpdateUserMutation,
@@ -17,6 +20,8 @@ import Button from './basic/button/Button'
 import { usePathname, useRouter } from 'next/navigation'
 import { InputField, StaticField } from './basic/form_fields'
 import { formatDate } from '@app/utils/format_date'
+import { MdCancel } from 'react-icons/md'
+import Tooltip from './basic/tooltip'
 
 type ProfileProps = {
 	userProfile?: User | undefined | null
@@ -46,7 +51,14 @@ const Profile = ({
 	const [inputUser, setInputUser] = React.useState(session?.user?.name)
 	const [imageEditor, setImageEditor] = React.useState(false)
 	const { data: loggedInFavorites } = useMyFavoritePromptsQuery()
+
+	const { data: userPicture } = useGetUserPictureQuery({
+		variables: { creatorId: parseInt((session as SessionUser).userID) },
+	})
+	const pictureID =
+		userPicture?.getUserPicture && parseInt(userPicture?.getUserPicture?.id)
 	const [updateUser] = useUpdateUserMutation()
+	const [deletePicture] = useDeletePictureMutation()
 
 	const profilePath = path === '/profile'
 	const nameInitials = profilePath ? session?.user?.name : userName
@@ -78,6 +90,50 @@ const Profile = ({
 		setImageEditor(!imageEditor)
 	}, [imageEditor])
 
+	const handleDeletePicture = useCallback(async (e: FormEvent) => {
+		e.preventDefault()
+
+		try {
+			const response = await deletePicture({
+				variables: {
+					deletePictureId: pictureID!,
+				},
+				update: (cache, { data }) => {
+					if (data?.deletePicture) {
+						const deletedPictureId = String(pictureID)
+
+						// 1. Evict the deleted picture from the cache
+						cache.evict({ id: `Picture:${deletedPictureId}` })
+
+						// 2. Remove it from the pictures list
+						cache.modify({
+							fields: {
+								pictures(existingPictures = [], { readField }) {
+									return existingPictures.filter(
+										(pic: any) => readField('id', pic) !== deletedPictureId
+									)
+								},
+							},
+						})
+						// 3. Broadcast the cache changes
+						cache.gc()
+					}
+				},
+				onCompleted() {
+					alert(
+						`Picture with name: '${userPicture?.getUserPicture?.filename.slice(6)}' of type: ${userPicture?.getUserPicture?.mimetype} deleted successfully.`
+					)
+					console.log('Picture deleted successfully')
+				},
+				onError(err) {
+					console.error('Error deleting picture:', err.message)
+				},
+			})
+		} catch (error) {
+			console.log(error)
+		}
+	}, [])
+
 	const handleSubmit = useCallback(async (e: FormEvent) => {
 		e.preventDefault()
 
@@ -88,8 +144,6 @@ const Profile = ({
 					username: inputUser!,
 				},
 			})
-			console.log(response)
-
 			alert(`Submitted ${response.data?.updateUser.username}`)
 		} catch (error) {
 			console.log(error)
@@ -111,26 +165,44 @@ const Profile = ({
 			</h1>
 			<p className='desc text-left'>{desc}</p>
 			<div className='flex mt-6 gap-10 border-b border-gray-400 p-8 w-300px flex-col sm:flex-row'>
-				<div className='flex flex-col gap-2 content-around items-center justify-evenly'>
-					<Avatar
-						width={57}
-						height={57}
-						userId={avatarID}
-						name={nameInitials || ''}
-						alt='user picture'
-						isLarge={true}
-					/>
+				<div className='relative group flex flex-col items-center gap-4'>
+					<div className='relative'>
+						<Avatar
+							width={57}
+							height={57}
+							userId={avatarID}
+							name={nameInitials || ''}
+							alt='user picture'
+							isLarge={true}
+						/>
+						{!!userPicture?.getUserPicture?.id && (
+							<div className='absolute top-1 right-1 p-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+								<Tooltip text='Remove picture'>
+									<Button
+										buttonStyle={{ color: 'red', rounded: 'lg', size: 'xs' }}
+										onClick={handleDeletePicture}
+									>
+										<MdCancel />
+									</Button>
+								</Tooltip>
+							</div>
+						)}
+					</div>
 					{session?.user && profilePath && (
-						<Button
-							onClick={handleUploadImage}
-							buttonStyle={{
-								color: 'glassBlue',
-								rounded: 'full',
-								size: 'xs',
-							}}
-						>
-							Upload Picture
-						</Button>
+						<div className='mt-2'>
+							<Tooltip text='Choose picture and apply it to be your avatar'>
+								<Button
+									onClick={handleUploadImage}
+									buttonStyle={{
+										color: 'glassBlue',
+										rounded: 'full',
+										size: 'xs',
+									}}
+								>
+									Upload Picture
+								</Button>
+							</Tooltip>
+						</div>
 					)}
 				</div>
 				<div className='flex-col self-center items-center sm:flex-start'>

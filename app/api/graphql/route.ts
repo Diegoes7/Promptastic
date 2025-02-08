@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { uploadProcess } from 'graphql-upload-nextjs'
 import Cors from 'cors'
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'production'
 
 // Apollo Server setup
 const server = new ApolloServer({

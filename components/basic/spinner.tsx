@@ -5,20 +5,23 @@ import { BounceLoader } from 'react-spinners'
 type SpinnerProps = {
 	size?: number
 	bounce?: boolean
+	customColor?: string
 }
 
-function Spinner({ size, bounce }: SpinnerProps) {
+function Spinner({ customColor, size, bounce }: SpinnerProps) {
+	const currentColor = customColor ? customColor : 'rgba(226, 75, 10, 0.85)'
+	
 	if (bounce) {
 		return (
 			<div className={`${size} mt-6`}>
-				<BounceLoader size={size} color='rgba(226, 75, 10, 0.85)' />
+				<BounceLoader size={size} color={currentColor} />
 			</div>
 		)
 	}
 
 	return (
 		<div className={`${size} mt-6`}>
-			<BeatLoader size={size} color='rgba(226, 75, 10, 0.85)' />
+			<BeatLoader size={size} color={currentColor} />
 		</div>
 	)
 }

@@ -78,7 +78,7 @@ export const solidButton = tv({
       pink:
         'bg-[#DE3163] text-white shadow-blueGray active:shadow-none active:translate-y-[5px] hover:bg-white hover:text-[#DE3163]',
       red:
-        'bg-[#EF4444] text-white shadow-blueGray active:shadow-none active:translate-y-[5px] hover:bg-white hover:text-[#EF4444]',
+        'bg-[#992B2B] text-white shadow-blueGray active:shadow-none active:translate-y-[5px] hover:bg-white hover:text-[#992B2B]',
     },
   },
 })
