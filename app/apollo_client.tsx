@@ -10,13 +10,14 @@ import {
 } from '@apollo/client'
 import { createUploadLink } from 'apollo-upload-client'
 import { PaginatedPrompts } from 'generated/graphql'
-import { onError } from "@apollo/client/link/error"
-
+import { onError } from '@apollo/client/link/error'
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
 	if (graphQLErrors) {
 		graphQLErrors.forEach(({ message, locations, path }) =>
-      console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
+			console.error(
+				`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+			)
 		)
 	}
 	if (networkError) console.error(`[Network error]: ${networkError}`)
@@ -90,38 +91,12 @@ const client = new ApolloClient({
 							existing: PaginatedPrompts | undefined,
 							incoming: PaginatedPrompts
 						): PaginatedPrompts {
-							const existingPrompts = existing?.prompts || []
-							const incomingIds = new Set(
-								incoming.prompts.map((prompt) => prompt.id)
-							)
-
-							const filteredExistingPrompts = existingPrompts.filter(
-								(prompt) => !incomingIds.has(prompt.id)
-							)
-
 							return {
 								...incoming,
-								prompts: [...filteredExistingPrompts, ...incoming.prompts],
+								prompts: [...(existing?.prompts || []), ...incoming.prompts], // ✅ Append instead of filtering
+								hasMore: incoming.hasMore, // ✅ Ensure `hasMore` updates correctly
 							}
 						},
-						// merge(
-						// 	existing: PaginatedPrompts | undefined,
-						// 	incoming: PaginatedPrompts
-						// ): PaginatedPrompts {
-						// 	const incomingIds = new Set(
-						// 		incoming.prompts.map((prompt) => prompt.id)
-						// 	)
-						// 	const mergedPrompts = [
-						// 		...incoming.prompts,
-						// 		...(existing?.prompts.filter(
-						// 			(prompt) => !incomingIds.has(prompt.id)
-						// 		) || []),
-						// 	]
-						// 	return {
-						// 		...incoming,
-						// 		prompts: mergedPrompts,
-						// 	}
-						// },
 					},
 				},
 			},

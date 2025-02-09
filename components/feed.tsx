@@ -33,7 +33,10 @@ const Feed = () => {
 
 	const handlePagination = () => {
 		if (!allPrompts) return
-		const cursor1 = allPrompts[allPrompts?.length - 1].createdAt
+		// const cursor1 = allPrompts[allPrompts?.length - 1].createdAt
+		const cursor1 = new Date(allPrompts[allPrompts.length - 1].createdAt)
+			.getTime()
+			.toString()
 		const element = allPrompts[allPrompts.length - 1]
 		console.log('element: ', element)
 		fetchMore({
@@ -42,19 +45,17 @@ const Feed = () => {
 				cursor: cursor1,
 			},
 			updateQuery: (previousValue, { fetchMoreResult }): PromptsQuery => {
-				if (!fetchMoreResult) {
-					return previousValue as PromptsQuery
-				}
+				if (!fetchMoreResult) return previousValue
 
 				return {
 					__typename: 'Query',
 					prompts: {
 						__typename: 'PaginatedPrompts',
-						hasMore: fetchMoreResult?.prompts?.hasMore!,
+						hasMore: fetchMoreResult?.prompts?.hasMore!, //& Correctly update `hasMore`
 						prompts: [
 							...previousValue?.prompts?.prompts!,
 							...fetchMoreResult?.prompts?.prompts!,
-						],
+						], //& Append new prompts
 					},
 				}
 			},
@@ -73,7 +74,7 @@ const Feed = () => {
 				setSearchText(e.target.value)
 			}
 		},
-		[]
+		[posts]
 	)
 
 	return (

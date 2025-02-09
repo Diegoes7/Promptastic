@@ -74,10 +74,10 @@ export class PromptResolver extends BaseEntity {
       .orderBy("p.createdAt", "DESC")
       .take(realLimitPlusOne)
 
-    if (cursor) {
-      queryBuilder.andWhere("p.createdAt < :cursor", { cursor: new Date(parseInt(cursor)) })
-    }
 
+    if (cursor) {
+      queryBuilder.andWhere("p.createdAt < :cursor", { cursor: new Date(parseInt(cursor, 10)) });
+    }
 
     const prompts = await queryBuilder.getMany()
 

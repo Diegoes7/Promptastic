@@ -38,10 +38,10 @@ export class FavoriteResolver {
 
   @Query(() => [Favorite])
   async myFavoritePrompts(@Ctx() { session }: ContextProps
-  ): Promise<Favorite[] | null> {
+  ): Promise<Favorite[]> {
     if (!session || !session.userID) {
       console.log('Session or userID is undefined:', session)
-      return null
+      return []
     }
 
     const userId = session.userID
@@ -51,7 +51,7 @@ export class FavoriteResolver {
       .where('favorite.userId = :userId', { userId })
       .getMany()
 
-    return favoritePrompts
+    return favoritePrompts ?? []
   }
 
   @Mutation(() => Favorite)
