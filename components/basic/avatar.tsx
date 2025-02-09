@@ -71,7 +71,7 @@ const Avatar = ({
 					isLarge ? 'h-[5.90em] w-[5.90em]' : 'h-11 w-11'
 				}`}
 				onClick={onClick}
-				unoptimized={imageSource.startsWith('http')} 
+				unoptimized={imageSource.startsWith("http")} 
 				{...props}
 			/>
 			{error && <ErrorMessage message={error.message} />}

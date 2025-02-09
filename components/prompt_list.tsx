@@ -24,7 +24,7 @@ const PromptList = ({ data, loading }: PromptListProps) => {
 	return (
 		<div className='relative flex flex-col align-center'>
 			{path !== '/' && (
-				<h1 className='pb-4 flex justify-center mt-3 text-xl'>Prompts</h1>
+				<h1 className='pb-4 flex justify-center text-xl'>Prompts</h1>
 			)}
 			{uniqueData.length > 0 ? (
 				<div className='flex flex-wrap gap-4 flex-col md:flex-row justify-center'>

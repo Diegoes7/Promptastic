@@ -53,11 +53,11 @@ const Profile = ({
 	const { data: loggedInFavorites } = useMyFavoritePromptsQuery()
 
 	const { data: userPicture } = useGetUserPictureQuery({
-		variables: { creatorId: parseInt((session as SessionUser).userID) },
+		variables: { creatorId: parseInt((session as SessionUser)?.userID) },
 	})
 	const pictureID =
 		userPicture?.getUserPicture && parseInt(userPicture?.getUserPicture?.id)
-	const [updateUser] = useUpdateUserMutation()
+	const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
 	const [deletePicture] = useDeletePictureMutation()
 
 	const profilePath = path === '/profile'
@@ -228,6 +228,7 @@ const Profile = ({
 										align: 'bottom',
 										HSpace: 'sm',
 									}}
+									isLoading={loading}
 									style={{ marginBottom: '.3em' }}
 								>
 									Submit

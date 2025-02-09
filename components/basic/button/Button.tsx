@@ -1,26 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { forwardRef, useMemo } from 'react';
-import { type VariantProps } from 'tailwind-variants';
-import { TbLoader } from 'react-icons/tb';
-import { outlineButton, solidButton, ghostButton } from './ButtonStyles';
+import { forwardRef, useMemo } from 'react'
+import { type VariantProps } from 'tailwind-variants'
+import { ImSpinner2 } from 'react-icons/im'
+import { outlineButton, solidButton, ghostButton } from './ButtonStyles'
 
 // define all the button attributes
-type BaseButtonAttributes = React.ComponentPropsWithoutRef<'button'>;
+type BaseButtonAttributes = React.ComponentPropsWithoutRef<'button'>
 
 // define the ref type
-type Ref = HTMLButtonElement;
+type Ref = HTMLButtonElement
 
 // extend the base button attributes
 interface ButtonProps extends BaseButtonAttributes {
-	isLoading?: boolean;
-	disabled?: boolean;
-	leftIcon?: React.ReactElement;
-	rightIcon?: React.ReactElement;
+	isLoading?: boolean
+	disabled?: boolean
+	leftIcon?: React.ReactElement
+	rightIcon?: React.ReactElement
 	buttonStyle?: VariantProps<
 		typeof solidButton | typeof outlineButton | typeof ghostButton
-	>;
-	className?: string;
-	buttonVariant?: 'solid' | 'outline' | 'ghost';
+	>
+	className?: string
+	buttonVariant?: 'solid' | 'outline' | 'ghost'
 }
 
 const Button = forwardRef<Ref, ButtonProps>((props, ref) => {
@@ -36,27 +36,27 @@ const Button = forwardRef<Ref, ButtonProps>((props, ref) => {
 		rightIcon,
 		className,
 		...rest
-	} = props;
+	} = props
 
 	// determine icon placement
 	const { newIcon: icon, iconPlacement } = useMemo(() => {
-		let newIcon = rightIcon || leftIcon;
+		let newIcon = rightIcon || leftIcon
 
 		if (isLoading) {
-			newIcon = <TbLoader className='animate-spin' size={25} />;
+			newIcon = <ImSpinner2 className='animate-spin' size={25} />
 		}
 
 		return {
 			newIcon,
 			iconPlacement: rightIcon ? ('right' as const) : ('left' as const),
-		};
-	}, [isLoading, leftIcon, rightIcon]);
+		}
+	}, [isLoading, leftIcon, rightIcon])
 
 	const renderButtonVariant = () => {
 		if (buttonVariant === 'solid') {
-			return solidButton({ ...buttonStyle, className });
+			return solidButton({ ...buttonStyle, className })
 		}
-	};
+	}
 
 	return (
 		<button
@@ -91,8 +91,8 @@ const Button = forwardRef<Ref, ButtonProps>((props, ref) => {
 				</span>
 			) : null}
 		</button>
-	);
-});
+	)
+})
 
 // set default props
 Button.defaultProps = {
@@ -102,6 +102,6 @@ Button.defaultProps = {
 	disabled: false,
 	leftIcon: undefined,
 	rightIcon: undefined,
-};
+}
 
-export default Button;
+export default Button

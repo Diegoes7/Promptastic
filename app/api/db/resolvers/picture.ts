@@ -2,13 +2,9 @@ import { Arg, Ctx, FieldResolver, Int, Mutation, Query, Resolver, Root, UseMiddl
 import { GraphQLUpload, type File } from 'graphql-upload-nextjs'
 import { Picture } from '../../db/entities/Picture'
 import { v4 as uuidv4 } from 'uuid'
-import fs, { createWriteStream } from 'fs'
-import path from 'path'
 import type { ContextProps } from '@app/api/graphql/context'
 import { User } from '../../db//entities/User'
-import { pipeline } from 'stream'
 import { DatabaseCheckMiddleware } from '@app/api/graphql/middleware/databaseCheck'
-import { tmpdir } from 'os'
 import { supabase } from '../supabase_client'
 
 @Resolver(Picture)
@@ -39,95 +35,85 @@ export class PictureResolver {
     }
 
     try {
-      const { createReadStream, encoding, fileName, fileSize, mimeType } = await file
+      const { createReadStream, fileName, mimeType } = await file
       const uniqueFilename = `private/${uuidv4()}-${fileName}`
-      // Use a Promise to handle the asynchronous file saving operation.
-      const uploadDir = process.env.NODE_ENV === 'production' ? tmpdir() : './public/uploads'
-      // const tempFilePath = path.join(uploadDir, uniqueFilename)
-      const tempFilePath = `${uploadDir}/${uniqueFilename}`
 
-      await new Promise((resolve, reject) => {
-        pipeline(
-          createReadStream(),
-          // This example stores the file in the 'public' directory for simplicity, you should NEVER do this.
-          createWriteStream(tempFilePath),
-          (error) => {
-            if (error) {
-              console.error('File upload pipeline error:', error)
-              reject(new Error('Error during file upload.'))
-            } else {
-              // console.log(`${ip} successfully uploaded ${fileName}`)
-              // Resolve the promise with the file details for the GraphQL response.
-              resolve({ encoding, fileName, fileSize, mimeType, uri: `http://localhost:3000/${uniqueFilename}` })
-            }
-          }
-        )
+      // Convert stream to buffer
+      const chunks: Uint8Array[] = []
+      const stream = createReadStream()
+
+      await new Promise<void>((resolve, reject) => {
+        stream.on('data', (chunk) => chunks.push(chunk))
+        stream.on('end', resolve)
+        stream.on('error', reject)
       })
 
-      // Upload file to Supabase
+      const buffer = Buffer.concat(chunks)
+
+      // Upload file to Supabase Storage
       const { data, error } = await supabase.storage
         .from('uploads')
-        // .from(tempFilePath)
-        .upload(uniqueFilename, createReadStream(), { contentType: mimeType, duplex: 'half' })
+        .upload(uniqueFilename, buffer, { contentType: mimeType })
 
       if (error) {
         console.error("Supabase upload failed:", error)
         throw new Error(`Supabase upload failed: ${error.message}`)
       }
 
-      // Get the user and save the picture with user reference
+      // Get public URL of uploaded file
+      const { data: publicUrlData } = supabase.storage
+        .from('uploads')
+        .getPublicUrl(uniqueFilename)
+
+      const publicUrl = publicUrlData.publicUrl
+
+      // Save file metadata in database
       const user = await User.findOne({ where: { id: session.userID } })
       if (!user) throw new Error('User not found')
 
       const picture = new Picture()
       picture.filename = uniqueFilename
       picture.mimetype = mimeType
-      picture.path = `/uploads/${uniqueFilename}`
+      picture.path = publicUrl // Store public URL instead of a temp path
       picture.creatorId = session.userID
 
       await picture.save()
       return true
     } catch (error) {
-      // You should handle any errors that occur during file upload more gracefully.
       console.error('Error handling file upload:', error)
       throw new Error('Failed to handle file upload.')
     }
   }
 
+
   @Mutation(() => Boolean)
-  async deletePicture(@Arg('id', () => Int) id: number): Promise<boolean> {
-    const picture = await Picture.findOne({ where: { id } })
+  async deletePicture(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { session }: ContextProps
+  ): Promise<boolean> {
+    if (!session || !session.userID) {
+      throw new Error("User not authenticated")
+    }
+
+    // Find the picture in the database
+    const picture = await Picture.findOne({ where: { id, creatorId: session.userID } })
+
     if (!picture) {
-      throw new Error('Picture not found')
+      throw new Error("Picture not found or you don't have permission to delete it")
     }
 
-    // Determine the file path for local environment (./public/uploads)
-    const filePath = path.join(process.cwd(), 'public', 'uploads', picture.filename)
-
-    // Check if the file exists and delete it
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath)
-    }
-
-    // Delete the file from Supabase Storage
-    const { error } = await supabase.storage
-      .from('uploads') // Your bucket name
-      .remove([picture.filename])
+    // Delete from Supabase Storage
+    const { error } = await supabase.storage.from('uploads').remove([picture.filename])
 
     if (error) {
-      console.error('Error deleting file from Supabase:', error)
-      throw new Error('Failed to delete file from storage.')
+      console.error("Supabase delete failed:", error)
+      throw new Error(`Failed to delete from storage: ${error.message}`)
     }
 
-    //* Delete from the database
-    await Picture.remove(picture)
+    // Remove from database
+    await Picture.delete({ id })
+
     return true
   }
-
-  // Fetch all pictures (to display)
-  // @Query(() => [Picture])
-  // async getAllPictures() {
-  //   return await Picture.find()
-  // }
 
 }
