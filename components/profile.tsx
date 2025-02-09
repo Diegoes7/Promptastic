@@ -63,6 +63,7 @@ const Profile = ({
 	const profilePath = path === '/profile'
 	const nameInitials = profilePath ? session?.user?.name : userName
 	const sessionUser = parseInt((session as SessionUser)?.userID)
+	const disabledSubmitButton = inputUser === session?.user?.name
 
 	const avatarID = otherUserID
 		? // ? parseInt(otherUserID)
@@ -83,7 +84,7 @@ const Profile = ({
 			const name = e.target.value
 			setInputUser(name)
 		},
-		[]
+		[inputUser]
 	)
 
 	const handleUploadImage = React.useCallback(() => {
@@ -94,7 +95,7 @@ const Profile = ({
 		e.preventDefault()
 
 		try {
-			const response = await deletePicture({
+			await deletePicture({
 				variables: {
 					deletePictureId: pictureID!,
 				},
@@ -144,11 +145,13 @@ const Profile = ({
 					username: inputUser!,
 				},
 			})
-			alert(`Submitted ${response.data?.updateUser.username}`)
+			alert(
+				`The display name is changed to ${response.data?.updateUser.username} from ${session?.user?.name}.`
+			)
 		} catch (error) {
 			console.log(error)
 		}
-	}, [])
+	}, [inputUser])
 
 	if (imageEditor) {
 		return (
@@ -228,7 +231,8 @@ const Profile = ({
 										align: 'bottom',
 										HSpace: 'sm',
 									}}
-									isLoading={loading}
+									isLoading={updateUserLoading}
+									disabled={disabledSubmitButton}
 									style={{ marginBottom: '.3em' }}
 								>
 									Submit

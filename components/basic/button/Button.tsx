@@ -52,15 +52,33 @@ const Button = forwardRef<Ref, ButtonProps>((props, ref) => {
 		}
 	}, [isLoading, leftIcon, rightIcon])
 
+	// const renderButtonVariant = () => {
+	// 	if (buttonVariant === 'solid') {
+	// 		return solidButton({ ...buttonStyle, className })
+	// 	}
+	// }
+
 	const renderButtonVariant = () => {
-		if (buttonVariant === 'solid') {
-			return solidButton({ ...buttonStyle, className })
+		const buttonVariants = {
+			solid: solidButton,
+			outline: outlineButton,
+			ghost: ghostButton,
 		}
+
+		const ButtonComponent = buttonVariants[buttonVariant ?? 'solid']
+
+		return ButtonComponent
+			? ButtonComponent({
+					...buttonStyle,
+					disabled: disabled || isLoading,
+					className,
+				} as any)
+			: null
 	}
 
 	return (
 		<button
-			className={renderButtonVariant()}
+			className={renderButtonVariant() || undefined}
 			{...rest}
 			type={type ? 'submit' : 'button'}
 			ref={ref}

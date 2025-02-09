@@ -80,6 +80,10 @@ export const solidButton = tv({
       red:
         'bg-[#992B2B] text-white shadow-blueGray active:shadow-none active:translate-y-[5px] hover:bg-white hover:text-[#992B2B]',
     },
+    disabled: {
+      true: 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-50 shadow-none translate-y-0 hover:bg-gray-400 hover:text-gray-200',
+      false: '',
+    },
   },
 })
 
@@ -100,6 +104,10 @@ export const outlineButton = tv({
         'ring-[#64748B] text-[#64748B] shadow-blueGray active:shadow-none active:translate-y-[5px] hover:bg-[#64748B] hover:text-gray-100',
       pink: 'ring-[#DE3163] text-[#64748B] shadow-blueGray active:shadow-none active:translate-y-[5px] hover:bg-[#DE3163] hover:text-gray-100',
     },
+    disabled: {
+      true: 'ring-gray-400 text-gray-300 cursor-not-allowed opacity-50 shadow-none translate-y-0 hover:bg-transparent hover:text-gray-300',
+      false: '',
+    },
   },
 })
 
@@ -113,6 +121,10 @@ export const ghostButton = tv({
       yellow: 'text-[#FFC700] hover:bg-[#FFC700] hover:text-gray-100',
       gray: 'text-[#64748B] hover:bg-[#64748B] hover:text-gray-100',
       pink: 'text-[#DE3163] hover:bg-[#DE3163] hover:text-white-100',
+    },
+    disabled: {
+      true: 'text-gray-400 cursor-not-allowed opacity-50 hover:bg-transparent',
+      false: '',
     },
   },
 })
