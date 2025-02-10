@@ -40,6 +40,19 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 	const { data: session } = useSession() as { data: SessionUser | null }
 	const [deletePrompt, { loading }] = useDeletePromptMutation({
 		refetchQueries: [PromptsDocument],
+		update: (cache, result) => {
+			const deletedPromptId = result.data?.deletePrompt
+
+			if (deletedPromptId) {
+				//* Handle string/number ID mismatch
+				const stringId = String(deletedPromptId)
+				const cacheId = `Prompt:{"id":"${stringId}"}` 
+
+				//! Evict the normalized entity
+				cache.evict({ id: cacheId })
+				cache.gc()
+			}
+		},
 	})
 
 	const [updateLikes] = useUpdateLikesMutation({
@@ -47,7 +60,7 @@ const PromptCard = ({ post, handleTagClick, mode }: PromptCardProps) => {
 		update(cache, { data }) {
 			if (data?.updateLikes) {
 				cache.modify({
-					id: cache.identify({ __typename: 'Prompt', id: post.id }), // Use post.id here
+					id: cache.identify({ __typename: 'Prompt', id: post.id }),
 					fields: {
 						likes(existingLikes = 0) {
 							return existingLikes + 1 // Increment likes

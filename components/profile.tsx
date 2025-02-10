@@ -1,6 +1,5 @@
 import React, { FormEvent, useCallback } from 'react'
 import {
-	DeletePictureDocument,
 	useDeletePictureMutation,
 	useGetUserFavoritePromptsQuery,
 	useGetUserPictureQuery,
@@ -17,7 +16,7 @@ import Avatar from './basic/avatar'
 import PopUp from './pop_up'
 import AvatarUploader from './image_editor'
 import Button from './basic/button/Button'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { InputField, StaticField } from './basic/form_fields'
 import { formatDate } from '@app/utils/format_date'
 import { MdCancel } from 'react-icons/md'
@@ -80,7 +79,7 @@ const Profile = ({
 
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-			// Handle the case where an event is passed
+			//* Handle the case where an event is passed
 			const name = e.target.value
 			setInputUser(name)
 		},
@@ -103,10 +102,10 @@ const Profile = ({
 					if (data?.deletePicture) {
 						const deletedPictureId = String(pictureID)
 
-						// 1. Evict the deleted picture from the cache
+						//* Evict the deleted picture from the cache
 						cache.evict({ id: `Picture:${deletedPictureId}` })
 
-						// 2. Remove it from the pictures list
+						//* Remove it from the pictures list
 						cache.modify({
 							fields: {
 								pictures(existingPictures = [], { readField }) {
@@ -116,7 +115,7 @@ const Profile = ({
 								},
 							},
 						})
-						// 3. Broadcast the cache changes
+						//! Broadcast the cache changes
 						cache.gc()
 					}
 				},
