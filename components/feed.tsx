@@ -16,6 +16,7 @@ const Feed = () => {
 			cursor: null,
 		},
 		notifyOnNetworkStatusChange: true, // loading actually seen, this tell loading is true
+		fetchPolicy: 'network-only',
 	})
 	const [searchText, setSearchText] = React.useState('')
 	const [posts, setPosts] = React.useState<Post[]>([])
