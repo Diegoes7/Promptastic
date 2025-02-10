@@ -15,8 +15,9 @@ const Feed = () => {
 			limit: 10,
 			cursor: null,
 		},
+		refetchWritePolicy: 'merge',
 		notifyOnNetworkStatusChange: true, // loading actually seen, this tell loading is true
-		fetchPolicy: 'network-only',
+		fetchPolicy: 'no-cache',
 	})
 	const [searchText, setSearchText] = React.useState('')
 	const [posts, setPosts] = React.useState<Post[]>([])
