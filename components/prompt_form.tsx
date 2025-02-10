@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useCallback } from 'react'
 import Link from 'next/link'
 import { Post } from '../app/create_prompt/page'
 import { InputField, TextAreaField } from './basic/form_fields'
@@ -25,15 +25,28 @@ const PromptForm = ({
 }: FormProps) => {
 	const router = useRouter()
 	const pathname = usePathname()
-	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		const { name, value } = e.target
-		const updatedPost = { ...post, [name]: value }
-		if (updatedPost) {
-			setPost(updatedPost)
-		}
-	}
+	const [hasChanges, setHasChanges] = React.useState(false)
+
+	const handleChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			const { name, value } = e.target
+			const updatedPost = { ...post, [name]: value }
+
+			// Check if any of the critical fields have changed
+			const isChanged =
+				updatedPost.title !== post.title ||
+				updatedPost.prompt !== post.prompt ||
+				updatedPost.tag !== post.tag
+
+			// Update the state
+			setHasChanges(isChanged)
+
+			if (updatedPost) {
+				setPost(updatedPost)
+			}
+		},
+		[post, setPost, setHasChanges] // Dependencies
+	)
 
 	const handleCancel = () => {
 		// router.push('/') //$ Navigates to the homepage
@@ -102,6 +115,7 @@ const PromptForm = ({
 							isLoading={submitting}
 							buttonStyle={{ color: 'glassBlue', rounded: 'full', size: 'md' }}
 							rightIcon={<AiFillEdit />}
+							disabled={!hasChanges}
 						>
 							Update Prompt
 						</Button>
@@ -111,6 +125,7 @@ const PromptForm = ({
 							isLoading={submitting}
 							buttonStyle={{ color: 'glassBlue', rounded: 'full', size: 'md' }}
 							rightIcon={<MdAddToPhotos />}
+							disabled={!hasChanges}
 						>
 							Create Prompt
 						</Button>

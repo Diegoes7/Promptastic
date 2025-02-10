@@ -44,14 +44,16 @@ const Navbar = () => {
 	return (
 		<nav className='flex-between gap-1 items-center w-full mb-6 pt-6 customSticky shadow-lg text-base sm:text-sm custom-px:text-xs'>
 			<Link href='/' className='flex gap-2 flex-center'>
-				<Image
-				loader={customLoader}
-					src='/assets/images/logo.svg'
-					alt='Promptastic logo'
-					width={37}
-					height={37}
-					className='object-contain'
-				/>
+				<Tooltip text='Go to home page'>
+					<Image
+						loader={customLoader}
+						src='/assets/images/logo.svg'
+						alt='Promptastic logo'
+						width={37}
+						height={37}
+						className='object-contain'
+					/>
+				</Tooltip>
 				{
 					<span className='logo-text'>
 						{isClient && width > 500 ? 'Promptastic' : ''}
@@ -121,7 +123,6 @@ type ButtonProps = {
 export const CreatePromptButton = ({ buttonSize }: ButtonProps) => {
 	const { loading, disabled, handleNavigation } =
 		useNavigationWithLoading('/create_prompt')
-	const color = disabled ? 'gray' : 'orange'
 
 	return (
 		<Tooltip text='Go to the prompt form'>
@@ -145,13 +146,12 @@ export const CreatePromptButton = ({ buttonSize }: ButtonProps) => {
 export const SignUpButton = ({ buttonSize }: ButtonProps) => {
 	const { loading, disabled, handleNavigation } =
 		useNavigationWithLoading('/sign_up')
-	const color = disabled ? 'gray' : 'orange'
 
 	return (
 		<Tooltip text='Navigate to sing in and sign up page'>
 			<Button
 				buttonStyle={{
-					color: color,
+					color: 'orange',
 					rounded: 'full',
 					size: buttonSize as any,
 				}}
@@ -168,8 +168,6 @@ export const SignUpButton = ({ buttonSize }: ButtonProps) => {
 
 export const SignOutButton = ({ buttonSize }: ButtonProps) => {
 	const [loading, setLoading] = React.useState(false)
-	// const { loading, disabled, handleNavigation } = useNavigationWithLoading('/')
-	// const color = disabled ? 'gray' : 'orange'
 
 	const handleSignOut = useCallback(async () => {
 		setLoading(true)
