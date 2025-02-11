@@ -3,7 +3,7 @@ import PromptCard from './prompt_card'
 import { Post } from '@app/create_prompt/page'
 import Skeleton from './skeleton'
 import { usePathname } from 'next/navigation'
-import { useWindowWidth } from '@app/utils/window_width'
+
 
 type PromptListProps = {
 	data: Post[] | undefined | null
