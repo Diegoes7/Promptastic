@@ -12,8 +12,6 @@ type PromptListProps = {
 
 const PromptList = ({ data, loading }: PromptListProps) => {
 	const path = usePathname()
-	const width = useWindowWidth()
-
 
 	if (loading) {
 		return <Skeleton />

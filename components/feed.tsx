@@ -30,7 +30,7 @@ const Feed = () => {
 		if (allPrompts) {
 			setPosts(allPrompts)
 		}
-	}, [allPrompts, data])
+	}, [allPrompts])
 
 	const handlePagination = () => {
 		if (!allPrompts) return
