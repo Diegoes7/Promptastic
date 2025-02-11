@@ -36,7 +36,7 @@ const Feed = () => {
 	}, [allPrompts])
 
 	React.useEffect(() => {
-		if (location === '/home') {
+		if (location === '/') {
 			refetch()
 		}
 	}, [location])
