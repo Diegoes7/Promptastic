@@ -3,6 +3,7 @@ import PromptCard from './prompt_card'
 import { Post } from '@app/create_prompt/page'
 import Skeleton from './skeleton'
 import { usePathname } from 'next/navigation'
+import { useWindowWidth } from '@app/utils/window_width'
 
 type PromptListProps = {
 	data: Post[] | undefined | null
@@ -11,6 +12,8 @@ type PromptListProps = {
 
 const PromptList = ({ data, loading }: PromptListProps) => {
 	const path = usePathname()
+	const width = useWindowWidth()
+
 
 	if (loading) {
 		return <Skeleton />

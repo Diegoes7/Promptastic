@@ -15,9 +15,8 @@ const Feed = () => {
 			limit: 10,
 			cursor: null,
 		},
-		refetchWritePolicy: 'merge',
 		notifyOnNetworkStatusChange: true, // loading actually seen, this tell loading is true
-		fetchPolicy: 'no-cache',
+		fetchPolicy: 'cache-and-network',
 	})
 	const [searchText, setSearchText] = React.useState('')
 	const [posts, setPosts] = React.useState<Post[]>([])
@@ -31,7 +30,7 @@ const Feed = () => {
 		if (allPrompts) {
 			setPosts(allPrompts)
 		}
-	}, [allPrompts])
+	}, [allPrompts, data])
 
 	const handlePagination = () => {
 		if (!allPrompts) return

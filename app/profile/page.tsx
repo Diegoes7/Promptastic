@@ -11,7 +11,9 @@ import ErrorMessage from 'components/basic/error_message'
 const MyProfile = () => {
 	const router = useRouter()
 	const { data: session } = useSession()
-	const { data, loading, error } = useGetUserPromptsQuery()
+	const { data, loading, error } = useGetUserPromptsQuery({
+		  fetchPolicy: 'cache-and-network'
+	})
 	const myPrompts = data?.getUserPrompts || []
 
 	React.useEffect(() => {
@@ -19,10 +21,6 @@ const MyProfile = () => {
 			router.push('/')
 		}
 	}, [])
-
-	if (loading) {
-		return <Spinner />
-	}
 
 	return (
 		<div>

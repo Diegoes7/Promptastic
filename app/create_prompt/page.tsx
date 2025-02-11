@@ -9,6 +9,7 @@ import PromptForm from '../../components/prompt_form'
 import { useCreatePromptMutation, User } from '../../generated/graphql'
 import Spinner from '../../components/basic/spinner'
 import ErrorMessage from 'components/basic/error_message'
+import { MyOwnSession } from '@app/api/auth/authOptions'
 
 export type Post = {
 	id?: string
@@ -20,8 +21,12 @@ export type Post = {
 }
 
 const CreatePrompt = () => {
+	const router = useRouter()
+	const { data: session } = useSession()
 	const [create, { loading, error }] = useCreatePromptMutation({
 		update(cache, { data }) {
+			const newPrompt = data?.createPrompt
+
 			cache.modify({
 				fields: {
 					prompts(existing = {}) {
@@ -33,10 +38,22 @@ const CreatePrompt = () => {
 					},
 				},
 			})
+
+			//! Add to user-specific prompts list
+			cache.modify({
+				id: cache.identify({
+					__typename: 'User',
+					id: (session as MyOwnSession)?.userID, 
+				}),
+				fields: {
+					prompts(existing = []) {
+						return [newPrompt, ...existing]
+					},
+				},
+			})
 		},
 	})
-	const router = useRouter()
-	const { data: session } = useSession()
+
 	const [post, setPost] = useState<Post>({
 		title: '',
 		prompt: '',
