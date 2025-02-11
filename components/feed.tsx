@@ -8,16 +8,19 @@ import { Post } from '@app/create_prompt/page'
 import Skeleton from './skeleton'
 import useInfiniteScroll from '@app/utils/useLoadMore'
 import ErrorMessage from './basic/error_message'
+import { usePathname } from 'next/navigation'
 
 const Feed = () => {
-	const { data, loading, error, fetchMore, variables } = usePromptsQuery({
-		variables: {
-			limit: 10,
-			cursor: null,
-		},
-		notifyOnNetworkStatusChange: true, // loading actually seen, this tell loading is true
-		fetchPolicy: 'cache-and-network',
-	})
+	const location = usePathname()
+	const { data, loading, error, fetchMore, variables, refetch } =
+		usePromptsQuery({
+			variables: {
+				limit: 10,
+				cursor: null,
+			},
+			notifyOnNetworkStatusChange: true, // loading actually seen, this tell loading is true
+			fetchPolicy: 'cache-and-network',
+		})
 	const [searchText, setSearchText] = React.useState('')
 	const [posts, setPosts] = React.useState<Post[]>([])
 
@@ -31,6 +34,12 @@ const Feed = () => {
 			setPosts(allPrompts)
 		}
 	}, [allPrompts])
+
+	React.useEffect(() => {
+		if (location === '/home') {
+			refetch()
+		}
+	}, [location])
 
 	const handlePagination = () => {
 		if (!allPrompts) return
