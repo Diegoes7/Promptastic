@@ -60,7 +60,7 @@ export class PromptResolver extends BaseEntity {
 
     const promptRepository = dataSource.getRepository(Prompt)
 
-    const realLimit = Math.min(10, limit) //* take the smaller of two values
+    const realLimit = Math.min(100, limit) //* take the smaller of two values
     const realLimitPlusOne = realLimit + 1
 
     const replacements: any[] = [realLimitPlusOne]

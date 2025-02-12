@@ -8,18 +8,26 @@ import Spinner from './basic/spinner'
 const PopularPrompts = () => {
 	const { data, loading /*variables, fetchMore */ } = usePromptsQuery({
 		variables: {
-			limit: 10,
+			limit: 100,
 			cursor: null,
 		},
-		notifyOnNetworkStatusChange: true, // loading actually seen, this tell loading is true
+		fetchPolicy: 'cache-and-network',
 	})
 	const allPrompts = data?.prompts?.prompts
 
 	const popularPrompts = React.useMemo(() => {
-		if (!allPrompts) return [] // Handle case where data is not available
+		if (!allPrompts) return []
 
-		// Sorting prompts by vote property (highest to lowest)
-		return [...allPrompts].sort((a, b) => b.likes - a.likes)
+		// Remove duplicates by id using a Map
+		const uniquePromptsMap = new Map()
+		allPrompts.forEach((prompt) => {
+			uniquePromptsMap.set(prompt.id, prompt)
+		})
+
+		// Convert back to array and sort by likes
+		return Array.from(uniquePromptsMap.values())
+			.sort((a, b) => b.likes - a.likes)
+			.slice(0, 20)
 	}, [allPrompts])
 
 	//! still need to think about it

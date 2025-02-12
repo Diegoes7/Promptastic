@@ -88,7 +88,7 @@ const Feed = () => {
 	)
 
 	return (
-		<section className='feed'>
+		<section className='feed overflow-y-hidden'>
 			<form className='relative w-2/3 w-full sm:w-full flex justify-center items-center'>
 				<input
 					type='search'
