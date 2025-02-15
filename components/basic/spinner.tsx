@@ -1,6 +1,7 @@
 import React from 'react'
 import BeatLoader from 'react-spinners/BeatLoader'
 import { BounceLoader } from 'react-spinners'
+import { useTheme } from 'next-themes'
 
 type SpinnerProps = {
 	size?: number

@@ -6,7 +6,6 @@ import {
 } from 'generated/graphql'
 import customLoader from './basic/custom_image_loader'
 import Spinner from './basic/spinner'
-import { SP } from 'next/dist/shared/lib/utils'
 
 type AvatarUploaderProps = {
 	userId: number
@@ -173,7 +172,7 @@ const AvatarUploader = ({ userId }: AvatarUploaderProps) => {
 						Upload
 					</button>
 				</form>
-				{loading ? <Spinner customColor='#fffff7' /> : null}
+				{loading ? <Spinner /> : null}
 			</div>
 		</div>
 	)

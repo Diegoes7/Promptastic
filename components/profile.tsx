@@ -60,9 +60,13 @@ const Profile = ({
 	const [deletePicture] = useDeletePictureMutation()
 
 	const profilePath = path === '/profile'
-	const nameInitials = profilePath ? session?.user?.name : userName
-	const sessionUser = parseInt((session as SessionUser)?.userID)
-	const disabledSubmitButton = inputUser === session?.user?.name
+	const sessionUserName = session?.user?.name
+	const nameInitials = profilePath ? sessionUserName : userName
+	const sessionUserID = parseInt((session as SessionUser)?.userID)
+
+	const disabledSubmitButton = useCallback(() => {
+		return inputUser === sessionUserName
+	}, [sessionUserName, inputUser])
 
 	const avatarID = otherUserID
 		? // ? parseInt(otherUserID)
@@ -134,28 +138,31 @@ const Profile = ({
 		}
 	}, [])
 
-	const handleSubmit = useCallback(async (e: FormEvent) => {
-		e.preventDefault()
+	const handleSubmit = useCallback(
+		async (e: FormEvent) => {
+			e.preventDefault()
 
-		try {
-			const response = await updateUser({
-				variables: {
-					updateUserId: parseInt((session as any).userID),
-					username: inputUser!,
-				},
-			})
-			alert(
-				`The display name is changed to ${response.data?.updateUser.username} from ${session?.user?.name}.`
-			)
-		} catch (error) {
-			console.log(error)
-		}
-	}, [inputUser])
+			try {
+				const response = await updateUser({
+					variables: {
+						updateUserId: parseInt((session as any).userID),
+						username: inputUser!,
+					},
+				})
+				alert(
+					`The display name is changed to ${response.data?.updateUser.username} from ${session?.user?.name}.`
+				)
+			} catch (error) {
+				console.log(error)
+			}
+		},
+		[inputUser]
+	)
 
 	if (imageEditor) {
 		return (
 			<PopUp onClose={handleUploadImage} isOpen={imageEditor}>
-				<AvatarUploader userId={sessionUser} />
+				<AvatarUploader userId={sessionUserID} />
 			</PopUp>
 		)
 	}
@@ -231,7 +238,7 @@ const Profile = ({
 										HSpace: 'sm',
 									}}
 									isLoading={updateUserLoading}
-									disabled={disabledSubmitButton}
+									disabled={disabledSubmitButton()}
 									style={{ marginBottom: '.3em' }}
 								>
 									Submit
