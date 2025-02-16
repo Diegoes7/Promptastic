@@ -48,12 +48,26 @@ const Profile = ({
 }: ProfileProps) => {
 	const userName = userProfile ? userProfile.username : name || ''
 	const path = usePathname()
-	const { data: session } = useSession()
+	const { data: session, update: updateSession } = useSession()
 	const sessionUserName = session?.user?.name
 	const [inputUser, setInputUser] = React.useState(sessionUserName)
 	const [isDisabled, setIsDisabled] = React.useState(true)
 	const [imageEditor, setImageEditor] = React.useState(false)
+
 	const { data: loggedInFavorites } = useMyFavoritePromptsQuery()
+	const { data: userPicture } = useGetUserPictureQuery({
+		variables: { creatorId: parseInt((session as SessionUser)?.userID) },
+	})
+	const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation({
+		onCompleted: async (data) => {
+			if (data?.updateUser) {
+				await updateSession({
+					user: { ...session?.user, name: data.updateUser.username },
+				})
+			}
+		},
+	})
+	const [deletePicture] = useDeletePictureMutation()
 
 	//! Sync inputUser when sessionUserName changes
 	React.useEffect(() => {
@@ -66,13 +80,8 @@ const Profile = ({
 		setIsDisabled(inputUser === sessionUserName)
 	}, [inputUser, sessionUserName])
 
-	const { data: userPicture } = useGetUserPictureQuery({
-		variables: { creatorId: parseInt((session as SessionUser)?.userID) },
-	})
 	const pictureID =
 		userPicture?.getUserPicture && parseInt(userPicture?.getUserPicture?.id)
-	const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
-	const [deletePicture] = useDeletePictureMutation()
 
 	const profilePath = path === '/profile'
 	const nameInitials = profilePath ? sessionUserName : userName
