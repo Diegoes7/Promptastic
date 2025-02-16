@@ -1,10 +1,12 @@
 import React, { FormEvent, useCallback } from 'react'
 import {
+	UpdateUserDocument,
 	useDeletePictureMutation,
 	useGetUserFavoritePromptsQuery,
 	useGetUserPictureQuery,
 	useMyFavoritePromptsQuery,
 	User,
+	UserDocument,
 	useUpdateUserMutation,
 } from '../generated/graphql'
 import PromptList from './prompt_list'
@@ -47,9 +49,22 @@ const Profile = ({
 	const userName = userProfile ? userProfile.username : name || ''
 	const path = usePathname()
 	const { data: session } = useSession()
-	const [inputUser, setInputUser] = React.useState(session?.user?.name)
+	const sessionUserName = session?.user?.name
+	const [inputUser, setInputUser] = React.useState(sessionUserName)
+	const [isDisabled, setIsDisabled] = React.useState(true)
 	const [imageEditor, setImageEditor] = React.useState(false)
 	const { data: loggedInFavorites } = useMyFavoritePromptsQuery()
+
+	//! Sync inputUser when sessionUserName changes
+	React.useEffect(() => {
+		setInputUser((prevValue) =>
+			prevValue !== sessionUserName ? sessionUserName : prevValue
+		)
+	}, [sessionUserName])
+
+	React.useEffect(() => {
+		setIsDisabled(inputUser === sessionUserName)
+	}, [inputUser, sessionUserName])
 
 	const { data: userPicture } = useGetUserPictureQuery({
 		variables: { creatorId: parseInt((session as SessionUser)?.userID) },
@@ -60,13 +75,8 @@ const Profile = ({
 	const [deletePicture] = useDeletePictureMutation()
 
 	const profilePath = path === '/profile'
-	const sessionUserName = session?.user?.name
 	const nameInitials = profilePath ? sessionUserName : userName
 	const sessionUserID = parseInt((session as SessionUser)?.userID)
-
-	const disabledSubmitButton = useCallback(() => {
-		return inputUser === sessionUserName
-	}, [sessionUserName, inputUser])
 
 	const avatarID = otherUserID
 		? // ? parseInt(otherUserID)
@@ -87,7 +97,7 @@ const Profile = ({
 			const name = e.target.value
 			setInputUser(name)
 		},
-		[inputUser]
+		[]
 	)
 
 	const handleUploadImage = React.useCallback(() => {
@@ -152,6 +162,7 @@ const Profile = ({
 				alert(
 					`The display name is changed to ${response.data?.updateUser.username} from ${session?.user?.name}.`
 				)
+				setIsDisabled(true)
 			} catch (error) {
 				console.log(error)
 			}
@@ -238,7 +249,7 @@ const Profile = ({
 										HSpace: 'sm',
 									}}
 									isLoading={updateUserLoading}
-									disabled={disabledSubmitButton()}
+									disabled={isDisabled}
 									style={{ marginBottom: '.3em' }}
 								>
 									Submit
